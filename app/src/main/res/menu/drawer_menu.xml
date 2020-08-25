@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:title="Home"
+            android:icon="@drawable/ic_home"/>
+        <item
+            android:id="@+id/school"
+            android:title="school"
+            android:icon="@drawable/ic_school"/>
+        <item
+            android:id="@+id/work"
+            android:title="work"
+            android:icon="@drawable/ic_logout"/>
+        <item
+            android:id="@+id/timeLine"
+            android:title="timeLine"
+            android:icon="@drawable/ic_timeline"/>
+    </group>
+
+    <item android:title="controls">
+        <menu>
+            <item
+                android:id="@+id/settings"
+                android:title="settings"
+                android:icon="@drawable/ic_settings"/>
+
+            <item
+                android:id="@+id/logout"
+                android:title="logout"
+                android:icon="@drawable/ic_logout"/>
+
+        </menu>
+    </item>
+
+</menu>
