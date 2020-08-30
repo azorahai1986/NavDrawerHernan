@@ -23,5 +23,6 @@
         app:headerLayout="@layout/header_encabezado"
         android:layout_gravity="start">
 
+
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

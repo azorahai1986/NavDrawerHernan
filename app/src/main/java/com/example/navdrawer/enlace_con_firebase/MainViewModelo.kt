@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.navdrawer.modelos_de_datos.CartelPrincipal
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
 
 class MainViewModelo: ViewModel() {
@@ -17,5 +18,12 @@ class MainViewModelo: ViewModel() {
         }
         return mutableData
 
+    }
+    fun fetchUserDataOfertas():LiveData<MutableList<CartelPrincipal>>{
+        val mutableDataOfertas = MutableLiveData<MutableList<CartelPrincipal>>()
+        repo.getOfertas().observeForever {
+            mutableDataOfertas.value = it
+        }
+        return mutableDataOfertas
     }
 }

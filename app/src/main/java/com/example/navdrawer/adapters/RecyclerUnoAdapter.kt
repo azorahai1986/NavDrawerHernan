@@ -1,13 +1,14 @@
 package com.example.navdrawer.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.navdrawer.R
+import com.example.navdrawer.fragmentos.VerImagenFragment
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
 import kotlinx.android.synthetic.main.item_productos.view.*
 
@@ -29,7 +30,14 @@ class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, 
         holder.itemView.textview_sub.text = modelosFb.sub
         Glide.with(activity).load(modelosFb.imagen).into(holder.itemView.imageview)
 
+        holder.itemView.imageview.setOnClickListener{
+            activity.supportFragmentManager.beginTransaction().replace(R.id.drawerLayout, VerImagenFragment.newInstance(modelosFb.imagen))
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(VerImagenFragment.IMAGENRECIBIDA).commit()
+        }
+
     }
+
+
 
 
 }

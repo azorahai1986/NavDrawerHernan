@@ -8,12 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.navdrawer.R
+import com.example.navdrawer.adapters.PagerPrincipalAdapter
 import com.example.navdrawer.adapters.RecyclerUnoAdapter
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
+import com.example.navdrawer.modelos_de_datos.CartelPrincipal
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
+import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.toolbar_layout.*
 import java.lang.ClassCastException
 import java.util.Observer
 
@@ -22,8 +28,10 @@ import java.util.Observer
 class HomeFragment : Fragment() {
     var listener:FragmentoEnActivity? = null  // del fragmento
     private var adapter:RecyclerUnoAdapter? = null
+    private var adapterCartelPrincipal:PagerPrincipalAdapter? = null
     private var layoutManager:RecyclerView.LayoutManager? = null
     private var recyclerView:RecyclerView? = null
+    private var viewPagerCartelPrincipal:ViewPager2? = null
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
 
 
@@ -34,20 +42,22 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        val productos = ArrayList<ModeloDeIndumentaria>()
-        productos.add(ModeloDeIndumentaria("1", "ss", "aa", R.drawable.constantine, "mm", "20"))
-        productos.add(ModeloDeIndumentaria("2", "ss", "aa", R.drawable.constantine, "mm", "20"))
-        productos.add(ModeloDeIndumentaria("3", "ss", "aa", R.drawable.constantine, "mm", "20"))
-        productos.add(ModeloDeIndumentaria("4", "ss", "aa", R.drawable.constantine, "mm", "20"))
-
         recyclerView = view.findViewById(R.id.recycler_productos)
-        layoutManager = LinearLayoutManager(activity)
+        layoutManager = GridLayoutManager(activity, 2)
         recyclerView?.layoutManager = layoutManager
         recyclerView?.setHasFixedSize(true)
-        adapter = RecyclerUnoAdapter(productos, context as FragmentActivity)
+        adapter = RecyclerUnoAdapter(arrayListOf(), context as FragmentActivity)
         recyclerView?.adapter = adapter
 
+        // inflar ViewPager Principal
+        viewPagerCartelPrincipal = view.findViewById(R.id.viewpager_cartel)
 
+        adapterCartelPrincipal = PagerPrincipalAdapter(arrayListOf(), context as FragmentActivity)
+        viewPagerCartelPrincipal?.adapter = adapterCartelPrincipal
+
+
+        observeData()
+        cargarPagerCartelPrincipal()
         return view
     }
 
@@ -59,6 +69,12 @@ class HomeFragment : Fragment() {
 
     }
 
+    fun cargarPagerCartelPrincipal(){
+        viewModel.fetchUserDataOfertas().observe(this.viewLifecycleOwner, androidx.lifecycle.Observer {
+        adapterCartelPrincipal!!.itemCartel = it as ArrayList<CartelPrincipal>
+        adapterCartelPrincipal!!.notifyDataSetChanged()
+        })
+    }
     interface FragmentoEnActivity{
 
 
