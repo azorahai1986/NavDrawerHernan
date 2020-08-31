@@ -3,18 +3,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/gris"
     tools:context=".fragmentos.VerImagenFragment">
 
    <androidx.coordinatorlayout.widget.CoordinatorLayout
        android:layout_width="match_parent"
-       android:layout_height="match_parent">
+       android:layout_height="match_parent"
+       android:focusableInTouchMode="true">
+
+       <com.google.android.material.appbar.AppBarLayout
+           android:id="@+id/appBarLayout"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+
+       <com.google.android.material.appbar.CollapsingToolbarLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:background="#FFFFFF"
+           app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
        <ImageView
            android:id="@+id/imageView_ver_imagen"
            android:layout_width="match_parent"
-           android:layout_height="match_parent"
+           android:layout_height="450dp"
            android:src="@drawable/constantine"
+           android:clickable="false"
            android:scaleType="fitXY"/>
+       <View
+           android:layout_width="match_parent"
+           android:layout_height="2dp"
+           android:background="@color/color_negro"
+           android:layout_marginTop="452dp"/>
+       <TextView
+           android:id="@+id/textViewNombre"
+           android:layout_width="match_parent"
+           android:layout_height="40dp"
+           android:layout_marginTop="455dp"
+           android:text="Prodcto nombre"
+           android:textSize="24dp"
+           android:textStyle="bold"/>
+       <View
+           android:layout_width="match_parent"
+           android:layout_height="2dp"
+           android:background="@color/color_negro"
+           android:layout_marginTop="502dp"/>
+       <TextView
+           android:id="@+id/textViewPrecio"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="505dp"
+           android:text="S150"
+           android:textColor="#EE8F00"
+           android:textSize="34dp"
+           android:textStyle="bold"/>
+
+       <View
+           android:layout_width="match_parent"
+           android:layout_height="2dp"
+           android:background="@color/color_negro"
+           android:layout_marginTop="557dp"/>
+
+       <TextView
+           android:id="@+id/textViewDesc"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginTop="558dp"
+           android:text="@string/texto_descripcion"
+           android:textSize="24dp"
+           android:textStyle="bold"/>
+
+       </com.google.android.material.appbar.CollapsingToolbarLayout>
+       </com.google.android.material.appbar.AppBarLayout>
+
+       <androidx.viewpager2.widget.ViewPager2
+           android:id="@+id/viewPager_similares"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
+
    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </FrameLayout>
