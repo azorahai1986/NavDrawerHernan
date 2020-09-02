@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.navdrawer.modelos_de_datos.CartelPrincipal
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
+import com.example.navdrawer.modelos_de_datos.PagerSimilares
 
 class MainViewModelo: ViewModel() {
     val repo = Repo()
@@ -19,9 +20,9 @@ class MainViewModelo: ViewModel() {
 
     }
 
-    fun fetchUserDataSimilares(recibirId:String): LiveData<MutableList<ModeloDeIndumentaria>> {
-        val mutableData = MutableLiveData<MutableList<ModeloDeIndumentaria>>()
-        repo.getUserDataSimilares(recibirId).observeForever {
+    fun fetchUserDataSimilares(recibirDescripcion: String?): LiveData<MutableList<PagerSimilares>> {
+        val mutableData = MutableLiveData<MutableList<PagerSimilares>>()
+        repo.getUserDataSimilares(recibirDescripcion).observeForever {
             mutableData.value = it
 
         }

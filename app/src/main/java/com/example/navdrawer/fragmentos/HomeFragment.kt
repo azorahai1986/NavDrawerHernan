@@ -2,14 +2,13 @@ package com.example.navdrawer.fragmentos
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.navdrawer.R
@@ -18,10 +17,6 @@ import com.example.navdrawer.adapters.RecyclerUnoAdapter
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
 import com.example.navdrawer.modelos_de_datos.CartelPrincipal
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.toolbar_layout.*
-import java.lang.ClassCastException
-import java.util.Observer
 
 
 

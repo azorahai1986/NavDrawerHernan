@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -54,6 +53,7 @@ class VerImagenFragment : Fragment() {
 
     }
     var adapterSimilar:PagerSimilaresAdapter? = null
+    var viewPagerSimilar:ViewPager2? = null
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
 
 
@@ -69,7 +69,7 @@ class VerImagenFragment : Fragment() {
         recibirNombre = arguments?.getString(NOMBRE_RECIBIDO)
         recibirDescripcion = arguments?.getString(DESC_RECIBIDA)
         recibirPrecio = arguments?.getString(PRECIO_RECIBIDO)
-        recibirId = arguments?.getString(PRECIO_RECIBIDO)
+        recibirId = arguments?.getString(ID_RECIBIDO)
         val imagenDelAdapter = view.findViewById<ImageView>(R.id.imageView_ver_imagen)
         val nombre = view.findViewById<TextView>(R.id.textViewNombre)
         val desc = view.findViewById<TextView>(R.id.textViewDesc)
@@ -81,19 +81,21 @@ class VerImagenFragment : Fragment() {
         precio.text = recibirPrecio
 
         // inflar viewPager......................................
-        val viewPagerSimilar = view.findViewById(R.id.viewPager_similares) as ViewPager2
-        adapterSimilar = PagerSimilaresAdapter(arrayListOf(), context as FragmentActivity)
-        viewPagerSimilar.adapter = adapterSimilar
 
+        viewPagerSimilar = view.findViewById(R.id.viewPager_similares) as ViewPager2
+        adapterSimilar = PagerSimilaresAdapter(arrayListOf(), context as FragmentActivity)
+        viewPagerSimilar?.adapter = adapterSimilar
+
+        Log.e("idRecibido", recibirId!!)
         observerDataSimil()
         return view
     }
     //  funcion para inflar el viewPager
     private fun observerDataSimil(){
-        viewModel.fetchUserDataSimilares(recibirId!!).observe(this.viewLifecycleOwner, Observer {
+        viewModel.fetchUserDataSimilares(recibirDescripcion).observe(this.viewLifecycleOwner, androidx.lifecycle.Observer{
             adapterSimilar!!.similaresArray = it as ArrayList<PagerSimilares>
             adapterSimilar!!.notifyDataSetChanged()
-            Log.e("Datos del viewPager", it.toString())
+
         })
 
     }

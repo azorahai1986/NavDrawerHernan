@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:elevation="6dp"
+        app:cardElevation="5dp"
         app:cardCornerRadius="12dp">
 
         <LinearLayout
@@ -19,7 +20,7 @@
             <ImageView
                 android:id="@+id/imageView_similar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="250dp"
                 android:src="@drawable/constantine"
                 android:scaleType="fitXY"/>
 
@@ -39,6 +40,13 @@
                 android:textColor="#FFC107"
                 android:textStyle="bold"
                 android:textSize="34dp"/>
+            <TextView
+                android:id="@+id/text_sub_similar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="deportiva"
+                android:textStyle="bold"
+                android:textSize="24dp"/>
 
         </LinearLayout>
 

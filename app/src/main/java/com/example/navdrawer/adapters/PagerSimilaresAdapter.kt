@@ -15,16 +15,18 @@ class PagerSimilaresAdapter(var similaresArray:ArrayList<PagerSimilares>, val ac
 
     inner class SimilaresViewHolder(itemView:View):RecyclerView.ViewHolder(itemView)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SimilaresViewHolder=
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerSimilaresAdapter.SimilaresViewHolder=
         SimilaresViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_pager_similares, parent, false))
 
 
     override fun getItemCount(): Int= similaresArray.size
 
-    override fun onBindViewHolder(holder: SimilaresViewHolder, position: Int) {
-        val arraySimilar = similaresArray[position]
+    override fun onBindViewHolder(holder: PagerSimilaresAdapter.SimilaresViewHolder, position: Int) {
+        val arraySimilar= similaresArray[position]
+
         holder.itemView.text_nombre_similar.text = arraySimilar.nombre
         holder.itemView.text_precio_similar.text = arraySimilar.precio
-        Glide.with(activity).load(arraySimilar.Imagen).into(holder.itemView.imageView_similar)
+        holder.itemView.text_sub_similar.text = arraySimilar.sub
+        Glide.with(activity).load(arraySimilar.imagen).into(holder.itemView.imageView_similar)
     }
 }

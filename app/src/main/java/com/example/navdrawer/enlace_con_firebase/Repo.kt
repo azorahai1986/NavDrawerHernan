@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.navdrawer.modelos_de_datos.CartelPrincipal
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
+import com.example.navdrawer.modelos_de_datos.PagerSimilares
 import com.google.firebase.firestore.FirebaseFirestore
 
 class Repo {
@@ -51,25 +52,27 @@ class Repo {
         return mutableDatabaseOfertas
     }
 
-    fun getUserDataSimilares(recibirId:String): LiveData<MutableList<ModeloDeIndumentaria>> {
-
-        val mutableData = MutableLiveData<MutableList<ModeloDeIndumentaria>>()
-        FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria").whereEqualTo("cate", recibirId)
+    fun getUserDataSimilares(recibirDescripcion: String?): LiveData<MutableList<PagerSimilares>> {
+        Log.e("DescripcionRepo", recibirDescripcion)
+        val mutableData = MutableLiveData<MutableList<PagerSimilares>>()
+        FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria").whereEqualTo("sub", recibirDescripcion)
             .get().addOnSuccessListener {
 
-                val listData = mutableListOf<ModeloDeIndumentaria>()
-                Log.e("Datos del repo1", it.toString())
+                val listData = mutableListOf<PagerSimilares>()
+                //Log.e("Datos del repo1", it.toString())
+                //Log.e("Datos del repo2", listData.toString())
 
                 for (obtenerFireBase in it.documents){
-                    val indument = obtenerFireBase.toObject(ModeloDeIndumentaria::class.java)
+                    val indument = obtenerFireBase.toObject(PagerSimilares::class.java)
                     indument?.id = obtenerFireBase.id
                     if (indument != null)
-
                         listData.add(indument)
 
                 }
+                //Log.e("Datos del repo3", listData.toString())
+
                 mutableData.value = listData
-                Log.e("Datos del repo2", listData.toString())
+
             }.addOnFailureListener {
                 Log.e("ErrorMODELO", it.toString())
                 //Esto lo hice para probar si llega internet a la app.
