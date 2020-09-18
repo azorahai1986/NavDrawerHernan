@@ -24,7 +24,7 @@ class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, 
     // Enlazar ViewHolder
     override fun onBindViewHolder(holder: RecyclerUnoAdapter.ViewHolderModel, position: Int) {
         val modelosFb = mutableListModel[position]
-        holder.itemView.textview_producto.text = modelosFb.nombre
+        holder.itemView.textview_producto.text = modelosFb.nombre + " "+modelosFb.sub
         holder.itemView.textview_precio.text = modelosFb.precio
         holder.itemView.textview_descripcion.text = modelosFb.cate
         holder.itemView.textview_sub.text = modelosFb.sub
@@ -32,8 +32,7 @@ class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, 
 
         holder.itemView.imageview.setOnClickListener{
             activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.drawerLayout, VerImagenFragment
-                    .newInstance(modelosFb.imagen, modelosFb.nombre, modelosFb.sub, modelosFb.precio, modelosFb.id))
+                .replace(R.id.drawerLayout, VerImagenFragment.newInstance(modelosFb.imagen, modelosFb.nombre, modelosFb.sub, modelosFb.precio, modelosFb.id))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(VerImagenFragment.IMAGENRECIBIDA).commit()
         }
 

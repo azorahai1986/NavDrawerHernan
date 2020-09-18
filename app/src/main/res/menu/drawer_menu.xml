@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/home"
+            android:id="@+id/inicio"
             android:title="Inicio"
             android:icon="@drawable/ic_home"/>
         <item
-            android:id="@+id/school"
-            android:title="school"
+            android:id="@+id/categorias"
+            android:title="categorias"
             android:icon="@drawable/ic_school"/>
         <item
             android:id="@+id/work"
@@ -28,7 +28,7 @@
                 android:icon="@drawable/ic_settings"/>
 
             <item
-                android:id="@+id/logout"
+                android:id="@+id/subcate"
                 android:title="acceder"
                 android:icon="@drawable/ic_logout"/>
 

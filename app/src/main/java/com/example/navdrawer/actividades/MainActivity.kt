@@ -1,25 +1,25 @@
 package com.example.navdrawer.actividades
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentTransaction
-import com.example.navdrawer.*
+import com.example.navdrawer.R
 import com.example.navdrawer.fragmentos.*
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
-class MainActivity : AppCompatActivity(), HomeFragment.FragmentoEnActivity, NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    lateinit var homeFragment: HomeFragment
+    lateinit var inicioFragment: HomeFragment
     lateinit var workFragment: WorkFragment
     lateinit var settingFragment: SettingFragment
-    lateinit var logoutFragment: LogoutFragment
+    lateinit var subCateFragment: SubCateFragment
     lateinit var timelineFragment: TimelineFragment
-    lateinit var schoolFragment: SchoolFragment
+    lateinit var categoriasFragment: CategoriasFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,23 +40,24 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentoEnActivity, Navi
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        homeFragment = HomeFragment()
-        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, homeFragment)
+        inicioFragment = HomeFragment()
+        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, inicioFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
 
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.home -> {
-                homeFragment = HomeFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, homeFragment)
+            R.id.inicio -> {
+                inicioFragment = HomeFragment()
+                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, inicioFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
             }
-            R.id.school -> {
-                schoolFragment = SchoolFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, schoolFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
+            R.id.categorias -> {
+                categoriasFragment = CategoriasFragment()
+                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, categoriasFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(CategoriasFragment.volver).commit()
+                //en este caso para volver desde un fragmenr al inicio debo colocar aquí el addtoBackStack
             }
 
             R.id.work -> {
@@ -64,7 +65,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.FragmentoEnActivity, Navi
                 supportFragmentManager.beginTransaction().replace(R.id.frame_layout, workFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
             }
-            R.id.school -> {
+            R.id.categorias -> {
                 timelineFragment = TimelineFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.frame_layout, timelineFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
