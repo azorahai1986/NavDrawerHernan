@@ -1,10 +1,13 @@
 package com.example.navdrawer.fragmentos
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
@@ -20,7 +23,9 @@ import com.example.navdrawer.modelos_de_datos.CartelPrincipal
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 
-
+enum class ProviderType {
+    BIENVENIDO
+}
 class HomeFragment : Fragment() {
     private var adapter:RecyclerUnoAdapter? = null
     private var adapterCartelPrincipal:PagerPrincipalAdapter? = null
@@ -41,12 +46,48 @@ class HomeFragment : Fragment() {
 
         }
     }
+    lateinit var categoriasFragment:CategoriasFragment
+    //para el bundle
+    var tokenrecibido:String? = null
+
+    companion object {
+        private const val TOKEN_RECIBIDO = "TOKEN_RECIBIDO"
+        fun newInstance(token: String):HomeFragment {
+            val bundle = Bundle()
+            bundle.putString(TOKEN_RECIBIDO, token)
+            val fragment = HomeFragment()
+            fragment.arguments = bundle
+
+            return fragment
+
+        }
+
+
+    }
+
+    //........ token y datos desde fragmentAcceder
+    /*val bundle = intent.extras
+    val email = bundle?.getString("email")
+    val provider = bundle?.getString("provider")
+    val token = bundle?.getString("idToken")
+    setup(email?: "", provider?:"", token?:"")*/
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
+
+
+        newInstance(tokenrecibido?:"")
+        Log.e("tok", tokenrecibido)
+        tokenrecibido = arguments?.getString(TOKEN_RECIBIDO)
+
+
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+
 
         recyclerView = view.findViewById(R.id.recycler_productos)
         layoutManager = GridLayoutManager(activity, 2)
@@ -73,6 +114,24 @@ class HomeFragment : Fragment() {
                 handler.postDelayed(runnable, 5000)
             }
         })
+
+        // dar funcion a los textViews del final de lista
+        val irCategorias = view.findViewById<TextView>(R.id.textview_ir_categorias)
+        val quienesSomos = view.findViewById<TextView>(R.id.textview_quienes_somos)
+        irCategorias.setOnClickListener {
+            irACategorias()
+        }
+        quienesSomos.setOnClickListener { dialQuienSomos() }
+
+        //........ token y datos desde accederFragment...............
+        /*if (token.isNullOrEmpty()){
+            //Toast.makeText(this, "no hay nada", Toast.LENGTH_SHORT).show()
+        }else{
+           // Toast.makeText(this, "Contiene datos", Toast.LENGTH_SHORT).show()
+            Log.e("TokenMainAct", token.withIndex().toString())
+            //ibCerrarSesion.visibility = View.VISIBLE
+
+        }*/
 
         observeData()
         cargarPagerCartelPrincipal()
@@ -101,6 +160,22 @@ class HomeFragment : Fragment() {
         })
     }
 
+    fun irACategorias(){
+        categoriasFragment = CategoriasFragment()
+        activity?.supportFragmentManager?.beginTransaction()
+            ?.replace(R.id.frame_layout, categoriasFragment)?.addToBackStack(CategoriasFragment.volver)
+            ?.commit()
+    }
 
+    fun dialQuienSomos(){
+        val dialogQuien =LayoutInflater.from(activity).inflate(R.layout.dialog_quienes_somos, null)
+        val constructorDialog = AlertDialog.Builder(activity).setView(dialogQuien).setTitle("Quienes somos")
+        // mostrar dialog.
+        constructorDialog.show()
+    }
+
+    fun datosDeAcceder(){
+
+    }
 
 }

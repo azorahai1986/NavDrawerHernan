@@ -6,12 +6,14 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentTransaction
+import com.example.navdrawer.AccederFragment
 import com.example.navdrawer.R
 import com.example.navdrawer.fragmentos.*
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
+@Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     lateinit var inicioFragment: HomeFragment
@@ -19,11 +21,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var settingFragment: SettingFragment
     lateinit var subCateFragment: SubCateFragment
     lateinit var timelineFragment: TimelineFragment
+    lateinit var accederFragment: AccederFragment
     lateinit var categoriasFragment: CategoriasFragment
+    var tokenDeAcceder:String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
 
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
@@ -43,6 +49,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         inicioFragment = HomeFragment()
         supportFragmentManager.beginTransaction().replace(R.id.frame_layout, inicioFragment)
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
+
 
     }
 
@@ -69,6 +76,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 timelineFragment = TimelineFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.frame_layout, timelineFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
+            }
+
+            R.id.acceder -> {
+                accederFragment = AccederFragment()
+                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, accederFragment)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(AccederFragment.VOLVER).commit()
             }
 
         }

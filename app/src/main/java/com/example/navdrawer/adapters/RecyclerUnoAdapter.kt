@@ -32,7 +32,7 @@ class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, 
 
         holder.itemView.imageview.setOnClickListener{
             activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.drawerLayout, VerImagenFragment.newInstance(modelosFb.imagen, modelosFb.nombre, modelosFb.sub, modelosFb.precio, modelosFb.id))
+                .replace(R.id.frame_layout, VerImagenFragment.newInstance(modelosFb.imagen, modelosFb.nombre, modelosFb.sub, modelosFb.precio, modelosFb.id))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(VerImagenFragment.IMAGENRECIBIDA).commit()
         }
 

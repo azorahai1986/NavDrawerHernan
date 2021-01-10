@@ -27,7 +27,7 @@ class CategoriasAdapter(var arrayCategorias:MutableList<Categorias>, val fragmen
         Glide.with(fragment).load(categoriasArray.imagen).into(holder.itemView.imagen_item_categorias)
 
         holder.itemView.cardview_categorias.setOnClickListener {
-            fragment.supportFragmentManager.beginTransaction().replace(R.id.drawerLayout, SubCateFragment.newInstance(categoriasArray.id))
+            fragment.supportFragmentManager.beginTransaction().replace(R.id.frame_layout, SubCateFragment.newInstance(categoriasArray.id))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).addToBackStack(SubCateFragment.VOLVER).commit()
         }
     }

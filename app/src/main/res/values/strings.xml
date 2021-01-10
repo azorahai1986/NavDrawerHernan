@@ -5,6 +5,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="texto_descripcion">este tipo de productos aparecerá debajo del nombre y describira caracteristicas</string>
+    <string name="texto_quienes">Somos una empresa dedicada al servicio de la gente. no encontramos en la avenida blablbabla</string>
     <string name="_140">140</string>
     <string name="imagen_de_constantin">imagen de constantin</string>
 </resources>

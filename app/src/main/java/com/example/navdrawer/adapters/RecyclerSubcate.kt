@@ -24,15 +24,13 @@ class RecyclerSubcate(var mutableListSub: ArrayList<SubCategorias>, val activity
     // Enlazar ViewHolder
     override fun onBindViewHolder(holder: RecyclerSubcate.ViewHolderModel, position: Int) {
         val modelosFb = mutableListSub[position]
-        holder.itemView.text_producto_sub.text = modelosFb.marca
-        //holder.itemView.text_precio_sub.text = modelosFb.precio
-        holder.itemView.text_descripcion_sub.text = modelosFb.cate
-       // holder.itemView.text_sub_sub.text = modelosFb.sub
+
+        holder.itemView.text_descripcion_sub.text = modelosFb.marca
         Glide.with(activity).load(modelosFb.imagen).into(holder.itemView.imageView_sub)
 
         holder.itemView.imageView_sub.setOnClickListener{
             activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.drawerLayout, dependienteFragment.newInstance(modelosFb.marca))
+                .replace(R.id.frame_layout, dependienteFragment.newInstance(modelosFb.marca))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(dependienteFragment.VOLVER).commit()
         }
 

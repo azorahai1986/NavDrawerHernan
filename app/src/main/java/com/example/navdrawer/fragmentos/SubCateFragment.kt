@@ -20,11 +20,12 @@ class SubCateFragment : Fragment() {
 
     var categoriaRecibida: String? = null
 
+
+
     companion object {
         private const val CATE_RECIBIDA = "cate_recibida"
         const val VOLVER = "volver"
         fun newInstance(categoriaRecibidas: String): SubCateFragment{
-            Log.e("NewInstane", categoriaRecibidas)
             val bundle = Bundle()
             bundle.putString(CATE_RECIBIDA, categoriaRecibidas)
 
@@ -55,6 +56,7 @@ class SubCateFragment : Fragment() {
         adapterSub = RecyclerSubcate(arrayListOf(), activity as FragmentActivity)
         recyclerSub?.adapter = adapterSub
         observeDataSub()
+        Log.e("fragmentoCate", categoriaRecibida!!)
         return view
     }
 
