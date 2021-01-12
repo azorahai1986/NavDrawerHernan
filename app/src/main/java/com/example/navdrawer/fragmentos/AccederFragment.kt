@@ -1,23 +1,22 @@
-package com.example.navdrawer
+package com.example.navdrawer.fragmentos
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import com.example.navdrawer.fragmentos.HomeFragment
-import com.example.navdrawer.fragmentos.ProviderType
+import com.example.navdrawer.R
+import com.example.navdrawer.actividades.MainActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.fragment_acceder.*
 
 
 class AccederFragment : Fragment() {
 
     var botAcceder:Button? = null
-
+    var tokenParaHome:String? = null
     companion object{
         const val VOLVER = "volver"
 
@@ -39,23 +38,6 @@ class AccederFragment : Fragment() {
 
     private fun setup(){
 
-
-        /* btRegistrarse?.setOnClickListener {
-             if (etEmail.text.isNotEmpty() && etPassword.text.isNotEmpty()){
-
-                 FirebaseAuth.getInstance()
-                     .createUserWithEmailAndPassword(etEmail.text.toString(), etPassword.text.toString())
-                     .addOnCompleteListener {
-                         if (it.isSuccessful){
-                             showHome(it.result?.user?.email?: "", ProviderType.BIENVENIDO)
-
-                         }else{
-                             showAlert()
-
-                         }
-                     }
-             }
-         }*/
         botAcceder?.setOnClickListener {
 
 
@@ -65,8 +47,14 @@ class AccederFragment : Fragment() {
                     .signInWithEmailAndPassword(etEmail.text.toString(), etPassword.text.toString())
                     .addOnCompleteListener {
                         if (it.isSuccessful){
-                            showHome(it.result?.user?.email?: "", ProviderType.BIENVENIDO, idToken = "existe_token")
+                            showHome(it.result?.user?.email?: "", ProviderType.BIENVENIDO)
+                            tokenParaHome = "existe_token"
+                           activity?.finish()
 
+                           /* homeFragment = HomeFragment()
+                            activity?.supportFragmentManager?.beginTransaction()
+                                ?.replace(R.id.frame_layout, homeFragment)
+                                ?.commit()*/
 
                         }else{
                             showAlertAcceder()
@@ -77,19 +65,18 @@ class AccederFragment : Fragment() {
 
             }
 
-            val mUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+           /* val mUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
             mUser?.getIdToken(true)
                 ?.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
 
-                        Log.e("TokenActividadRegis", task.toString())
-                        val idToken = task?.result?.token?: ""
-                        Log.e("TokenT", idToken)
+                        var idToken = task?.result?.token?: ""
+                        Log.e("TokenReal", idToken)
 
                     } else {
                         // Handle error -> task.getException();
                     }
-                }
+                }*/
 
 
 
@@ -115,12 +102,11 @@ class AccederFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showHome(email: String, provider: ProviderType, idToken: String){
-        HomeFragment.newInstance(idToken)
-        Log.e("email", email)
-        Log.e("provider", provider.toString())
-        Log.e("idToken", idToken)
-
+    private fun showHome(email: String, provider: ProviderType){
+        val homeIntent = Intent(context, MainActivity::class.java)
+        homeIntent.putExtra("email", email)
+        homeIntent.putExtra("provider", provider.name)
+        startActivity(homeIntent)
 
 
     }

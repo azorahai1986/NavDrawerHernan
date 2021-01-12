@@ -22,7 +22,7 @@ class PagerPrincipalAdapter(var itemCartel:ArrayList<CartelPrincipal>, val fragm
     override fun onBindViewHolder(holder: ViewHolderCartel, position: Int) {
         val cartelArray = itemCartel[position]
 
-        Glide.with(fragment).load(cartelArray.image).into(holder.itemView.imageCartel)
+        Glide.with(fragment).load(cartelArray.imagen).into(holder.itemView.imageCartel)
     }
 
 

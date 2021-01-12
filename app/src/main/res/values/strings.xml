@@ -8,4 +8,17 @@
     <string name="texto_quienes">Somos una empresa dedicada al servicio de la gente. no encontramos en la avenida blablbabla</string>
     <string name="_140">140</string>
     <string name="imagen_de_constantin">imagen de constantin</string>
+
+    <string name="tvAccder">Acceder</string>
+    <string name="tvTitulo">Comercio</string>
+    <string name="tvcerrar">Cerrar sesion</string>
+    <string name="tvLogin">Ingresa tu mail y contraseña.\n Solo si eres usuario Registrado</string>
+
+    <string name="nombre">Nuevo Nombre</string>
+    <string name="precio">Nuevo Precio</string>
+    <string name="categoria">Nueva Categoria</string>
+    <string name="marca">Nueva Marca</string>
+    <string name="salir_editar">Precione aquí para \n aplicar los cambios</string>
+    <string name="dialog_tv_titulo"> Se perderán todos los datos de la compra \n Si ingresas a la información \n del producto en esta instancia</string>
+
 </resources>

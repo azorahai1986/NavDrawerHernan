@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".actividades.CartelActivity">
+
+    <TextView
+        android:id="@+id/textTitulo"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:text="Ingresa el valor de tu Oferta!!"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:textColor="#FFF"
+        android:elevation="10dp"
+        android:textAlignment="center"
+        android:layout_margin="10dp"
+        android:background="@color/colorPrimary"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="245dp"
+        android:background="@color/colorPrimary"/>
+    <ImageView
+        android:id="@+id/image_crar_ofertas"
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:src="@drawable/caramelos"
+        android:layout_marginTop="270dp"
+        android:elevation="15dp"
+        android:scaleType="fitXY"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/bt_cargar_ofertas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="20dp"
+        android:src="@drawable/ic_agregar"
+        app:fabSize="normal"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="crear Oferta"
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="bottom|right"
+        android:layout_marginRight="90dp"
+        android:layout_marginBottom="30dp"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

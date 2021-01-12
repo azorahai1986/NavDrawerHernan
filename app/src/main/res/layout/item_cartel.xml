@@ -10,6 +10,6 @@
         android:layout_height="250dp"
         android:src="@drawable/constantine"
         android:layout_margin="5dp"
-        android:scaleType="centerCrop"/>
+        android:scaleType="fitXY"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
