@@ -1,5 +1,6 @@
 package com.example.navdrawer.enlace_con_firebase
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,10 +19,12 @@ class MainViewModelo: ViewModel() {
 
     }
 
-    fun fetchUserDataSimilares(recibirDescripcion: String?): LiveData<MutableList<PagerSimilares>> {
+    fun fetchUserDataSimilares(recibirMarca: String?): LiveData<MutableList<PagerSimilares>> {
         val mutableData = MutableLiveData<MutableList<PagerSimilares>>()
-        repo.getUserDataSimilares(recibirDescripcion).observeForever {
+        Log.e("ReciMarcaViewM", mutableData.toString())
+        repo.getUserDataSimilares(recibirMarca).observeForever {
             mutableData.value = it
+            Log.e("ReciMarcaViewPa", mutableData.toString())
 
         }
         return mutableData

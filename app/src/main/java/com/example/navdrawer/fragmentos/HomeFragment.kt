@@ -22,7 +22,6 @@ import com.airbnb.lottie.LottieAnimationView
 import com.example.navdrawer.R
 import com.example.navdrawer.actividades.ActividadAgregar
 import com.example.navdrawer.actividades.CartelActivity
-import com.example.navdrawer.actividades.MainActivity
 import com.example.navdrawer.adapters.PagerPrincipalAdapter
 import com.example.navdrawer.adapters.RecyclerUnoAdapter
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
@@ -156,7 +155,6 @@ class HomeFragment : Fragment() {
         var btAgregar = view.findViewById<FloatingActionButton>(R.id.flot_btAgregar)
         var btAgCartel = view.findViewById<FloatingActionButton>(R.id.floatBtAgregarCartel)
         var btAgProducto = view.findViewById<FloatingActionButton>(R.id.floatBtAgregarProducto)
-        var btcerSesion = view.findViewById<FloatingActionButton>(R.id.floatBtcerSesion)
         var txtcartel = view.findViewById<TextView>(R.id.textOfertas)
         var txtproducto = view.findViewById<TextView>(R.id.textLista)
         //........ token y datos desde accederFragment.....................................................
@@ -169,14 +167,12 @@ class HomeFragment : Fragment() {
         btAgregar.setOnClickListener {
             btAgCartel.visibility = View.VISIBLE
             btAgProducto.visibility = View.VISIBLE
-            btcerSesion.visibility = View.VISIBLE
             txtcartel.visibility = View.VISIBLE
             txtproducto.visibility = View.VISIBLE
 
             isOpen = if (isOpen){
                 btAgProducto.startAnimation(abrire)
                 btAgCartel.startAnimation(abrire)
-                btcerSesion.startAnimation(abrire)
                 txtcartel.startAnimation(abrire)
                 txtproducto.startAnimation(abrire)
                 //flot_btAgregar.startAnimation(rotate)
@@ -184,19 +180,12 @@ class HomeFragment : Fragment() {
             }else{
                 btAgProducto.startAnimation(cerrar)
                 btAgCartel.startAnimation(cerrar)
-                btcerSesion.startAnimation(cerrar)
                 txtcartel.startAnimation(cerrar)
                 txtproducto.startAnimation(cerrar)
-                //flot_btAgregar.startAnimation(rotate)
                 true
             }
         }
 
-        // corregir
-        btcerSesion.setOnClickListener {
-           cerrarSesion()
-
-        }
         // dar funcines a los botones............................
         btAgProducto.setOnClickListener { irAgregarActivity() }
         btAgCartel.setOnClickListener { irCartelActivity() }
@@ -257,13 +246,6 @@ class HomeFragment : Fragment() {
     fun irCartelActivity(){
         val intent = Intent(context, CartelActivity::class.java)
         startActivity(intent)
-    }
-    fun cerrarSesion(){
-        FirebaseAuth.getInstance().signOut()
-        val homeIntent = Intent(context, MainActivity::class.java)
-        startActivity(homeIntent)
-
-
     }
 
     override fun onResume() {

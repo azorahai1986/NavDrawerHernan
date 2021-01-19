@@ -6,25 +6,39 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.navdrawer.R
 import com.example.navdrawer.adapters.RecyclerUnoAdapter
+import com.example.navdrawer.clases_push.NotificationData
+import com.example.navdrawer.clases_push.PushNotification
+import com.example.navdrawer.clases_push.Retrofitinstance
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_actividad_agregar.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.*
 
-class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
 
+
+const val TOPIC = "/topics/myTopic"
+class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
+// para enviar los push.........................................
+    val TAG = "ActividadAgregar"
 
     private val PICK_IMAGE_REQUEST = 1234
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
@@ -126,8 +140,13 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
 
+
         imageView.setOnClickListener(this)
         btCargar.setOnClickListener(this)
+        // para lanzar push..................
+        FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
+        var botPush = findViewById<FloatingActionButton>(R.id.btPush)
+        botPush.setOnClickListener { lanzarPush() }
 
         exTraerDatos()
 
@@ -167,8 +186,34 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
         })
 
     }
+    // para enviar los push a los usuarios..............................
+    private fun sendNotification(notification:PushNotification) = CoroutineScope(Dispatchers.IO).launch{
+        try {
+            val response = Retrofitinstance.api.postNotification(notification)
+            if (response.isSuccessful){
+                Log.e(TAG, "response: ${Gson().toJson(response)} ")
+            }else{
+                Log.e(TAG, response.errorBody().toString())
+
+            }
+
+        }catch (e:Exception){
+            Log.e(TAG, e.toString())
+        }
 
 
+    }
+    fun lanzarPush(){
+        val title = tvNombre.text.toString()
+        val message = tvMarca.text.toString()
+        if (title.isNotEmpty() && message.isNotEmpty()){
+            PushNotification(NotificationData(title, message),
+                TOPIC
+            ).also {
+                sendNotification(it)
+            }
+        }
+    }
 
 
 }

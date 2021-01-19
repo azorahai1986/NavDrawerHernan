@@ -50,10 +50,10 @@ class Repo {
         return mutableDatabaseOfertas
     }
 
-    fun getUserDataSimilares(recibirDescripcion: String?): LiveData<MutableList<PagerSimilares>> {
+    fun getUserDataSimilares(recibirMarca: String?): LiveData<MutableList<PagerSimilares>> {
         //Log.e("DescripcionRepo", recibirDescripcion)
         val mutableData = MutableLiveData<MutableList<PagerSimilares>>()
-        FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria").whereEqualTo("sub", recibirDescripcion)
+        FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria").whereEqualTo("marca", recibirMarca)
             .get().addOnSuccessListener {
 
                 val listData = mutableListOf<PagerSimilares>()

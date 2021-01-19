@@ -23,14 +23,15 @@
     <item android:title="controls">
         <menu>
             <item
-                android:id="@+id/contactanos"
-                android:title="contactanos"
-                android:icon="@drawable/ic_settings"/>
-
-            <item
                 android:id="@+id/acceder"
                 android:title="acceder"
                 android:icon="@drawable/ic_logout"/>
+
+            <item
+                android:id="@+id/cerrar"
+                android:title="Cerrar sesion"
+                android:icon="@drawable/ic_settings"/>
+
 
         </menu>
     </item>

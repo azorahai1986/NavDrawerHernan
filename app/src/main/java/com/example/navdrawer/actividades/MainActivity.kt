@@ -1,8 +1,9 @@
 package com.example.navdrawer.actividades
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -36,26 +37,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-           //para saber si existe un email................................
-        auth = Firebase.auth
-        val user = FirebaseAuth.getInstance().currentUser
-        user?.let {
-            // Name, email address, and profile photo Url
-            val email = user.email
-
-            //Log.e("EmailMainAct2", email.toString())
-
-            val uid = user.uid
-            //Log.e("UID", uid)
-            uidRecuperado = user.uid
-            mailRecuperado = email.toString()
-        }
-
-        Log.e("UIDRECUPER", uidRecuperado.toString())
-
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
-        actionBar?.title = "Drawer Hernan"
+        actionBar?.title = ""
+
 
         val drawerToggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(this, drawerLayout, toolbar, (
                 R.string.open), (R.string.close)){
@@ -73,15 +58,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
 
         // recuperar los datos del login o acceso de usuario...............
-        val bundle = intent.extras
-        val email = bundle?.getString("email")
-        val provider = bundle?.getString("provider")
-        obtenerEmail(email ?: "", provider ?: "")
+        //para saber si existe un email................................
+        auth = Firebase.auth
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.let {
+            // Name, email address, and profile photo Url
+            val email = user.email
 
-        Log.e("emailEnActivityMain", email.toString())
+            //Log.e("EmailMainAct2", email.toString())
+
+            val uid = user.uid
+            //Log.e("UID", uid)
+            uidRecuperado = user.uid
+            mailRecuperado = email.toString()
+        }
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+
         when (item.itemId) {
             R.id.inicio -> {
                 inicioFragment = HomeFragment()
@@ -107,16 +102,38 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             R.id.acceder -> {
-                accederFragment = AccederFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, accederFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(
-                        AccederFragment.VOLVER).commit()
+                if (mailRecuperado != null){
+                    Toast.makeText(this, "Ya estás registrado", Toast.LENGTH_LONG).show()
+                }else{
+                    accederFragment = AccederFragment()
+                    supportFragmentManager.beginTransaction().replace(R.id.frame_layout, accederFragment)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(
+                            AccederFragment.VOLVER).commit()
+                }
+
+            }
+            R.id.cerrar ->{
+                if (mailRecuperado.isNullOrEmpty()){
+                    Toast.makeText(this, "No estás registrado", Toast.LENGTH_LONG).show()
+
+                }else{
+                    cerrarSesion()
+                }
+
             }
 
         }
 
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
+
+    }
+
+    fun cerrarSesion(){
+        FirebaseAuth.getInstance().signOut()
+        val homeIntent = Intent(this, MainActivity::class.java)
+        startActivity(homeIntent)
+
 
     }
 
@@ -128,9 +145,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
     }
-    fun obtenerEmail(email:String, provider:String){
-        title = "Inicio"
 
-    }
 
 }
