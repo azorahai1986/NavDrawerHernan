@@ -9,6 +9,7 @@ import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.navdrawer.R
@@ -18,7 +19,6 @@ import com.example.navdrawer.clases_push.PushNotification
 import com.example.navdrawer.clases_push.Retrofitinstance
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
@@ -37,32 +37,27 @@ import java.util.*
 
 const val TOPIC = "/topics/myTopic"
 class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
-// para enviar los push.........................................
+    // para enviar los push.........................................
     val TAG = "ActividadAgregar"
+    var tvSwitch: TextView? = null
 
     private val PICK_IMAGE_REQUEST = 1234
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
-    private var adapter:RecyclerUnoAdapter? = null
+    private var adapter: RecyclerUnoAdapter? = null
 
     // Método para subir imagenes al firebase storage
     private var filePath: Uri? = null
     private var storageReference: StorageReference? = null
-    override fun onClick(v: View?) {
-        if (v === imageView)
-            showFilerChooser()
-        else(v === btCargar)
-        uploadFile()
 
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null){
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             filePath = data.data
             try {
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
                 imageView!!.setImageBitmap(bitmap)
-            }catch (e: IOException){
+            } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
@@ -70,14 +65,14 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun uploadFile() {
-        if (filePath != null){
+        if (filePath != null) {
             val progressDialog = ProgressDialog(this)
             progressDialog.setTitle("Cargando...")
             progressDialog.show()
 
             // para modificar los datos de una lista usando firestore..........................
 
-            val imageRef = storageReference!!.child("images/"+ UUID.randomUUID().toString())
+            val imageRef = storageReference!!.child("images/" + UUID.randomUUID().toString())
 
             var uploadTask = imageRef.putFile(filePath!!)
             val urlTask = uploadTask.continueWithTask { task ->
@@ -98,7 +93,7 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
                     var imagen = downloadUri.toString()
                     var nombre = tvNombre.text.toString()
                     var precio = etNuevoPrecio.text.toString()
-                    var map = mutableMapOf<String,Any>()
+                    var map = mutableMapOf<String, Any>()
                     // map["id"] = id
                     map["cate"] = cate
                     map["marca"] = marca
@@ -120,7 +115,6 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
         }
 
 
-
     }
 
 
@@ -130,10 +124,14 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "SELECT PICTURE"), PICK_IMAGE_REQUEST)
     }
+
     lateinit var storage: FirebaseStorage
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_actividad_agregar)
+
+        tvSwitch = findViewById(R.id.textview_switch)
+
         storage = Firebase.storage
 
         // dare init a firebase
@@ -142,25 +140,39 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
 
 
         imageView.setOnClickListener(this)
-        btCargar.setOnClickListener(this)
-        // para lanzar push..................
+       
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
-        var botPush = findViewById<FloatingActionButton>(R.id.btPush)
-        botPush.setOnClickListener { lanzarPush() }
+
+        // dar funcion al swith..........................................
+        switch_push.setOnCheckedChangeListener { buttonView, isChecked ->
+            if (isChecked) {
+                tvSwitch?.setTextColor(getColor(R.color.WhiteColor))
+                btCargar.setOnClickListener {
+                    uploadFile()
+                    lanzarPush()
+                }
+
+            } else {
+                tvSwitch?.setTextColor(getColor(R.color.amarillo))
+                btCargar.setOnClickListener { uploadFile() }
+
+            }
+        }
+        btCargar.setOnClickListener { uploadFile() }
 
         exTraerDatos()
 
     }
 
-    fun exTraerDatos(){
-        viewModel.fetchUserData().observe(this, androidx.lifecycle.Observer{
+    fun exTraerDatos() {
+        viewModel.fetchUserData().observe(this, androidx.lifecycle.Observer {
             adapter?.mutableListModel = it as ArrayList<ModeloDeIndumentaria>
             adapter?.notifyDataSetChanged()
             val autocompletar = mutableListOf<String>()
             val autocompletarMarca = mutableListOf<String>()
             val autocompletarCate = mutableListOf<String>()
 
-            for (x in it){
+            for (x in it) {
                 autocompletar.add(x.nombre)
                 autocompletarMarca.add(x.marca)
                 autocompletarCate.add(x.cate)
@@ -170,44 +182,53 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
             tvNombre.threshold = 0
             tvNombre.setAdapter(adapterAuto)
             tvNombre.setOnFocusChangeListener { view, b ->
-                if (b) tvNombre.showDropDown()}
+                if (b) tvNombre.showDropDown()
+            }
 
-            val adapterAutoMarca = ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletarMarca)
+            val adapterAutoMarca =
+                ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletarMarca)
             tvMarca.threshold = 0
             tvMarca.setAdapter(adapterAutoMarca)
             tvMarca.setOnFocusChangeListener { view, b ->
-                if (b) tvMarca.showDropDown()}
+                if (b) tvMarca.showDropDown()
+            }
 
-            val adapterAutoCate = ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletarCate)
+            val adapterAutoCate =
+                ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletarCate)
             tvCategoria.threshold = 0
             tvCategoria.setAdapter(adapterAutoCate)
             tvCategoria.setOnFocusChangeListener { view, b ->
-                if (b) tvCategoria.showDropDown()}
+                if (b) tvCategoria.showDropDown()
+            }
         })
 
     }
-    // para enviar los push a los usuarios..............................
-    private fun sendNotification(notification:PushNotification) = CoroutineScope(Dispatchers.IO).launch{
-        try {
-            val response = Retrofitinstance.api.postNotification(notification)
-            if (response.isSuccessful){
-                Log.e(TAG, "response: ${Gson().toJson(response)} ")
-            }else{
-                Log.e(TAG, response.errorBody().toString())
 
+    // para enviar los push a los usuarios..............................
+    private fun sendNotification(notification: PushNotification) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = Retrofitinstance.api.postNotification(notification)
+                if (response.isSuccessful) {
+                    Log.e(TAG, "response: ${Gson().toJson(response)} ")
+                } else {
+                    Log.e(TAG, response.errorBody().toString())
+
+                }
+
+            } catch (e: Exception) {
+                Log.e(TAG, e.toString())
             }
 
-        }catch (e:Exception){
-            Log.e(TAG, e.toString())
+
         }
 
-
-    }
-    fun lanzarPush(){
+    fun lanzarPush() {
         val title = tvNombre.text.toString()
-        val message = tvMarca.text.toString()
-        if (title.isNotEmpty() && message.isNotEmpty()){
-            PushNotification(NotificationData(title, message),
+        val message = tvMarca.text.toString() + "  " + tvCategoria.text.toString()
+        if (title.isNotEmpty() && message.isNotEmpty()) {
+            PushNotification(
+                NotificationData(title, message),
                 TOPIC
             ).also {
                 sendNotification(it)
@@ -215,5 +236,12 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
         }
     }
 
+    override fun onClick(v: View?) {
+        if (v === imageView)
+            showFilerChooser()
+       // else (v === btCargar)
 
+        // lanzar e Swuitch................................................
+
+    }
 }

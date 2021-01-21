@@ -10,13 +10,13 @@
         android:id="@+id/textTitulo"
         android:layout_width="match_parent"
         android:layout_height="90dp"
-        android:text="Ingresa el valor de tu Oferta!!"
-        android:textSize="18dp"
+        android:text="Crea un Anuncio de Promoción!!"
+        android:textSize="24dp"
         android:textStyle="bold"
         android:textColor="#FFF"
+        android:layout_marginTop="40dp"
         android:elevation="10dp"
         android:textAlignment="center"
-        android:layout_margin="10dp"
         android:background="@color/colorPrimary"/>
 
     <View
@@ -25,10 +25,16 @@
         android:layout_marginTop="245dp"
         android:background="@color/colorPrimary"/>
     <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@drawable/paleta"
+        android:layout_marginTop="135dp"
+        android:scaleType="fitXY"/>
+    <ImageView
         android:id="@+id/image_crar_ofertas"
         android:layout_width="match_parent"
         android:layout_height="190dp"
-        android:src="@drawable/caramelos"
+        android:src="@drawable/caramelitos"
         android:layout_marginTop="270dp"
         android:elevation="15dp"
         android:scaleType="fitXY"/>
@@ -38,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="30dp"
         android:layout_marginRight="20dp"
         android:src="@drawable/ic_agregar"
         app:fabSize="normal"
@@ -50,6 +56,6 @@
         android:textColor="@color/colorPrimary"
         android:layout_gravity="bottom|right"
         android:layout_marginRight="90dp"
-        android:layout_marginBottom="30dp"/>
+        android:layout_marginBottom="55dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

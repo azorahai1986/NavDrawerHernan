@@ -7,4 +7,6 @@
     <color name="color_negro">#000000</color>
     <color name="gris">#AAB8B7</color>
     <color name="light_grey">#E5EDED</color>
+    <color name="amarillo">#FAE246</color>
+    <color name="color_para_fondos">#F5F3F8</color>
 </resources>

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/gris"
+    android:background="@color/color_para_fondos"
     android:clickable="false"
     tools:context=".fragmentos.VerImagenFragment">
 
@@ -78,41 +78,50 @@
            android:textSize="24dp"
            android:textStyle="bold"/>
 
-           <com.google.android.material.floatingactionbutton.FloatingActionButton
-               android:id="@+id/floatEliminarProducto"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_marginTop="650dp"
-               android:layout_marginLeft="200dp"
-               android:clickable="true"
-               android:elevation="8dp"
-               android:visibility="visible"
-               app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-               app:srcCompat="@drawable/ic_eliminar"
-               app:fabSize="mini"
-               app:pressedTranslationZ="12dp"/>
-
        </com.google.android.material.appbar.CollapsingToolbarLayout>
        </com.google.android.material.appbar.AppBarLayout>
+
        <androidx.core.widget.NestedScrollView
            android:layout_width="match_parent"
-           android:layout_height="match_parent"
+           android:layout_height="wrap_content"
            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
            <androidx.coordinatorlayout.widget.CoordinatorLayout
                android:layout_width="match_parent"
-               android:layout_height="match_parent">
+               android:layout_height="wrap_content">
 
            <androidx.viewpager2.widget.ViewPager2
            android:id="@+id/viewPager_similares"
            android:layout_width="match_parent"
-           android:layout_height="300dp"/>
+           android:layout_height="300dp" />
 
            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
        </androidx.core.widget.NestedScrollView>
 
+       <TextView
+           android:id="@+id/tv_elim_producto"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="Eliminar producto"
+           android:textColor="@color/colorPrimary"
+           android:layout_gravity="bottom|right"
+           android:layout_marginRight="50dp"
+           android:layout_marginBottom="40dp"
+           android:elevation="10dp"/>
 
+       <com.google.android.material.floatingactionbutton.FloatingActionButton
+           android:id="@+id/floatEliminarProducto"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="bottom|right"
+           android:clickable="true"
+           android:elevation="8dp"
+           android:visibility="visible"
+           android:layout_marginBottom="35dp"
+           app:srcCompat="@drawable/ic_eliminar"
+           app:fabSize="mini"
+           app:pressedTranslationZ="12dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

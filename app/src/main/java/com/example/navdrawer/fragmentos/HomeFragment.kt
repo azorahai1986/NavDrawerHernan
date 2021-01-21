@@ -252,5 +252,6 @@ class HomeFragment : Fragment() {
         super.onResume()
         observeData()
         cargarPagerCartelPrincipal()
+
     }
 }

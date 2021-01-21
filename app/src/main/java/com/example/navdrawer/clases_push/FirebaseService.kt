@@ -12,7 +12,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import com.example.navdrawer.R
-import com.example.navdrawer.actividades.ActividadAgregar
+import com.example.navdrawer.actividades.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlin.random.Random
@@ -24,7 +24,7 @@ class FirebaseService: FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        val intent = Intent(this, ActividadAgregar::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationID = Random.nextInt()
 
@@ -35,7 +35,9 @@ class FirebaseService: FirebaseMessagingService() {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, FLAG_ONE_SHOT)
         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle(message.data["title"]).setContentText(message.data["message"]).setSmallIcon(
+            .setContentTitle(message.data["title"])
+            .setContentText(message.data["message"])
+            .setSmallIcon(
                 R.drawable.ic_cartel).setAutoCancel(true).setContentIntent(pendingIntent).build()
 
         notificationManager.notify(notificationID, notification)

@@ -90,6 +90,7 @@ class VerImagenFragment : Fragment() {
     var btEliminar: FloatingActionButton? = null
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -107,6 +108,7 @@ class VerImagenFragment : Fragment() {
         marca = view.findViewById<TextView>(R.id.textview_marca)
         precio = view.findViewById<TextView>(R.id.textViewPrecio)
         btEliminar = view.findViewById(R.id.floatEliminarProducto)
+        var tvElimProducto = view.findViewById<TextView>(R.id.tv_elim_producto)
         // botones del dialog
         btAceptar = view.findViewById(R.id.bt_aceptar)
         btCancelar = view.findViewById(R.id.bt_cancelar)
@@ -131,6 +133,10 @@ class VerImagenFragment : Fragment() {
             mailRecuperado = user.email
 
             Log.e("EmailVerIamagen", mailRecuperado.toString())
+        }
+        if (mailRecuperado.isNullOrEmpty()){
+            btEliminar?.visibility = View.GONE
+            tvElimProducto.visibility = View.GONE
         }
         //dar funciones a los botones  textViews...............................
         btEliminar?.setOnClickListener { eliminarProducto() }

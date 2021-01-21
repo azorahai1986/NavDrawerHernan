@@ -15,7 +15,7 @@
     <string name="tvLogin">Ingresa tu mail y contraseña.\n Solo si eres usuario Registrado</string>
 
     <string name="nombre">Nuevo Nombre</string>
-    <string name="precio">Nuevo Precio</string>
+    <string name="precio">Nuevo Precio $</string>
     <string name="categoria">Nueva Categoria</string>
     <string name="marca">Nueva Marca</string>
     <string name="salir_editar">Precione aquí para \n aplicar los cambios</string>
