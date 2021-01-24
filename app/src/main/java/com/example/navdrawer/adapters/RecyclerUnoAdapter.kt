@@ -1,5 +1,6 @@
 package com.example.navdrawer.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,16 +15,29 @@ import kotlinx.android.synthetic.main.item_productos.view.*
 
 class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, val activity:FragmentActivity): RecyclerView.Adapter<RecyclerUnoAdapter.ViewHolderModel>() {
 
+    var arrayFiltro: ArrayList<ModeloDeIndumentaria> = ArrayList()
+
+    fun setData(datos: ArrayList<ModeloDeIndumentaria>){
+        mutableListModel = datos
+        Log.e("datos", datos.toString())
+        arrayFiltro = ArrayList(mutableListModel)
+       // Log.e("arrayFiltro", arrayFiltro.toString())
+
+    }
+
     inner class ViewHolderModel (itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerUnoAdapter.ViewHolderModel =
         ViewHolderModel(LayoutInflater.from(parent.context)
             .inflate(R.layout.item_productos, parent, false))
 
-    override fun getItemCount(): Int = mutableListModel.size
+    override fun getItemCount(): Int = arrayFiltro.size
     // Enlazar ViewHolder
     override fun onBindViewHolder(holder: RecyclerUnoAdapter.ViewHolderModel, position: Int) {
-        val modelosFb = mutableListModel[position]
+        val modelosFb = arrayFiltro[position]
+        indexModelo(modelosFb)
+
+
         holder.itemView.textview_producto.text = modelosFb.nombre + " "+modelosFb.marca
         holder.itemView.textview_precio.text = " $ " + modelosFb.precio
         holder.itemView.textview_cate.text = modelosFb.cate
@@ -37,8 +51,33 @@ class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, 
         }
 
     }
+    fun indexModelo(dat:ModeloDeIndumentaria): Int{
+        for (i in 0 until mutableListModel.size){
+            if(mutableListModel[i].id == dat.id)
+                return i
+            Log.e("return INfo", i.toString())
+        }
+        return 0
+        Log.e("return 0", 0.toString())
+    }
+    fun filtrado(editFiltro: String){
+        Log.e("return INfo", editFiltro)
 
+        if (editFiltro.isNotEmpty()) {
+            arrayFiltro = ArrayList()
+            for (d in mutableListModel) {
+                if (editFiltro in d.nombre) {
+                    arrayFiltro.add(d)
+                }
 
+            }
+
+        } else{
+            arrayFiltro = ArrayList(mutableListModel)
+        }
+        notifyDataSetChanged()
+
+    }
 
 
 }

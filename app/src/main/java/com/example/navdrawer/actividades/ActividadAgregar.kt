@@ -239,9 +239,6 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         if (v === imageView)
             showFilerChooser()
-       // else (v === btCargar)
-
-        // lanzar e Swuitch................................................
 
     }
 }

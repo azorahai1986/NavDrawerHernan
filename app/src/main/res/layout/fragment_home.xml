@@ -7,6 +7,7 @@
     tools:context=".fragmentos.HomeFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/cordin"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="55dp"
@@ -240,7 +241,26 @@
             android:visibility="invisible"
             android:textColor="@color/colorAccent"/>
 
-
+        <ImageView
+            android:id="@+id/tv_search"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_search"
+            android:scaleType="center"
+            android:background="#FFFFFF"
+            android:visibility="gone"
+            app:layout_collapseMode="pin"/>
+        <EditText
+            android:id="@+id/edt_Search"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="40dp"
+            android:background="#FFFFFF"
+            android:hint="filtrar"
+            android:scaleType="center"
+            android:visibility="gone"
+            android:focusableInTouchMode="true"
+            app:layout_collapseMode="pin"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </FrameLayout>

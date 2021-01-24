@@ -3,6 +3,7 @@ package com.example.navdrawer.actividades
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -24,7 +26,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
     private lateinit var auth:FirebaseAuth // para saber si hay existe un email
     lateinit var inicioFragment: HomeFragment
-    lateinit var workFragment: WorkFragment
+    lateinit var workFragment: MainActivity
     lateinit var settingFragment: SettingFragment
     lateinit var subCateFragment: SubCateFragment
     lateinit var timelineFragment: TimelineFragment
@@ -90,12 +92,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 //en este caso para volver desde un fragmenr al inicio debo colocar aquí el addtoBackStack
             }
 
-            R.id.work -> {
-                workFragment = WorkFragment()
+            R.id.busqueda -> {
+
+                if (edt_Search.visibility == View.GONE){
+                    tv_search.visibility = View.VISIBLE
+                    edt_Search.visibility = View.VISIBLE
+
+                }else{
+                    tv_search.visibility = View.GONE
+                    edt_Search.visibility = View.GONE
+                }
+
+               /*workFragment = WorkFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.frame_layout, workFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()*/
             }
-            R.id.categorias -> {
+            R.id.timeLine -> {
                 timelineFragment = TimelineFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.frame_layout, timelineFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
@@ -145,6 +157,5 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
     }
-
 
 }

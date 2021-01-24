@@ -11,9 +11,9 @@
             android:title="categorias"
             android:icon="@drawable/ic_school"/>
         <item
-            android:id="@+id/work"
-            android:title="work"
-            android:icon="@drawable/ic_logout"/>
+            android:id="@+id/busqueda"
+            android:icon="@drawable/ic_search"
+            android:title="busqueda" />
         <item
             android:id="@+id/timeLine"
             android:title="timeLine"

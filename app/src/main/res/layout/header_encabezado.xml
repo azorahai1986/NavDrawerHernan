@@ -3,26 +3,27 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="180dp"
-    android:background="@drawable/constantine"
+    android:background="@drawable/caramelitos"
     android:padding="16dp">
     
     <ImageView
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:src="@drawable/ic_logout"
+        android:src="@drawable/ic_fastfood"
         android:layout_marginTop="20dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nav Drawer"
-        android:textColor="@color/WhiteColor"
+        android:text="Mercado y comercio"
+        android:textColor="@color/colorPrimaryDark"
         android:textStyle="bold"
         android:textSize="20dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hernan Toores"
-        android:textColor="@color/WhiteColor"
+        android:text="Hernan Torres"
+        android:textStyle="italic"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="18dp"/>
 
 

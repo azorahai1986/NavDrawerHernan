@@ -38,7 +38,7 @@ class FirebaseService: FirebaseMessagingService() {
             .setContentTitle(message.data["title"])
             .setContentText(message.data["message"])
             .setSmallIcon(
-                R.drawable.ic_cartel).setAutoCancel(true).setContentIntent(pendingIntent).build()
+                R.drawable.ic_fastfood).setAutoCancel(true).setContentIntent(pendingIntent).build()
 
         notificationManager.notify(notificationID, notification)
 

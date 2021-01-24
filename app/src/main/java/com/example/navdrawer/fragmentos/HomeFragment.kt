@@ -4,11 +4,14 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -51,7 +54,7 @@ class HomeFragment : Fragment() {
     private var recyclerView:RecyclerView? = null
     private var viewPagerCartelPrincipal:ViewPager2? = null
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
-
+    var etSearch:EditText? = null
     // para darle movimiento automatico al viewPager
     private var indicator:DotsIndicator? = null //indicador para el viewPager
     private var animationCartel:LottieAnimationView? = null
@@ -196,6 +199,27 @@ class HomeFragment : Fragment() {
             observeData()
             swipe.isRefreshing = false
         }
+        // dar funcion al editTextSearch para filtrar el recycler:::::::::::::::::::::.....
+
+        etSearch = view.findViewById(R.id.edt_Search)
+        etSearch?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                Log.e("dentro del editText", s.toString())
+
+                adapter?.filtrado(s.toString())
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+
+        })
+
 
         observeData()
         cargarPagerCartelPrincipal()
@@ -205,7 +229,7 @@ class HomeFragment : Fragment() {
 
     fun observeData(){
         viewModel.fetchUserData().observe(this.viewLifecycleOwner, androidx.lifecycle.Observer {
-            adapter!!.mutableListModel = it as ArrayList<ModeloDeIndumentaria>
+            adapter!!.setData(it as ArrayList<ModeloDeIndumentaria>)
             adapter!!.notifyDataSetChanged()
 
         })
