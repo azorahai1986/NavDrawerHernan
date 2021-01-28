@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".actividades.ActividadBusqueda">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="10dp">
+
+        <ImageView
+            android:id="@+id/tv_actsearch"
+            android:layout_width="40dp"
+            android:layout_height="35dp"
+            android:src="@drawable/ic_search"
+            android:scaleType="center"
+            android:background="#FFFFFF"
+            app:layout_collapseMode="pin"/>
+        <EditText
+            android:id="@+id/edt_actSearch"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginLeft="40dp"
+            android:background="#FFFFFF"
+            android:hint="filtrar"
+            android:scaleType="center"
+            android:focusableInTouchMode="true"
+            app:layout_collapseMode="pin"/>
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_busqueda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:listitem="@layout/item_recycler_busqueda"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:elevation="15dp"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

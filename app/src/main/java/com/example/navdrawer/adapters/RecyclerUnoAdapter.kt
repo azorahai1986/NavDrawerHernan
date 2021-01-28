@@ -1,6 +1,5 @@
 package com.example.navdrawer.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,9 +18,7 @@ class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, 
 
     fun setData(datos: ArrayList<ModeloDeIndumentaria>){
         mutableListModel = datos
-        Log.e("datos", datos.toString())
         arrayFiltro = ArrayList(mutableListModel)
-       // Log.e("arrayFiltro", arrayFiltro.toString())
 
     }
 
@@ -35,10 +32,9 @@ class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, 
     // Enlazar ViewHolder
     override fun onBindViewHolder(holder: RecyclerUnoAdapter.ViewHolderModel, position: Int) {
         val modelosFb = arrayFiltro[position]
-        indexModelo(modelosFb)
 
 
-        holder.itemView.textview_producto.text = modelosFb.nombre + " "+modelosFb.marca
+        holder.itemView.textview_nombre.text = modelosFb.nombre + " "+modelosFb.marca
         holder.itemView.textview_precio.text = " $ " + modelosFb.precio
         holder.itemView.textview_cate.text = modelosFb.cate
         holder.itemView.textview_marca.text = modelosFb.marca
@@ -49,33 +45,6 @@ class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, 
                 .replace(R.id.frame_layout, VerImagenFragment.newInstance(modelosFb.imagen, modelosFb.nombre, modelosFb.marca, "$"+modelosFb.precio, modelosFb.id))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(VerImagenFragment.IMAGENRECIBIDA).commit()
         }
-
-    }
-    fun indexModelo(dat:ModeloDeIndumentaria): Int{
-        for (i in 0 until mutableListModel.size){
-            if(mutableListModel[i].id == dat.id)
-                return i
-            Log.e("return INfo", i.toString())
-        }
-        return 0
-        Log.e("return 0", 0.toString())
-    }
-    fun filtrado(editFiltro: String){
-        Log.e("return INfo", editFiltro)
-
-        if (editFiltro.isNotEmpty()) {
-            arrayFiltro = ArrayList()
-            for (d in mutableListModel) {
-                if (editFiltro in d.nombre) {
-                    arrayFiltro.add(d)
-                }
-
-            }
-
-        } else{
-            arrayFiltro = ArrayList(mutableListModel)
-        }
-        notifyDataSetChanged()
 
     }
 

@@ -3,6 +3,10 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.example.navdrawer">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-feature android:name="android.hardware.type.watch" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -17,15 +21,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <service android:name=".clases_push.FirebaseService"
+        <activity android:name=".actividades.ActividadBusqueda"></activity>
+
+        <service
+            android:name=".clases_push.FirebaseService"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
-
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-        <activity android:name=".actividades.CartelActivity"></activity>
+
+        <activity android:name=".actividades.CartelActivity" />
         <activity android:name=".actividades.ActividadAgregar" />
         <activity android:name=".actividades.MainActivity">
             <intent-filter>

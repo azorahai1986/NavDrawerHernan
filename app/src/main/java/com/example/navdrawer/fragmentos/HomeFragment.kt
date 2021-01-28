@@ -4,8 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -200,26 +198,6 @@ class HomeFragment : Fragment() {
             swipe.isRefreshing = false
         }
         // dar funcion al editTextSearch para filtrar el recycler:::::::::::::::::::::.....
-
-        etSearch = view.findViewById(R.id.edt_Search)
-        etSearch?.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-                Log.e("dentro del editText", s.toString())
-
-                adapter?.filtrado(s.toString())
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-            }
-
-        })
-
 
         observeData()
         cargarPagerCartelPrincipal()

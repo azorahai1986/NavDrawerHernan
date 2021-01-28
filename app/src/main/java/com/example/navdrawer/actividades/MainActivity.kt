@@ -3,22 +3,20 @@ package com.example.navdrawer.actividades
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
-import com.example.navdrawer.R
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
 import com.example.navdrawer.fragmentos.*
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -37,15 +35,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(com.example.navdrawer.R.layout.activity_main)
 
+        pushGeneral()
         setSupportActionBar(toolbar)
         val actionBar = supportActionBar
         actionBar?.title = ""
 
 
         val drawerToggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(this, drawerLayout, toolbar, (
-                R.string.open), (R.string.close)){
+                com.example.navdrawer.R.string.open), (com.example.navdrawer.R.string.close)){
 
         }
 
@@ -56,7 +55,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         inicioFragment = HomeFragment()
-        supportFragmentManager.beginTransaction().replace(R.id.frame_layout, HomeFragment.newInstance(mailRecuperado.toString()))
+        supportFragmentManager.beginTransaction().replace(com.example.navdrawer.R.id.frame_layout, HomeFragment.newInstance(mailRecuperado.toString()))
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
 
         // recuperar los datos del login o acceso de usuario...............
@@ -80,51 +79,53 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         when (item.itemId) {
-            R.id.inicio -> {
+            com.example.navdrawer.R.id.inicio -> {
                 inicioFragment = HomeFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, inicioFragment)
+                supportFragmentManager.beginTransaction().replace(com.example.navdrawer.R.id.frame_layout, inicioFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
             }
-            R.id.categorias -> {
+            com.example.navdrawer.R.id.categorias -> {
                 categoriasFragment = CategoriasFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, categoriasFragment)
+                supportFragmentManager.beginTransaction().replace(com.example.navdrawer.R.id.frame_layout, categoriasFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(CategoriasFragment.volver).commit()
                 //en este caso para volver desde un fragmenr al inicio debo colocar aquí el addtoBackStack
             }
 
-            R.id.busqueda -> {
+            com.example.navdrawer.R.id.busqueda -> {
+                val intent = Intent(this, ActividadBusqueda::class.java)
+                startActivity(intent)
 
-                if (edt_Search.visibility == View.GONE){
+               /* if (edt_Search.visibility == View.GONE){
                     tv_search.visibility = View.VISIBLE
                     edt_Search.visibility = View.VISIBLE
 
                 }else{
                     tv_search.visibility = View.GONE
                     edt_Search.visibility = View.GONE
-                }
+                }*/
 
                /*workFragment = WorkFragment()
                 supportFragmentManager.beginTransaction().replace(R.id.frame_layout, workFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()*/
             }
-            R.id.timeLine -> {
+            com.example.navdrawer.R.id.timeLine -> {
                 timelineFragment = TimelineFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, timelineFragment)
+                supportFragmentManager.beginTransaction().replace(com.example.navdrawer.R.id.frame_layout, timelineFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
             }
 
-            R.id.acceder -> {
+            com.example.navdrawer.R.id.acceder -> {
                 if (mailRecuperado != null){
                     Toast.makeText(this, "Ya estás registrado", Toast.LENGTH_LONG).show()
                 }else{
                     accederFragment = AccederFragment()
-                    supportFragmentManager.beginTransaction().replace(R.id.frame_layout, accederFragment)
+                    supportFragmentManager.beginTransaction().replace(com.example.navdrawer.R.id.frame_layout, accederFragment)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(
                             AccederFragment.VOLVER).commit()
                 }
 
             }
-            R.id.cerrar ->{
+            com.example.navdrawer.R.id.cerrar ->{
                 if (mailRecuperado.isNullOrEmpty()){
                     Toast.makeText(this, "No estás registrado", Toast.LENGTH_LONG).show()
 
@@ -156,6 +157,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             super.onBackPressed()
         }
 
+    }
+
+    fun pushGeneral(){
+        FirebaseMessaging.getInstance().subscribeToTopic("general")
     }
 
 }

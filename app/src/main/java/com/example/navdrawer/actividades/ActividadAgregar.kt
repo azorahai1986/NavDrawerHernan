@@ -35,7 +35,7 @@ import java.util.*
 
 
 
-const val TOPIC = "/topics/myTopic"
+const val TOPIC = "/topics/general"
 class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
     // para enviar los push.........................................
     val TAG = "ActividadAgregar"

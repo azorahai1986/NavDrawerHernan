@@ -29,18 +29,22 @@ import kotlinx.android.synthetic.main.dialog_editar_precio.view.*
 
 class VerImagenFragment : Fragment() {
 
-    // variables para los datos recibidos desde el adapter............................
+    // variables para los datos recibidos desde el adapterRecyclerPrincipal............................
     var recibirImagen: String? = null
     var recibirNombre: String? = null
     var recibirMarca: String? = null
     var recibirPrecio: String? = null
     var recibirId: String? = null
+    // variables para los datos recibidos desde el adapterRecyclerPrincipal............................
+    var recibirImagenBusqueda: String? = null
+    var recibirNombreBusqueda: String? = null
+    var recibirMarcaBusqueda: String? = null
+    var recibirPrecioBusqueda: String? = null
+    var recibirIdBusqueda: String? = null
 
     // botones del dialog
     var btAceptar: Button? = null
     var btCancelar: Button? = null
-    var butAceptar:Button? = null
-    var editNombre:EditText? = null
 // variable para recuperar el usuario
     private lateinit var auth: FirebaseAuth
     var mailRecuperado:String? = null
@@ -53,6 +57,13 @@ class VerImagenFragment : Fragment() {
         private const val MARCA_RECIBIDA = "MARCA_RECIBIDA" //para recibir la descripcion del adapter
         private const val PRECIO_RECIBIDO = "PRECIO_RECIBIDO" //para recibir el precio del adapter
         private const val ID_RECIBIDO = "ID_RECIBIDO" //para recibir el precio del adapter y plasmarlo en el viewPager
+
+        const val IMAGENRECIBIDABUSQUEDA = "imagenRecibida" //para cuando vuelvo atras recordar donde estaba ubicado
+        private const val IM_RECIBIDABUSQUEDA = "IM_RECIBIDABUSQUEDA" //para recibir la imagen del adapter
+        private const val NOMBRE_RECIBIDOBUSQUEDA = "NOMBRE_RECIBIDOBUSQUEDA" //para recibir el nombre del adapter
+        private const val MARCA_RECIBIDABUSQUEDA = "MARCA_RECIBIDABUSQUEDA" //para recibir la descripcion del adapter
+        private const val PRECIO_RECIBIDOBUSQUEDA = "PRECIO_RECIBIDOBUSQUEDA" //para recibir el precio del adapter
+        private const val ID_RECIBIDOBUSQUEDA = "ID_RECIBIDOBUSQUEDA" //para recibir el precio del adapter y plasmarlo en el viewPager
 
         fun newInstance(
             recibirImagen: String,
@@ -68,6 +79,27 @@ class VerImagenFragment : Fragment() {
             bundle.putString(MARCA_RECIBIDA, recibirMarca)
             bundle.putString(PRECIO_RECIBIDO, precioRecibido)
             bundle.putString(ID_RECIBIDO, recibirId)
+            val fragment = VerImagenFragment()
+            fragment.arguments = bundle
+
+
+            return fragment
+
+        }
+        fun newInstanceBusqueda(
+            recibirImagenBusqueda: String,
+            recibirNombreBusqueda: String,
+            recibirMarcaBusqueda: String,
+            precioRecibidoBusqueda: String,
+            recibirIdBusqueda: String
+        ): VerImagenFragment {
+
+            val bundle = Bundle()
+            bundle.putString(IM_RECIBIDABUSQUEDA, recibirImagenBusqueda)
+            bundle.putString(NOMBRE_RECIBIDOBUSQUEDA, recibirNombreBusqueda)
+            bundle.putString(MARCA_RECIBIDABUSQUEDA, recibirMarcaBusqueda)
+            bundle.putString(PRECIO_RECIBIDOBUSQUEDA, precioRecibidoBusqueda)
+            bundle.putString(ID_RECIBIDOBUSQUEDA, recibirIdBusqueda)
             val fragment = VerImagenFragment()
             fragment.arguments = bundle
 
@@ -97,12 +129,22 @@ class VerImagenFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_ver_imagen, container, false)
-
+//  del recycler principal
         recibirImagen = arguments?.getString(IM_RECIBIDA)
         recibirNombre = arguments?.getString(NOMBRE_RECIBIDO)
         recibirMarca = arguments?.getString(MARCA_RECIBIDA)
         recibirPrecio = arguments?.getString(PRECIO_RECIBIDO)
         recibirId = arguments?.getString(ID_RECIBIDO)
+    // del recicler de busqueda..................................
+        recibirImagenBusqueda = arguments?.getString(IM_RECIBIDABUSQUEDA)
+        recibirNombreBusqueda = arguments?.getString(NOMBRE_RECIBIDOBUSQUEDA)
+        recibirMarcaBusqueda = arguments?.getString(MARCA_RECIBIDABUSQUEDA)
+        recibirPrecioBusqueda = arguments?.getString(PRECIO_RECIBIDOBUSQUEDA)
+        recibirIdBusqueda = arguments?.getString(ID_RECIBIDOBUSQUEDA)
+
+
+
+
         imagenDelAdapter = view.findViewById<ImageView>(R.id.imageView_ver_imagen)
         nombre = view.findViewById<TextView>(R.id.textViewNombre)
         marca = view.findViewById<TextView>(R.id.textview_marca)
@@ -117,6 +159,8 @@ class VerImagenFragment : Fragment() {
         nombre?.text = recibirNombre
         marca?.text = recibirMarca
         precio?.text = recibirPrecio
+
+
 
         // inflar viewPager......................................
 

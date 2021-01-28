@@ -4,7 +4,7 @@
     <string name="close">close</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="texto_descripcion">este tipo de productos aparecerá debajo del nombre y describira caracteristicas</string>
+    <string name="texto_descripcion">este tipo de producto</string>
     <string name="texto_quienes">Somos una empresa dedicada al servicio de la gente. no encontramos en la avenida blablbabla</string>
     <string name="_140">140</string>
     <string name="imagen_de_constantin">imagen de constantin</string>
@@ -20,5 +20,11 @@
     <string name="marca">Nueva Marca</string>
     <string name="salir_editar">Precione aquí para \n aplicar los cambios</string>
     <string name="dialog_tv_titulo"> Se perderán todos los datos de la compra \n Si ingresas a la información \n del producto en esta instancia</string>
+    <string name="title_activity_actividad_busqueda">ActividadBusqueda</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
 
 </resources>

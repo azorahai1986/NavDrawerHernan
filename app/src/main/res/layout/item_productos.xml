@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/color_para_fondos"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardview_productos"
+        android:id="@+id/cardview_busqueda"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
@@ -30,7 +31,7 @@
                 android:scaleType="fitCenter"/>
 
             <TextView
-                android:id="@+id/textview_producto"
+                android:id="@+id/textview_nombre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
