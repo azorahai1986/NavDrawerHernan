@@ -35,12 +35,6 @@ class VerImagenFragment : Fragment() {
     var recibirMarca: String? = null
     var recibirPrecio: String? = null
     var recibirId: String? = null
-    // variables para los datos recibidos desde el adapterRecyclerPrincipal............................
-    var recibirImagenBusqueda: String? = null
-    var recibirNombreBusqueda: String? = null
-    var recibirMarcaBusqueda: String? = null
-    var recibirPrecioBusqueda: String? = null
-    var recibirIdBusqueda: String? = null
 
     // botones del dialog
     var btAceptar: Button? = null
@@ -58,13 +52,6 @@ class VerImagenFragment : Fragment() {
         private const val PRECIO_RECIBIDO = "PRECIO_RECIBIDO" //para recibir el precio del adapter
         private const val ID_RECIBIDO = "ID_RECIBIDO" //para recibir el precio del adapter y plasmarlo en el viewPager
 
-        const val IMAGENRECIBIDABUSQUEDA = "imagenRecibida" //para cuando vuelvo atras recordar donde estaba ubicado
-        private const val IM_RECIBIDABUSQUEDA = "IM_RECIBIDABUSQUEDA" //para recibir la imagen del adapter
-        private const val NOMBRE_RECIBIDOBUSQUEDA = "NOMBRE_RECIBIDOBUSQUEDA" //para recibir el nombre del adapter
-        private const val MARCA_RECIBIDABUSQUEDA = "MARCA_RECIBIDABUSQUEDA" //para recibir la descripcion del adapter
-        private const val PRECIO_RECIBIDOBUSQUEDA = "PRECIO_RECIBIDOBUSQUEDA" //para recibir el precio del adapter
-        private const val ID_RECIBIDOBUSQUEDA = "ID_RECIBIDOBUSQUEDA" //para recibir el precio del adapter y plasmarlo en el viewPager
-
         fun newInstance(
             recibirImagen: String,
             recibirNombre: String,
@@ -79,27 +66,6 @@ class VerImagenFragment : Fragment() {
             bundle.putString(MARCA_RECIBIDA, recibirMarca)
             bundle.putString(PRECIO_RECIBIDO, precioRecibido)
             bundle.putString(ID_RECIBIDO, recibirId)
-            val fragment = VerImagenFragment()
-            fragment.arguments = bundle
-
-
-            return fragment
-
-        }
-        fun newInstanceBusqueda(
-            recibirImagenBusqueda: String,
-            recibirNombreBusqueda: String,
-            recibirMarcaBusqueda: String,
-            precioRecibidoBusqueda: String,
-            recibirIdBusqueda: String
-        ): VerImagenFragment {
-
-            val bundle = Bundle()
-            bundle.putString(IM_RECIBIDABUSQUEDA, recibirImagenBusqueda)
-            bundle.putString(NOMBRE_RECIBIDOBUSQUEDA, recibirNombreBusqueda)
-            bundle.putString(MARCA_RECIBIDABUSQUEDA, recibirMarcaBusqueda)
-            bundle.putString(PRECIO_RECIBIDOBUSQUEDA, precioRecibidoBusqueda)
-            bundle.putString(ID_RECIBIDOBUSQUEDA, recibirIdBusqueda)
             val fragment = VerImagenFragment()
             fragment.arguments = bundle
 
@@ -135,15 +101,6 @@ class VerImagenFragment : Fragment() {
         recibirMarca = arguments?.getString(MARCA_RECIBIDA)
         recibirPrecio = arguments?.getString(PRECIO_RECIBIDO)
         recibirId = arguments?.getString(ID_RECIBIDO)
-    // del recicler de busqueda..................................
-        recibirImagenBusqueda = arguments?.getString(IM_RECIBIDABUSQUEDA)
-        recibirNombreBusqueda = arguments?.getString(NOMBRE_RECIBIDOBUSQUEDA)
-        recibirMarcaBusqueda = arguments?.getString(MARCA_RECIBIDABUSQUEDA)
-        recibirPrecioBusqueda = arguments?.getString(PRECIO_RECIBIDOBUSQUEDA)
-        recibirIdBusqueda = arguments?.getString(ID_RECIBIDOBUSQUEDA)
-
-
-
 
         imagenDelAdapter = view.findViewById<ImageView>(R.id.imageView_ver_imagen)
         nombre = view.findViewById<TextView>(R.id.textViewNombre)
@@ -159,6 +116,8 @@ class VerImagenFragment : Fragment() {
         nombre?.text = recibirNombre
         marca?.text = recibirMarca
         precio?.text = recibirPrecio
+
+
 
 
 
