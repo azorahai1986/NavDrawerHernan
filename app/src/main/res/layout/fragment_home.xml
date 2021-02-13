@@ -101,7 +101,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="30dp"
                 android:textStyle="bold"
-                android:textColor="@color/WhiteColor"
+                android:textColor="@color/colorPrimaryDark"
                 android:text="Volver al inicio"
                 android:layout_gravity="bottom"
                 android:elevation="10dp"/>
@@ -113,7 +113,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="100dp"
                 android:textStyle="bold"
-                android:textColor="@color/WhiteColor"
+                android:textColor="@color/colorPrimaryDark"
                 android:text="Ir a las Categorias"
                 android:layout_gravity="bottom|right"
                 android:elevation="10dp"/>
@@ -132,7 +132,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="30dp"
                 android:textStyle="bold"
-                android:textColor="@color/WhiteColor"
+                android:textColor="@color/colorPrimaryDark"
                 android:text="Quienes somos"
                 android:layout_gravity="bottom"
                 android:elevation="10dp"/>
@@ -144,7 +144,7 @@
                 android:layout_marginTop="30dp"
                 android:layout_marginLeft="100dp"
                 android:textStyle="bold"
-                android:textColor="@color/WhiteColor"
+                android:textColor="@color/colorPrimaryDark"
                 android:text="Volver al inicio"
                 android:layout_gravity="bottom|right"
                 android:elevation="10dp"/>
@@ -240,26 +240,7 @@
             android:visibility="invisible"
             android:textColor="@color/colorAccent"/>
 
-        <ImageView
-            android:id="@+id/tv_search"
-            android:layout_width="40dp"
-            android:layout_height="35dp"
-            android:src="@drawable/ic_search"
-            android:scaleType="center"
-            android:background="#FFFFFF"
-            android:visibility="gone"
-            app:layout_collapseMode="pin"/>
-        <EditText
-            android:id="@+id/edt_Search"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_marginLeft="40dp"
-            android:background="#FFFFFF"
-            android:hint="filtrar"
-            android:scaleType="center"
-            android:visibility="gone"
-            android:focusableInTouchMode="true"
-            app:layout_collapseMode="pin"/>
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </FrameLayout>

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
+import com.example.navdrawer.R
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
 import com.example.navdrawer.fragmentos.*
 import com.google.android.material.navigation.NavigationView
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     lateinit var workFragment: MainActivity
     lateinit var settingFragment: SettingFragment
     lateinit var subCateFragment: SubCateFragment
-    lateinit var timelineFragment: TimelineFragment
+    lateinit var timelineFragment: PdfFragment
     lateinit var accederFragment: AccederFragment
     lateinit var categoriasFragment: CategoriasFragment
     var uidRecuperado:String? = null
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.example.navdrawer.R.layout.activity_main)
+        setContentView(R.layout.activity_main)
 
         pushGeneral()
         setSupportActionBar(toolbar)
@@ -95,21 +96,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val intent = Intent(this, ActividadBusqueda::class.java)
                 startActivity(intent)
 
-               /* if (edt_Search.visibility == View.GONE){
-                    tv_search.visibility = View.VISIBLE
-                    edt_Search.visibility = View.VISIBLE
-
-                }else{
-                    tv_search.visibility = View.GONE
-                    edt_Search.visibility = View.GONE
-                }*/
-
-               /*workFragment = WorkFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, workFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()*/
             }
             com.example.navdrawer.R.id.timeLine -> {
-                timelineFragment = TimelineFragment()
+                timelineFragment = PdfFragment()
                 supportFragmentManager.beginTransaction().replace(com.example.navdrawer.R.id.frame_layout, timelineFragment)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
             }

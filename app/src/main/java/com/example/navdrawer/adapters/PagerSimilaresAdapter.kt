@@ -25,7 +25,7 @@ class PagerSimilaresAdapter(var similaresArray:ArrayList<PagerSimilares>, val ac
         val arraySimilar= similaresArray[position]
 
         holder.itemView.text_nombre_similar.text = arraySimilar.nombre
-        holder.itemView.text_precio_similar.text = arraySimilar.precio
+        holder.itemView.text_precio_similar.text = " $ " + arraySimilar.precio + " x unidad"
         holder.itemView.text_sub_similar.text = arraySimilar.sub
         Glide.with(activity).load(arraySimilar.imagen).into(holder.itemView.imageView_similar)
     }

@@ -112,7 +112,7 @@ class VerImagenFragment : Fragment() {
         btAceptar = view.findViewById(R.id.bt_aceptar)
         btCancelar = view.findViewById(R.id.bt_cancelar)
 
-        Glide.with(context!!.applicationContext).load(recibirImagen!!).into(imagenDelAdapter!!)
+        Glide.with(requireContext().applicationContext).load(recibirImagen!!).into(imagenDelAdapter!!)
         nombre?.text = recibirNombre
         marca?.text = recibirMarca
         precio?.text = recibirPrecio
@@ -153,6 +153,8 @@ class VerImagenFragment : Fragment() {
                 dialogEditarPrecio()
             }
         }
+
+
 
 
 
@@ -263,8 +265,7 @@ class VerImagenFragment : Fragment() {
 
 
         val dialogEditPrecio = LayoutInflater.from(context).inflate(R.layout.dialog_editar_precio, null)
-        val dialogConstructor = AlertDialog.Builder(context)
-            .setView(dialogEditPrecio)
+        val dialogConstructor = AlertDialog.Builder(context).setView(dialogEditPrecio)
 
         val edPrecio = dialogEditPrecio.et_precio
         Log.e("EdPrecio", edPrecio.text.toString())
@@ -288,4 +289,6 @@ class VerImagenFragment : Fragment() {
 
         }
     }
+
+    
 }
