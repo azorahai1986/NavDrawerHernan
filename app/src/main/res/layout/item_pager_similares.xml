@@ -23,7 +23,7 @@
                 android:layout_height="150dp"
                 android:layout_marginTop="15dp"
                 android:src="@drawable/constantine"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitCenter"/>
 
             <TextView
                 android:id="@+id/text_nombre_similar"

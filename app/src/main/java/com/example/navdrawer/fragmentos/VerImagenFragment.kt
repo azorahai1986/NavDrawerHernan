@@ -46,6 +46,7 @@ class VerImagenFragment : Fragment() {
 
     companion object {
         const val IMAGENRECIBIDA = "imagenRecibida" //para cuando vuelvo atras recordar donde estaba ubicado
+        const val VOLVERBUSQUEDA = "imagenRecibida" //para cuando vuelvo atras recordar donde estaba ubicado
         private const val IM_RECIBIDA = "IM_RECIBIDA" //para recibir la imagen del adapter
         private const val NOMBRE_RECIBIDO = "NOMBRE_RECIBIDO" //para recibir el nombre del adapter
         private const val MARCA_RECIBIDA = "MARCA_RECIBIDA" //para recibir la descripcion del adapter

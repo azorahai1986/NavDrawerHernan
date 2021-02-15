@@ -1,5 +1,6 @@
 package com.example.navdrawer.fragmentos
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,6 +23,7 @@ import com.example.navdrawer.enlace_con_firebase.MainViewModelo
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
 import com.example.navdrawer.modelos_de_datos.ModeloPdf
 import kotlinx.android.synthetic.main.activity_actividad_busqueda.*
+import kotlinx.android.synthetic.main.fragment_search.*
 
 
 class SearchFragment : Fragment() {
@@ -34,10 +36,6 @@ class SearchFragment : Fragment() {
     var btEnviarPdf:ImageButton? = null
     var tvCantidadSearch:TextView? = null
     var tvTotalPrecio:TextView? = null
-    var precio:String? = null
-    var cantidad :String? = null
-    var PREC = "PREC"
-    var CANT = "CANT"
 
 
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
@@ -53,10 +51,12 @@ class SearchFragment : Fragment() {
         tvCantidadSearch = view.findViewById(R.id.tvCantidad)
         tvTotalPrecio = view.findViewById(R.id.tvTotPrecio)
 
-        cantidad = arguments?.getString(CANT)
-        Log.e("Cantidad", cantidad.toString())
-
-        tvCantidadSearch?.text = cantidad.toString()
+        val intent = Intent()
+        val bundle = intent.extras
+        val arrayCantidades =bundle?.getIntegerArrayList("arrayCant")
+        val arrayPrecios =bundle?.get("arrayPrec")
+        obtenerDatosAdapter(arrayCantidades!!, arrayListOf())
+        Log.e("Sumatoria Cantidad", arrayCantidades.toString())
 
         // inflar recycler.......................
         recyclerView = view.findViewById(R.id.recycler_busqueda)
@@ -133,27 +133,19 @@ class SearchFragment : Fragment() {
         var sum = 0
         for (i in arrayCant){
             sum += i
-            Log.e("Sumatoria Cantidad", sum.toString())
+            //Log.e("Sumatoria Cantidad", arrayCant.toString())
 
         }
 
         var sumPrecio = 0.0
         for (p in arrayPrec){
             sumPrecio += p
-            Log.e("Sumatoria Precio", sum.toString())
+            //Log.e("Sumatoria Precio", arrayPrec.toString())
 
         }
 
 
 
-        pdfPreciosArray = arrayPrec // esto me servirá para enviar los precios totales al pdf
-        tvTotalPrecio?.text = sumPrecio.toString()
-        Log.e("Precio", sumPrecio.toString())
-
-
-
-
-
-
     }
+
 }

@@ -51,21 +51,21 @@ class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, va
 
         holder.itemView.textview_nombre_busqueda.text = modelosFb.nombre + " "+modelosFb.marca
         holder.itemView.textview_precio_busqueda.text = " $ " + modelosFb.precio
-        holder.itemView.textview_marca_busqueda.text = modelosFb.marca
+       // holder.itemView.textview_marca_busqueda.text = modelosFb.marca
         Glide.with(activity).load(modelosFb.imagen).into(holder.itemView.imageview_busqueda)
 
         holder.itemView.cardview_busqueda.setOnClickListener{
             activity.supportFragmentManager.beginTransaction()
                 .replace(R.id.cordinat, VerImagenFragment.newInstance(modelosFb.imagen, modelosFb.nombre, modelosFb.marca,"$"+modelosFb.precio, modelosFb.id))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(VerImagenFragment.VOLVERBUSQUEDA).commit()
 
         }
         //daré funciones a los botones de agregar y restar.................................
         holder.itemView.tvValorCantidad.text = arrayCantidades[index].toString()
         holder.itemView.tv_template_cantidad.text = arrayCantidades[index].toString()
         holder.itemView.tv_template_precio.text = arrayPecios[index].toString()
-        if (arrayCantidades[index] == 0)holder.itemView.tv_template_cantidad.text = "Sub Total"
-        if (arrayCantidades[index] == 0)holder.itemView.tv_template_precio.text = "precio $"
+        if (arrayCantidades[index] == 0)holder.itemView.tv_template_cantidad.text = "0 pedido"
+        if (arrayCantidades[index] == 0)holder.itemView.tv_template_precio.text = " $ 0..."
 
         // boton para sumar valores............................................
         holder.itemView.btSumar.setOnClickListener {
@@ -73,10 +73,10 @@ class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, va
             arrayCantidades[index] = arrayCantidades[index] + 1
 
             holder.itemView.tvValorCantidad.text = arrayCantidades[index].toString()
-            holder.itemView.tv_template_cantidad.text = "cantidad ${arrayCantidades[index]}"
+            holder.itemView.tv_template_cantidad.text = "x ${arrayCantidades[index]} unidades"
             arrayPecios[index] = arrayPecios[index] + modelosFb.precio.toDouble()
 
-            holder.itemView.tv_template_precio.text = " precio $ ${arrayPecios[index]}"
+            holder.itemView.tv_template_precio.text = " sub total $ ${arrayPecios[index]}"
 
             // desde aquí envio los arrays al main activity. a la funcion obtenerdatosadapter
             busqueda.obtenerDatosAdapter(arrayCant = arrayCantidades, arrayPrec = arrayPecios)
@@ -89,9 +89,9 @@ class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, va
             if (arrayCantidades[index] > 0){
                 arrayCantidades[index] = arrayCantidades[index] - 1
                 holder.itemView.tvValorCantidad.text = arrayCantidades[index].toString()
-                holder.itemView.tv_template_cantidad.text = "cantidad ${arrayCantidades[index]}"
+                holder.itemView.tv_template_cantidad.text = "x ${arrayCantidades[index]} unidades"
                 arrayPecios[index] = arrayPecios[index] - modelosFb.precio.toDouble()
-                holder.itemView.tv_template_precio.text = " precio $ ${arrayPecios[index]}"
+                holder.itemView.tv_template_precio.text = " sub total $ ${arrayPecios[index]}"
                 busqueda.obtenerDatosAdapter(arrayCant = arrayCantidades, arrayPrec = arrayPecios)
             }
         }
