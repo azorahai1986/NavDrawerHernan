@@ -37,7 +37,7 @@
                 android:textColor="@color/colorPrimary"/>
 
             <EditText
-                android:id="@+id/etNombrePdf"
+                android:id="@+id/etNombre_Pdf"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:hint="ingerese su nombre"
@@ -64,7 +64,7 @@
                 android:textColor="@color/colorPrimary"/>
 
             <EditText
-                android:id="@+id/etDireccionPdf"
+                android:id="@+id/etDireccion_Pdf"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:hint="ingerese su nombre"
@@ -73,7 +73,7 @@
 
          </LinearLayout>
          <TextView
-             android:id="@+id/tvEspacio"
+             android:id="@+id/tv_Espacio"
              android:text=".      ."
              android:layout_width="match_parent"
              android:layout_height="8dp"/>
@@ -120,29 +120,45 @@
           android:textAppearance="@style/TextAppearance.AppCompat.Body2"
           android:textColor="#0923AF" />
    </LinearLayout>
+
+
    <View
        android:layout_width="match_parent"
        android:layout_height="2dp"
        android:background="@android:color/background_dark"/>
 
-   <androidx.recyclerview.widget.RecyclerView
-       android:id="@+id/recyclerPdf"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content" />
 
-   <TextView
-       android:id="@+id/tvTotalPresupuesto"
+
+   <androidx.core.widget.NestedScrollView
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:text="Total Compra"
-       android:textAlignment="center"
-       android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-       android:textColorHint="#EA0909" />
-   <Button
-       android:id="@+id/guardarPdf"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="generar pedido"/>
+       app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="vertical">
+
+         <androidx.recyclerview.widget.RecyclerView
+             android:id="@+id/recyclerPdf"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content" />
+         <TextView
+             android:id="@+id/tvTotalPresupuesto"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:text="Total Compra"
+             android:textAlignment="center"
+             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+             android:textColorHint="#EA0909" />
+         <Button
+             android:id="@+id/guardar_Pdf"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="generar pedido"/>
+      </LinearLayout>
+
+
+   </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>

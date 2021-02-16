@@ -1,6 +1,5 @@
 package com.example.navdrawer.fragmentos
 
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -51,25 +51,18 @@ class SearchFragment : Fragment() {
         tvCantidadSearch = view.findViewById(R.id.tvCantidad)
         tvTotalPrecio = view.findViewById(R.id.tvTotPrecio)
 
-        val intent = Intent()
-        val bundle = intent.extras
-        val arrayCantidades =bundle?.getIntegerArrayList("arrayCant")
-        val arrayPrecios =bundle?.get("arrayPrec")
-        obtenerDatosAdapter(arrayCantidades!!, arrayListOf())
-        Log.e("Sumatoria Cantidad", arrayCantidades.toString())
-
         // inflar recycler.......................
         recyclerView = view.findViewById(R.id.recycler_busqueda)
         layoutManager = GridLayoutManager(context, 1)
         recyclerView?.layoutManager = layoutManager
         recyclerView?.setHasFixedSize(true)
-        adapter = AdapterBusqueda(arrayListOf(), context as FragmentActivity, SearchFragment())
+        adapter = AdapterBusqueda(arrayListOf(), context as FragmentActivity, this)
         recyclerView?.adapter = adapter
 
         // pasaré datos al pdf.......................................................
 
         btEnviarPdf = view.findViewById(R.id.ibEnviarAPdf)
-        btEnviarPdf?.setOnClickListener {
+        activity?.ibEnviarAPdf?.setOnClickListener {
             if (tvTotPrecio.text.isNullOrEmpty()){
                 Toast.makeText(context, "Agrega productos a la lista", Toast.LENGTH_SHORT).show()
             }else{
@@ -88,10 +81,10 @@ class SearchFragment : Fragment() {
                         }
                     }
 
-                    /*val intent = Intent(this, Pdf::class.java)
-                    intent.putExtra(Pdf.PROD_SELECT, enviarDatosAlPdf)
-                    intent.putExtra("Total Precios", tvTotPrecio.text.toString())
-                    startActivity(intent)*/
+                    activity?.supportFragmentManager?.beginTransaction()?.replace(R.id.cordinat, PdfFragment.newInstancePdf(
+                        enviarDatosAlPdf, tvTotalPrecio?.text.toString()))?.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)?.commit()
+
+
                 }
             }
         }
@@ -140,12 +133,12 @@ class SearchFragment : Fragment() {
         var sumPrecio = 0.0
         for (p in arrayPrec){
             sumPrecio += p
-            //Log.e("Sumatoria Precio", arrayPrec.toString())
+            tvTotalPrecio?.text = sumPrecio.toString()
 
         }
 
-
-
+        tvCantidadSearch?.text = sum.toString()
+        pdfPreciosArray = arrayPrec
     }
 
 }

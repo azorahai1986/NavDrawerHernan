@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -22,18 +24,24 @@ import com.itextpdf.text.*
 import com.itextpdf.text.pdf.PdfPCell
 import com.itextpdf.text.pdf.PdfPTable
 import com.itextpdf.text.pdf.PdfWriter
-import kotlinx.android.synthetic.main.fragment_pdf.*
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
 
+@Suppress("DEPRECATION")
 class PdfFragment : Fragment() {
-    private var cantidad: String? = null
-    var tvPdf:TextView? = null
+    private var precio: String? = null
+    private var datosRecibidos:ArrayList<ModeloPdf>? = null
     var adaptadorPdf:PdfAdapter? = null
     var layoutManager: RecyclerView.LayoutManager? = null
     var arrayDatosRecyclerPdf:ArrayList<ModeloPdf>? = null
+    var tvTotalPresup:TextView? = null
+    var tvEspacio:TextView? = null
+    var etNombrePdf:EditText? = null
+    var etDireccionPdf:EditText? = null
+    private var recyclerViewPdf: RecyclerView? = null
+    var guardarPdf:Button? = null
 
     private val STORAGE_CODE: Int = 100
 
@@ -44,16 +52,25 @@ class PdfFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_pdf, container, false)
 
-        arrayDatosRecyclerPdf = arguments?.getString(PROD_SELECT) as ArrayList<ModeloPdf>?
+        precio = arguments?.getString(PRECIOS_TOTALES)
+        datosRecibidos = arguments?.getSerializable(PROD_SELECT) as ArrayList<ModeloPdf>
 
-        var preciosTotales = arguments?.getString("Total Precios")
-        tvTotalPresupuesto.text = preciosTotales
+        Log.e("datos", datosRecibidos.toString())
+        tvTotalPresup = view.findViewById(R.id.tvTotalPresupuesto)
+        recyclerViewPdf = view.findViewById(R.id.recyclerPdf)
+        guardarPdf = view.findViewById(R.id.guardar_Pdf)
+        etNombrePdf = view.findViewById(R.id.etNombre_Pdf)
+        etDireccionPdf = view.findViewById(R.id.etDireccion_Pdf)
+        tvEspacio = view.findViewById(R.id.tv_Espacio)
+
+
+        tvTotalPresup?.text = precio
         // inflaré el recyclerPdf
-        recyclerPdf?.setHasFixedSize(true)
+        recyclerViewPdf?.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context)
-        recyclerPdf?.layoutManager =layoutManager
-        adaptadorPdf = PdfAdapter(arrayDatosRecyclerPdf!!)
-        recyclerPdf?.adapter = adaptadorPdf
+        recyclerViewPdf?.layoutManager =layoutManager
+        adaptadorPdf = PdfAdapter(datosRecibidos!!)
+        recyclerViewPdf?.adapter = adaptadorPdf
 
         guardarPdf?.setOnClickListener {
             //necesitamos manejar permisos de tiempo de ejecución para dispositivos con marshmallow  y superior
@@ -63,16 +80,20 @@ class PdfFragment : Fragment() {
                     // no se otorgó permiso, solicítelo
                     val permissions = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     requestPermissions(permissions, STORAGE_CODE)
+                    Toast.makeText(context, "denegado", Toast.LENGTH_LONG).show()
                 }
                 else{
                     //permiso ya otorgado, llamar al método savepdf
                     savePdf()
+                    Toast.makeText(context, "consedido", Toast.LENGTH_LONG).show()
+
                 }
             }
             else{
                 //permiso ya otorgado, llamar al método savepdf
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     savePdf()
+
                 }
             }
         }
@@ -92,10 +113,10 @@ class PdfFragment : Fragment() {
             PdfWriter.getInstance(mDoc, FileOutputStream(mFilePath))
             mDoc.open()
 
-            val mPrecioTotal = tvTotalPresupuesto.text.toString()
-            val nombrePresu = etNombrePdf.text
-            val domicilioPresu = etDireccionPdf.text
-            val espacio = tvEspacio.text.toString()
+            val mPrecioTotal = tvTotalPresup?.text.toString()
+            val nombrePresu = etNombrePdf?.text
+            val domicilioPresu = etDireccionPdf?.text
+            val espacio = tvEspacio?.text.toString()
 
 
 
@@ -183,7 +204,7 @@ class PdfFragment : Fragment() {
     ) {
         when(requestCode){
             STORAGE_CODE -> {
-                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                     // se otorgó el permiso de la ventana emergente, llama a savePdf()
                     savePdf()
                 }
@@ -200,12 +221,16 @@ class PdfFragment : Fragment() {
 
     companion object {
         const val PROD_SELECT = "ProductosSelect"
+        const val PRECIOS_TOTALES = "PreciosTotales"
+
 
         const val volver = "volver"
-        fun newInstancePdf(editCantidad: String): PdfFragment {
+        fun newInstancePdf(datosRecibidos: ArrayList<ModeloPdf>, preciosRecibidos:String): PdfFragment {
             val bundle = Bundle()
-            bundle.putString(PROD_SELECT, editCantidad)
-            Log.e("cantidad", editCantidad)
+            bundle.putSerializable(PROD_SELECT, datosRecibidos)
+            bundle.putString(PRECIOS_TOTALES, preciosRecibidos)
+            Log.e("cantidad", datosRecibidos.toString())
+            Log.e("cantidad", preciosRecibidos)
 
             val fragment = PdfFragment()
             fragment.arguments = bundle
@@ -217,4 +242,5 @@ class PdfFragment : Fragment() {
 
 
     }
+
 }

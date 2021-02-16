@@ -54,7 +54,7 @@ class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, va
        // holder.itemView.textview_marca_busqueda.text = modelosFb.marca
         Glide.with(activity).load(modelosFb.imagen).into(holder.itemView.imageview_busqueda)
 
-        holder.itemView.cardview_busqueda.setOnClickListener{
+        holder.itemView.imageview_busqueda.setOnClickListener{
             activity.supportFragmentManager.beginTransaction()
                 .replace(R.id.cordinat, VerImagenFragment.newInstance(modelosFb.imagen, modelosFb.nombre, modelosFb.marca,"$"+modelosFb.precio, modelosFb.id))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(VerImagenFragment.VOLVERBUSQUEDA).commit()
