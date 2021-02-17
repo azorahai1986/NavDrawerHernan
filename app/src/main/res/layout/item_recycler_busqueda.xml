@@ -99,11 +99,11 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardview_cantidad"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:orientation="vertical"
         android:layout_gravity="right"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="4dp"
         android:elevation="20dp"
         app:cardCornerRadius="15dp"
         android:background="@color/cardview_shadow_end_color"
@@ -112,20 +112,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
             android:orientation="vertical">
 
             <ImageButton
                 android:id="@+id/btSumar"
                 android:layout_width="30dp"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:layout_height="30dp"
                 android:elevation="8dp"
                 android:src="@drawable/ic_sumar" />
             <TextView
                 android:id="@+id/tvValorCantidad"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:text="0..."
                 android:textSize="18dp"
                 android:textColor="@color/colorPrimaryDark"/>
@@ -133,8 +132,7 @@
             <ImageButton
                 android:id="@+id/btRestar"
                 android:layout_width="30dp"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
+                android:layout_height="30dp"
                 android:elevation="8dp"
                 android:src="@drawable/ic_resta"/>
         </LinearLayout>

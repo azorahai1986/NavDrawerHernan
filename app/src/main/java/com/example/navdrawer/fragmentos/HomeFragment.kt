@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -52,7 +51,6 @@ class HomeFragment : Fragment() {
     private var recyclerView:RecyclerView? = null
     private var viewPagerCartelPrincipal:ViewPager2? = null
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
-    var etSearch:EditText? = null
     // para darle movimiento automatico al viewPager
     private var indicator:DotsIndicator? = null //indicador para el viewPager
     private var animationCartel:LottieAnimationView? = null
@@ -65,7 +63,7 @@ class HomeFragment : Fragment() {
 
         }
     }
-    lateinit var categoriasFragment:CategoriasFragment
+    lateinit var homeFragment: HomeFragment
     //para el bundle
     var tokenrecibido:String? = null
 
@@ -145,11 +143,9 @@ class HomeFragment : Fragment() {
         val abrire = AnimationUtils.loadAnimation(context, R.anim.abrir)
         val cerrar = AnimationUtils.loadAnimation(context, R.anim.cerrar)
         // dar funcion a los textViews del final de lista
-        val irCategorias = view.findViewById<TextView>(R.id.textview_ir_categorias)
         val quienesSomos = view.findViewById<TextView>(R.id.textview_quienes_somos)
-        irCategorias.setOnClickListener {
-            irACategorias()
-        }
+        val irAlPrincio = view.findViewById<TextView>(R.id.tv_volver_inicio)
+        irAlPrincio.setOnClickListener { irAlInicio() }
         quienesSomos.setOnClickListener { dialQuienSomos() }
 
         // ...... asignar variable a los botones........
@@ -227,16 +223,16 @@ class HomeFragment : Fragment() {
         })
     }
 
-    fun irACategorias(){
-        categoriasFragment = CategoriasFragment()
+    fun irAlInicio(){
+        homeFragment = HomeFragment()
         activity?.supportFragmentManager?.beginTransaction()
-            ?.replace(R.id.frame_layout, categoriasFragment)?.addToBackStack(CategoriasFragment.volver)
+            ?.replace(R.id.frame_layout, homeFragment)
             ?.commit()
     }
 
     fun dialQuienSomos(){
         val dialogQuien =LayoutInflater.from(activity).inflate(R.layout.dialog_quienes_somos, null)
-        val constructorDialog = AlertDialog.Builder(activity).setView(dialogQuien).setTitle("Quienes somos")
+        val constructorDialog = AlertDialog.Builder(activity).setView(dialogQuien).setTitle("   Mercado y Comercio")
         // mostrar dialog.
         constructorDialog.show()
     }

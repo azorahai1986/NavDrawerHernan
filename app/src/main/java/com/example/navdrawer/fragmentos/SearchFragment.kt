@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
@@ -24,6 +25,8 @@ import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
 import com.example.navdrawer.modelos_de_datos.ModeloPdf
 import kotlinx.android.synthetic.main.activity_actividad_busqueda.*
 import kotlinx.android.synthetic.main.fragment_search.*
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 
 class SearchFragment : Fragment() {
@@ -36,6 +39,7 @@ class SearchFragment : Fragment() {
     var btEnviarPdf:ImageButton? = null
     var tvCantidadSearch:TextView? = null
     var tvTotalPrecio:TextView? = null
+    var isOpen = true // para las animcaiones de los botones
 
 
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
@@ -62,6 +66,7 @@ class SearchFragment : Fragment() {
         // pasaré datos al pdf.......................................................
 
         btEnviarPdf = view.findViewById(R.id.ibEnviarAPdf)
+
         activity?.ibEnviarAPdf?.setOnClickListener {
             if (tvTotPrecio.text.isNullOrEmpty()){
                 Toast.makeText(context, "Agrega productos a la lista", Toast.LENGTH_SHORT).show()
@@ -109,6 +114,7 @@ class SearchFragment : Fragment() {
 
         })
 
+
         observeData()
         return view
     }
@@ -133,12 +139,35 @@ class SearchFragment : Fragment() {
         var sumPrecio = 0.0
         for (p in arrayPrec){
             sumPrecio += p
-            tvTotalPrecio?.text = sumPrecio.toString()
+            Log.e("tvTotalPrecio", tvTotalPrecio?.text.toString())
+
+
 
         }
 
-        tvCantidadSearch?.text = sum.toString()
+        tvCantidadSearch?.text = "$sum productos"
+        val redondeo = BigDecimal(sumPrecio).setScale(2, RoundingMode.HALF_EVEN) // para dejar solo 2 decimales y que sea mas corto
+
+        tvTotalPrecio?.text = "Total $redondeo"
+
+        Log.e("total Precio", redondeo.toString())
+
         pdfPreciosArray = arrayPrec
+
+        if (tvTotalPrecio?.text.isNullOrEmpty()){
+            pdfPreciosArray = arrayPrec
+
+        }else{
+            val dilatar = AnimationUtils.loadAnimation(context, R.anim.abrir)
+            dilatar.interpolator
+            dilatar.repeatMode
+            dilatar.duration
+            tvTotalPrecio?.startAnimation(dilatar)
+            tvCantidadSearch?.startAnimation(dilatar)
+        }
+
+        //enviar los datos obtenidos al adapter
+        adapter?.traerdatosParaDialog(sum)
     }
 
 }

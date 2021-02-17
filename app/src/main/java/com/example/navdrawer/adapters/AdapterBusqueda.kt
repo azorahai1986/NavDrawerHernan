@@ -1,5 +1,6 @@
 package com.example.navdrawer.adapters
 
+import android.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,13 +13,17 @@ import com.example.navdrawer.R
 import com.example.navdrawer.fragmentos.SearchFragment
 import com.example.navdrawer.fragmentos.VerImagenFragment
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
+import kotlinx.android.synthetic.main.dialog_ir_pdf.view.*
 import kotlinx.android.synthetic.main.item_recycler_busqueda.view.*
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, val activity:FragmentActivity, val busqueda: SearchFragment):RecyclerView.Adapter<AdapterBusqueda.ViewHolder>() {
 
     var arrayFiltro: ArrayList<ModeloDeIndumentaria> = ArrayList()
     var arrayCantidades: ArrayList<Int> = ArrayList()
     var arrayPecios: ArrayList<Double> = ArrayList()
+    var cantidad:Int? = null
 
     fun setData(datos: ArrayList<ModeloDeIndumentaria>){
         arrayModelBudqueda = datos
@@ -54,12 +59,7 @@ class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, va
        // holder.itemView.textview_marca_busqueda.text = modelosFb.marca
         Glide.with(activity).load(modelosFb.imagen).into(holder.itemView.imageview_busqueda)
 
-        holder.itemView.imageview_busqueda.setOnClickListener{
-            activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.cordinat, VerImagenFragment.newInstance(modelosFb.imagen, modelosFb.nombre, modelosFb.marca,"$"+modelosFb.precio, modelosFb.id))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(VerImagenFragment.VOLVERBUSQUEDA).commit()
 
-        }
         //daré funciones a los botones de agregar y restar.................................
         holder.itemView.tvValorCantidad.text = arrayCantidades[index].toString()
         holder.itemView.tv_template_cantidad.text = arrayCantidades[index].toString()
@@ -76,10 +76,13 @@ class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, va
             holder.itemView.tv_template_cantidad.text = "x ${arrayCantidades[index]} unidades"
             arrayPecios[index] = arrayPecios[index] + modelosFb.precio.toDouble()
 
-            holder.itemView.tv_template_precio.text = " sub total $ ${arrayPecios[index]}"
+            val redondeo = BigDecimal(arrayPecios[index]).setScale(2, RoundingMode.HALF_EVEN)
+            holder.itemView.tv_template_precio.text = " sub total $ ${redondeo}"
 
             // desde aquí envio los arrays al main activity. a la funcion obtenerdatosadapter
+
             busqueda.obtenerDatosAdapter(arrayCant = arrayCantidades, arrayPrec = arrayPecios)
+
 
 
         }
@@ -93,6 +96,18 @@ class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, va
                 arrayPecios[index] = arrayPecios[index] - modelosFb.precio.toDouble()
                 holder.itemView.tv_template_precio.text = " sub total $ ${arrayPecios[index]}"
                 busqueda.obtenerDatosAdapter(arrayCant = arrayCantidades, arrayPrec = arrayPecios)
+            }
+        }
+
+        holder.itemView.imageview_busqueda.setOnClickListener{
+            Log.e("en el adapter1", cantidad.toString())
+            if (cantidad == null){
+                activity.supportFragmentManager.beginTransaction()
+                    .replace(R.id.cordinat, VerImagenFragment.newInstance(modelosFb.imagen, modelosFb.nombre, modelosFb.marca,"$"+modelosFb.precio, modelosFb.id))
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(
+                        VerImagenFragment.VOLVERBUSQUEDA).commit()
+            }else{
+                dialIrAVerImagen(modelosFb.imagen, modelosFb.nombre, modelosFb.marca, modelosFb.precio, modelosFb.id)
             }
         }
     }
@@ -127,6 +142,24 @@ class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, va
         notifyDataSetChanged()
 
     }
+    fun traerdatosParaDialog(totalCant:Int){
+        cantidad = totalCant
 
+    }
+
+    fun dialIrAVerImagen(imagen:String, nombre:String, marca:String, precio:String, id:String){
+        val dialIrVerImagen =LayoutInflater.from(activity).inflate(R.layout.dialog_ir_pdf, null)
+        val constructorDialog = AlertDialog.Builder(activity).setView(dialIrVerImagen)
+        // mostrar dialog.
+        val alertDialog= constructorDialog.show()
+        dialIrVerImagen.flbt_permanecer.setOnClickListener { alertDialog.dismiss() }
+        dialIrVerImagen.flbt_avanzar.setOnClickListener {
+            activity.supportFragmentManager.beginTransaction()
+                .replace(R.id.cordinat, VerImagenFragment.newInstance(imagen, nombre, marca, precio, id))
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(VerImagenFragment.VOLVERBUSQUEDA).commit()
+            alertDialog.dismiss()
+        }
+
+    }
 
 }

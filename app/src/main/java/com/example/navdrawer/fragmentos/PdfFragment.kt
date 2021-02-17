@@ -29,13 +29,11 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-@Suppress("DEPRECATION")
 class PdfFragment : Fragment() {
     private var precio: String? = null
     private var datosRecibidos:ArrayList<ModeloPdf>? = null
     var adaptadorPdf:PdfAdapter? = null
     var layoutManager: RecyclerView.LayoutManager? = null
-    var arrayDatosRecyclerPdf:ArrayList<ModeloPdf>? = null
     var tvTotalPresup:TextView? = null
     var tvEspacio:TextView? = null
     var etNombrePdf:EditText? = null
@@ -55,7 +53,6 @@ class PdfFragment : Fragment() {
         precio = arguments?.getString(PRECIOS_TOTALES)
         datosRecibidos = arguments?.getSerializable(PROD_SELECT) as ArrayList<ModeloPdf>
 
-        Log.e("datos", datosRecibidos.toString())
         tvTotalPresup = view.findViewById(R.id.tvTotalPresupuesto)
         recyclerViewPdf = view.findViewById(R.id.recyclerPdf)
         guardarPdf = view.findViewById(R.id.guardar_Pdf)
@@ -64,7 +61,7 @@ class PdfFragment : Fragment() {
         tvEspacio = view.findViewById(R.id.tv_Espacio)
 
 
-        tvTotalPresup?.text = precio
+        tvTotalPresup?.text = "Total: $precio"
         // inflaré el recyclerPdf
         recyclerViewPdf?.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context)
@@ -85,7 +82,8 @@ class PdfFragment : Fragment() {
                 else{
                     //permiso ya otorgado, llamar al método savepdf
                     savePdf()
-                    Toast.makeText(context, "consedido", Toast.LENGTH_LONG).show()
+                        activity?.finish()
+                    Toast.makeText(context, "archivado en el dispositivo", Toast.LENGTH_LONG).show()
 
                 }
             }
@@ -117,6 +115,7 @@ class PdfFragment : Fragment() {
             val nombrePresu = etNombrePdf?.text
             val domicilioPresu = etDireccionPdf?.text
             val espacio = tvEspacio?.text.toString()
+
 
 
 
@@ -159,12 +158,12 @@ class PdfFragment : Fragment() {
             )
 
             mDoc.add(table)
-            val nombrePdf = Paragraph("                    Nombre Completo: $nombrePresu", Font(Font.FontFamily.HELVETICA, 12f, Font.BOLD))
+            val nombrePdf = Paragraph("                    Domicilio: $domicilioPresu", Font(Font.FontFamily.HELVETICA, 12f, Font.BOLD))
             nombrePdf.alignment = Element.ALIGN_LEFT
             mDoc.add(nombrePdf)
 
             mDoc.add(table)
-            val domicilioPdf = Paragraph("                    Domicilio: $domicilioPresu", Font(Font.FontFamily.HELVETICA, 12f, Font.BOLD))
+            val domicilioPdf = Paragraph("                    Nombre Completo: $nombrePresu", Font(Font.FontFamily.HELVETICA, 12f, Font.BOLD))
             domicilioPdf.alignment = Element.ALIGN_LEFT
             mDoc.add(domicilioPdf)
 
@@ -173,11 +172,13 @@ class PdfFragment : Fragment() {
             espacioPdf.alignment = Element.ALIGN_CENTER
             mDoc.add(espacioPdf)
 
-            for (list in arrayDatosRecyclerPdf!!){
+            for (list in datosRecibidos!!){
                 table.addCell(PdfPCell(Phrase(list.producto, Font(Font.FontFamily.HELVETICA, 12f))))
                 table.addCell(PdfPCell(Phrase(list.cantidad.toString(), Font(Font.FontFamily.HELVETICA, 12f))))
                 table.addCell(PdfPCell(Phrase(list.precio.toString(), Font(Font.FontFamily.HELVETICA, 12f))))
                 table.addCell(PdfPCell(Phrase(list.subTotal.toString(), Font(Font.FontFamily.HELVETICA, 12f))))
+
+
 
             }
 
@@ -192,7 +193,12 @@ class PdfFragment : Fragment() {
             Toast.makeText(context, " $mFileName.pdf\nse guardó en \n$mFilePath", Toast.LENGTH_SHORT).show()
 
         }
-        catch (e: Exception){}
+        catch (e: Exception){
+            Log.e("exeptin", e.toString())
+        }
+
+
+
 
     }
 

@@ -27,20 +27,37 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="40dp"
+                android:src="@drawable/ic_carrito_24"/>
+
             <TextView
                 android:id="@+id/tvCantidad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="cantidad"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"/>
+                android:text=" 0 producto"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="50dp"
+                android:src="@drawable/ic_money_24"/>
 
             <TextView
                 android:id="@+id/tvTotPrecio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="50dp"
+                android:layout_marginTop="5dp"
                 android:textStyle="bold"
+                android:text="0..."
                 android:textColor="#FFFFFF"/>
 
 

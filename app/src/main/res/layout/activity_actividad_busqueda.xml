@@ -11,17 +11,18 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary">
+        android:background="@color/colorPrimaryDark">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/text_input_layout_email"
             android:layout_width="260dp"
             android:layout_height="match_parent"
-            app:startIconDrawable="@drawable/ic_search"
+            app:startIconDrawable="@drawable/ic_busqueda_24"
+            app:errorTextColor="@color/WhiteColor"
             app:endIconMode="clear_text"
             android:hint="Busqueda..."
             android:elevation="10dp"
-            android:layout_marginRight="15dp"
+            android:layout_marginRight="10dp"
             style="@style/TextAppearance.AppCompat.Headline"
             >
 
@@ -40,7 +41,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:gravity="right"
-            android:layout_marginRight="15dp">
+            android:layout_marginRight="20dp">
 
             <TextView
                 android:layout_width="wrap_content"

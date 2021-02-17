@@ -1,53 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/et_nombre"
-        android:layout_width="237dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:ems="10"
-        android:hint="editar nombre producto"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_dialog" />
-
-    <TextView
-        android:id="@+id/tv_dialog"
-        android:layout_width="260dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:text="Introduce nuevo nombre"
-        android:textColor="@color/design_default_color_error"
-        android:textColorHighlight="@color/colorPrimaryDark"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_margin="10dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        app:cardCornerRadius="12dp"
+        app:cardMaxElevation="5dp"
+        android:background="@color/color_para_fondos">
 
-    <Button
-        android:id="@+id/bt_aceptar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="32dp"
-        android:text="Aceptar"
-        app:layout_constraintStart_toEndOf="@+id/bt_cancelar"
-        app:layout_constraintTop_toBottomOf="@+id/et_nombre" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/bt_cancelar"
-        android:layout_width="wrap_content"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edita el producto"
+                android:textSize="24dp"
+                android:textColor="#EF1D0E"
+                android:layout_gravity="center"/>
+
+            <EditText
+                android:id="@+id/et_nombre"
+                android:layout_width="237dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:hint="editar nombre producto"
+                android:inputType="textPersonName"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:text="Cancelar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_nombre" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        app:cardCornerRadius="12dp"
+        app:cardMaxElevation="5dp"
+        android:background="@color/color_para_fondos">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/bt_cancelar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_agregar"
+                android:layout_marginLeft="10dp"
+                app:fabSize="mini"
+                android:backgroundTint="@color/colorPrimaryDark"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Regresar"
+                android:textColor="@color/colorPrimary"
+                android:layout_margin="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginLeft="55dp"
+                android:layout_marginTop="10dp"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/bt_aceptar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_agregar"
+                app:fabSize="mini"
+                android:layout_marginLeft="10dp"
+                android:backgroundTint="@color/colorPrimaryDark"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
