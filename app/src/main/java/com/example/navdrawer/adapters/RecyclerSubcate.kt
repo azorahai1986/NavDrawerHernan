@@ -30,7 +30,7 @@ class RecyclerSubcate(var mutableListSub: ArrayList<SubCategorias>, val activity
 
         holder.itemView.imageView_sub.setOnClickListener{
             activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.frame_layout, dependienteFragment.newInstance(modelosFb.marca))
+                .replace(R.id.frame_layout, dependienteFragment.newInstance(modelosFb.marca, modelosFb.id))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(dependienteFragment.VOLVER).commit()
         }
 

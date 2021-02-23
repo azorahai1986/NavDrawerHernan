@@ -8,16 +8,16 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.navdrawer.R
-import com.example.navdrawer.adapters.CategoriasAdapter
+import com.example.navdrawer.adapters.RecyclerSubcate
 import com.example.navdrawer.clases_push.PushNotification
 import com.example.navdrawer.clases_push.Retrofitinstance
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
-import com.example.navdrawer.modelos_de_datos.Categorias
+import com.example.navdrawer.modelos_de_datos.SubCategorias
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
@@ -25,28 +25,28 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_actividad_agregar.*
+import kotlinx.android.synthetic.main.activity_actividad_agregar.imageView_sub
+import kotlinx.android.synthetic.main.activity_actividad_agregar_sub_cat.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.*
 
+class ActividadAgregarSubCat : AppCompatActivity(), View.OnClickListener {
 
-
-const val TOPIC = "/topics/general"
-class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
-    // para enviar los push.........................................
     val TAG = "ActividadAgregar"
     var tvSwitch: TextView? = null
-
+    var btCargarSub: ImageButton? = null
+    var idRecibido:String? = null
     private val PICK_IMAGE_REQUEST = 1234
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
-    private var adapter: CategoriasAdapter? = null
+    private var adapter: RecyclerSubcate? = null
 
     // Método para subir imagenes al firebase storage
     private var filePath: Uri? = null
     private var storageReference: StorageReference? = null
+
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -87,22 +87,22 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
 
                     // para editar los datos de la lista...........................................
 
-                    var cate = tvCategoria.text.toString()
-                    //var marca = tvMarca.text.toString()
+                    val bundle = intent.extras
+                    idRecibido = bundle?.getString("id")
+                    //var cate = tvCategoria.text.toString()
+                    var sub = tv_subcate.text.toString()
                     var imagen = downloadUri.toString()
-                   // var nombre = tvNombre.text.toString()
-                   // var precio = etNuevoPrecio.text.toString()
+
                     var map = mutableMapOf<String, Any>()
-                    // map["id"] = id
-                    map["cate"] = cate
-                   // map["marca"] = marca
+                     map["cate"] = idRecibido.toString()
+                   // map["cate"] = cate
+                    map["marca"] = sub
                     map["imagen"] = imagen
-                   // map["nombre"] = nombre
-                   // map["precio"] = precio
 
 
 
-                    FirebaseFirestore.getInstance().collection("Categoria")
+
+                    FirebaseFirestore.getInstance().collection("Subcatergoria")
                         .document().set(map)
                     finish()
                 } else {
@@ -123,13 +123,11 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "SELECT PICTURE"), PICK_IMAGE_REQUEST)
     }
-
     lateinit var storage: FirebaseStorage
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_actividad_agregar)
-
-        tvSwitch = findViewById(R.id.textview_switch)
+        setContentView(R.layout.activity_actividad_agregar_sub_cat)
 
         storage = Firebase.storage
 
@@ -138,17 +136,17 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
         storageReference = storage!!.reference
 
 
+        btCargarSub = findViewById(R.id.btCargar_sub)
         imageView_sub.setOnClickListener(this)
-       
+
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
         // dar funcion al swith..........................................
-        switch_push.setOnCheckedChangeListener { buttonView, isChecked ->
+        /*switch_push.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 tvSwitch?.setTextColor(getColor(R.color.WhiteColor))
                 btCargar.setOnClickListener {
                     uploadFile()
-                    //lanzarPush()
                 }
 
             } else {
@@ -156,16 +154,16 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
                 btCargar.setOnClickListener { uploadFile() }
 
             }
-        }
-        btCargar.setOnClickListener { uploadFile() }
+        }*/
+        btCargarSub?.setOnClickListener { uploadFile() }
 
         exTraerDatos()
 
     }
 
     fun exTraerDatos() {
-        viewModel.fetchUserData().observe(this, androidx.lifecycle.Observer {
-            adapter?.arrayCategorias = it as ArrayList<Categorias>
+        viewModel.fetchUserDataSubcate(idRecibido).observe(this, androidx.lifecycle.Observer {
+            adapter?.mutableListSub = it as ArrayList<SubCategorias>
             adapter?.notifyDataSetChanged()
             val autocompletar = mutableListOf<String>()
             val autocompletarMarca = mutableListOf<String>()
@@ -173,7 +171,7 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
 
             for (x in it) {
                 //autocompletar.add(x.nombre)
-                //autocompletarMarca.add(x.marca)
+                autocompletarMarca.add(x.marca)
                 autocompletarCate.add(x.cate)
 
             }
@@ -190,15 +188,15 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
             tvMarca.setAdapter(adapterAutoMarca)
             tvMarca.setOnFocusChangeListener { view, b ->
                 if (b) tvMarca.showDropDown()
-            }
-*/
-            val adapterAutoCate =
+            }*/
+
+            /*val adapterAutoCate =
                 ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletarCate)
             tvCategoria.threshold = 0
             tvCategoria.setAdapter(adapterAutoCate)
             tvCategoria.setOnFocusChangeListener { view, b ->
                 if (b) tvCategoria.showDropDown()
-            }
+            }*/
         })
 
     }
@@ -233,11 +231,12 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
                 sendNotification(it)
             }
         }
-    }
-*/
+    }*/
+
     override fun onClick(v: View?) {
         if (v === imageView_sub)
             showFilerChooser()
+
 
     }
 }

@@ -124,14 +124,15 @@ class Repo {
         return mutableData
     }
 
-    fun getUserDataDependiente(marcaRecibida:String?): LiveData<MutableList<Dependiente>> {
+    fun getUserDataDependiente(idRecibido:String?): LiveData<MutableList<Dependiente>> {
 
         val mutableData = MutableLiveData<MutableList<Dependiente>>()
-        FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria").whereEqualTo("sub", marcaRecibida)
+        FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria").whereEqualTo("marca", idRecibido)
             .get().addOnSuccessListener {
 
                 val listData = mutableListOf<Dependiente>()
 
+                Log.e("DependienteRepo", idRecibido.toString())
                 for (obtenerFireBase in it.documents){
                     val indument = obtenerFireBase.toObject(Dependiente::class.java)
                     indument?.id = obtenerFireBase.id

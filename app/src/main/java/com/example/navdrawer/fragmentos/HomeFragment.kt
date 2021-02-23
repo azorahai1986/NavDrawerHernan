@@ -20,7 +20,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.airbnb.lottie.LottieAnimationView
 import com.example.navdrawer.R
-import com.example.navdrawer.actividades.ActividadAgregar
 import com.example.navdrawer.actividades.CartelActivity
 import com.example.navdrawer.adapters.PagerPrincipalAdapter
 import com.example.navdrawer.adapters.RecyclerUnoAdapter
@@ -184,7 +183,6 @@ class HomeFragment : Fragment() {
         }
 
         // dar funcines a los botones............................
-        btAgProducto.setOnClickListener { irAgregarActivity() }
         btAgCartel.setOnClickListener { irCartelActivity() }
 
         var swipe = view.findViewById<SwipeRefreshLayout>(R.id.swiperefreshlayout)
@@ -237,10 +235,6 @@ class HomeFragment : Fragment() {
         constructorDialog.show()
     }
 
-    fun irAgregarActivity(){
-        val intent = Intent(context, ActividadAgregar::class.java)
-        startActivity(intent)
-    }
     fun irCartelActivity(){
         val intent = Intent(context, CartelActivity::class.java)
         startActivity(intent)

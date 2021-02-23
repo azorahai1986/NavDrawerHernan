@@ -1,5 +1,6 @@
 package com.example.navdrawer.fragmentos
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,15 +12,18 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.navdrawer.R
+import com.example.navdrawer.actividades.ActividadAgregarSubCat
 import com.example.navdrawer.adapters.RecyclerSubcate
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
 import com.example.navdrawer.modelos_de_datos.SubCategorias
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class SubCateFragment : Fragment() {
 
     var categoriaRecibida: String? = null
-
+    var btMostrarbt:FloatingActionButton? = null
+    var btAgregarSub:FloatingActionButton? = null
 
 
     companion object {
@@ -49,14 +53,21 @@ class SubCateFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_sub_cate, container, false)
         categoriaRecibida = arguments?.getString(CATE_RECIBIDA)
 
+        btMostrarbt = view.findViewById(R.id.flot_bt_mostrar_sub)
+        btAgregarSub = view.findViewById(R.id.fl_Bt_AgregarSub)
         recyclerSub = view.findViewById(R.id.recy_subcate)
-        layoutManager = GridLayoutManager(activity, 1)
+
+        layoutManager = GridLayoutManager(activity, 2)
         recyclerSub?.layoutManager = layoutManager
         recyclerSub?.setHasFixedSize(true)
         adapterSub = RecyclerSubcate(arrayListOf(), activity as FragmentActivity)
         recyclerSub?.adapter = adapterSub
         observeDataSub()
-        Log.e("fragmentoCate", categoriaRecibida!!)
+
+        btMostrarbt?.setOnClickListener {
+            btAgregarSub?.visibility = View.VISIBLE
+        }
+        btAgregarSub?.setOnClickListener { irAAgregarSub() }
         return view
     }
 
@@ -67,6 +78,12 @@ class SubCateFragment : Fragment() {
             Log.e("datos IT", it.toString())
         })
 
+    }
+
+    fun irAAgregarSub(){
+        val intent = Intent(context, ActividadAgregarSubCat::class.java)
+        intent.putExtra("id", categoriaRecibida)
+        startActivity(intent)
     }
 
 }

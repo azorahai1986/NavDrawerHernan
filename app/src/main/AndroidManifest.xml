@@ -21,7 +21,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".actividades.ActividadBusqueda"></activity>
+        <activity android:name=".actividades.ActividadAgregarProducto"></activity>
+        <activity android:name=".actividades.ActividadAgregarSubCat" />
+        <activity android:name=".actividades.ActividadBusqueda" />
 
         <service
             android:name=".clases_push.FirebaseService"

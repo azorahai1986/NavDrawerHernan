@@ -3,13 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gris"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/color_para_fondos"
     android:clickable="false"
     tools:context=".fragmentos.dependienteFragment">
 
    <androidx.recyclerview.widget.RecyclerView
        android:id="@+id/recycler_dependiente"
        android:layout_width="match_parent"
-       android:layout_height="match_parent"/>
+       android:layout_height="match_parent"
+       tools:listitem="@layout/item_subcate"/>
+
+   <com.google.android.material.floatingactionbutton.FloatingActionButton
+       android:id="@+id/flot_bt_mostrar_btprodu"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_gravity="bottom|right"
+       android:layout_marginBottom="20dp"
+       android:visibility="visible"
+       android:src="@drawable/ic_agregar"
+       app:fabSize="normal"
+       android:elevation="10dp"/>
+
+   <com.google.android.material.floatingactionbutton.FloatingActionButton
+       android:id="@+id/fl_Bt_AgregarProdu"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_gravity="right|bottom"
+       android:layout_marginBottom="90dp"
+       android:layout_marginRight="10dp"
+       android:clickable="true"
+       android:elevation="10dp"
+       android:src="@drawable/ic_lista"
+       android:backgroundTint="#FFFFFF"
+       app:fabSize="mini"
+       android:visibility="gone"
+       app:pressedTranslationZ="12dp"/>
 
 </FrameLayout>

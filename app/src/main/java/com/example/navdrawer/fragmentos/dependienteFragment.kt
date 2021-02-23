@@ -1,7 +1,7 @@
 package com.example.navdrawer.fragmentos
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,27 +11,31 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.navdrawer.R
+import com.example.navdrawer.actividades.ActividadAgregarProducto
 import com.example.navdrawer.adapters.RecyDependienteAdapter
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
 import com.example.navdrawer.modelos_de_datos.Dependiente
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val RECIBIRMARCA = "recibir_marca"
-private const val ARG_PARAM2 = "param2"
+private const val RECIIBIR_ID = "recibir_id"
 
 
 class dependienteFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var recibirMarca: String? = null
+    private var IdRecibido: String? = null
 
     companion object {
 
         const val VOLVER = "volver"
-        fun newInstance(marcaRecibida: String) =
+        fun newInstance(marcaRecibida: String, id:String) =
             dependienteFragment().apply {
                 arguments = Bundle().apply {
                     putString(RECIBIRMARCA, marcaRecibida)
+                    putString(RECIIBIR_ID, id)
                 }
             }
     }
@@ -39,15 +43,18 @@ class dependienteFragment : Fragment() {
     var recyDependiente:RecyclerView? = null
     var adapterDependiente:RecyDependienteAdapter? = null
     var layoutManager:RecyclerView.LayoutManager? = null
+    var btMostrarProdu:FloatingActionButton? = null
+    var btAgregarProdu:FloatingActionButton? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        arguments?.let {
-            recibirMarca = it.getString(RECIBIRMARCA)
-        }
+
+        recibirMarca = arguments?.getString(RECIBIRMARCA)
+        IdRecibido = arguments?.getString(RECIIBIR_ID)
+
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_dependiente, container, false)
 
@@ -58,8 +65,15 @@ class dependienteFragment : Fragment() {
         adapterDependiente = RecyDependienteAdapter(arrayListOf(), context as FragmentActivity)
         recyDependiente?.adapter = adapterDependiente
 
-        Log.e("En el fragmento", recibirMarca!!)
         observeDataDependiente()
+
+        btMostrarProdu = view.findViewById(R.id.flot_bt_mostrar_btprodu)
+        btAgregarProdu = view.findViewById(R.id.btCargar_produ)
+        btMostrarProdu?.setOnClickListener {
+            btAgregarProdu?.visibility = View.VISIBLE
+        }
+
+        btMostrarProdu?.setOnClickListener { irAcitividadAgregarProducto() }
 
         return view
     }
@@ -71,6 +85,13 @@ class dependienteFragment : Fragment() {
 
         })
 
+
+    }
+    fun irAcitividadAgregarProducto(){
+        val intent = Intent(context, ActividadAgregarProducto::class.java)
+        intent.putExtra("id", IdRecibido)
+        intent.putExtra("marca", recibirMarca)
+        startActivity(intent)
     }
 
 }

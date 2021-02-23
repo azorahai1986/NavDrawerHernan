@@ -8,16 +8,16 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.navdrawer.R
-import com.example.navdrawer.adapters.CategoriasAdapter
+import com.example.navdrawer.adapters.RecyclerUnoAdapter
 import com.example.navdrawer.clases_push.PushNotification
 import com.example.navdrawer.clases_push.Retrofitinstance
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
-import com.example.navdrawer.modelos_de_datos.Categorias
+import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
@@ -25,24 +25,22 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_actividad_agregar.*
+import kotlinx.android.synthetic.main.activity_actividad_agregar_producto.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.IOException
 import java.util.*
 
+class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
 
-
-const val TOPIC = "/topics/general"
-class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
-    // para enviar los push.........................................
     val TAG = "ActividadAgregar"
     var tvSwitch: TextView? = null
+    var btCargarProdu: ImageButton? = null
 
     private val PICK_IMAGE_REQUEST = 1234
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
-    private var adapter: CategoriasAdapter? = null
+    private var adapter: RecyclerUnoAdapter? = null
 
     // Método para subir imagenes al firebase storage
     private var filePath: Uri? = null
@@ -55,7 +53,7 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
             filePath = data.data
             try {
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
-                imageView_sub!!.setImageBitmap(bitmap)
+                imageView_produ!!.setImageBitmap(bitmap)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -87,22 +85,25 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
 
                     // para editar los datos de la lista...........................................
 
-                    var cate = tvCategoria.text.toString()
-                    //var marca = tvMarca.text.toString()
+                    val bundle = intent.extras
+                    val idRecuperado = bundle?.getString("id")
+                    var marca = bundle?.getString("marca")
+                    //var cate = tvCategoria.text.toString()
+                    var producto = tv_produ.text.toString()
                     var imagen = downloadUri.toString()
-                   // var nombre = tvNombre.text.toString()
-                   // var precio = etNuevoPrecio.text.toString()
+                    var precio = etPrecioProdu.text.toString()
+
                     var map = mutableMapOf<String, Any>()
-                    // map["id"] = id
-                    map["cate"] = cate
-                   // map["marca"] = marca
+                     map["cate"] = idRecuperado.toString()
+                     map["marca"] = marca.toString()
+                    map["precio"] = precio
+                    map["nombre"] = producto
                     map["imagen"] = imagen
-                   // map["nombre"] = nombre
-                   // map["precio"] = precio
 
 
 
-                    FirebaseFirestore.getInstance().collection("Categoria")
+
+                    FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
                         .document().set(map)
                     finish()
                 } else {
@@ -114,6 +115,7 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
         }
 
 
+
     }
 
 
@@ -123,13 +125,11 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "SELECT PICTURE"), PICK_IMAGE_REQUEST)
     }
-
     lateinit var storage: FirebaseStorage
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_actividad_agregar)
-
-        tvSwitch = findViewById(R.id.textview_switch)
+        setContentView(R.layout.activity_actividad_agregar_producto)
 
         storage = Firebase.storage
 
@@ -138,17 +138,17 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
         storageReference = storage!!.reference
 
 
-        imageView_sub.setOnClickListener(this)
-       
+        btCargarProdu = findViewById(R.id.btCargar_produ)
+        imageView_produ.setOnClickListener(this)
+
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
         // dar funcion al swith..........................................
-        switch_push.setOnCheckedChangeListener { buttonView, isChecked ->
+        /*switch_push.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 tvSwitch?.setTextColor(getColor(R.color.WhiteColor))
                 btCargar.setOnClickListener {
                     uploadFile()
-                    //lanzarPush()
                 }
 
             } else {
@@ -156,8 +156,8 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
                 btCargar.setOnClickListener { uploadFile() }
 
             }
-        }
-        btCargar.setOnClickListener { uploadFile() }
+        }*/
+        btCargarProdu?.setOnClickListener { uploadFile() }
 
         exTraerDatos()
 
@@ -165,15 +165,15 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
 
     fun exTraerDatos() {
         viewModel.fetchUserData().observe(this, androidx.lifecycle.Observer {
-            adapter?.arrayCategorias = it as ArrayList<Categorias>
+            adapter?.mutableListModel = it as ArrayList<ModeloDeIndumentaria>
             adapter?.notifyDataSetChanged()
             val autocompletar = mutableListOf<String>()
             val autocompletarMarca = mutableListOf<String>()
             val autocompletarCate = mutableListOf<String>()
 
             for (x in it) {
-                //autocompletar.add(x.nombre)
-                //autocompletarMarca.add(x.marca)
+                autocompletar.add(x.nombre)
+                autocompletarMarca.add(x.marca)
                 autocompletarCate.add(x.cate)
 
             }
@@ -192,13 +192,13 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
                 if (b) tvMarca.showDropDown()
             }
 */
-            val adapterAutoCate =
+            /*val adapterAutoCate =
                 ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletarCate)
             tvCategoria.threshold = 0
             tvCategoria.setAdapter(adapterAutoCate)
             tvCategoria.setOnFocusChangeListener { view, b ->
                 if (b) tvCategoria.showDropDown()
-            }
+            }*/
         })
 
     }
@@ -233,11 +233,13 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
                 sendNotification(it)
             }
         }
-    }
-*/
+    }*/
+
     override fun onClick(v: View?) {
-        if (v === imageView_sub)
+        if (v === imageView_produ)
             showFilerChooser()
+
+
 
     }
 }

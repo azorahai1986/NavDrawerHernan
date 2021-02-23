@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/light_grey"
     android:clickable="false"
     tools:context=".fragmentos.SubCateFragment">
@@ -17,9 +18,33 @@
             android:id="@+id/recy_subcate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:listitem="@android:layout/activity_list_item"/>
+            tools:listitem="@layout/item_subcate"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/flot_bt_mostrar_sub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="20dp"
+            android:visibility="visible"
+            android:src="@drawable/ic_agregar"
+            app:fabSize="normal"
+            android:elevation="10dp"/>
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fl_Bt_AgregarSub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_marginBottom="90dp"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:elevation="10dp"
+            android:src="@drawable/ic_lista"
+            android:backgroundTint="#FFFFFF"
+            app:fabSize="mini"
+            android:visibility="gone"
+            app:pressedTranslationZ="12dp"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

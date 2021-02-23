@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".actividades.ActividadAgregar">
+    tools:context=".actividades.ActividadAgregarSubCat">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tolbar_agregar"
@@ -38,7 +38,7 @@
             android:textColor="#FAE246" />
 
         <ImageButton
-            android:id="@+id/btCargar"
+            android:id="@+id/btCargar_sub"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="8dp"
@@ -47,34 +47,50 @@
             android:src="@drawable/ic_agregar" />
     </androidx.appcompat.widget.Toolbar>
 
-    <AutoCompleteTextView
-        android:id="@+id/tvCategoria"
+
+    <TextView
+        android:id="@+id/tv_categoria"
         android:layout_width="250dp"
         android:layout_height="41dp"
         android:layout_marginStart="80dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="68dp"
         android:layout_marginEnd="81dp"
         android:elevation="10dp"
-        android:hint="Seleccione Categoria"
-        android:inputType="textAutoCorrect|textPersonName"
+        android:text="Categria"
+        android:textSize="18dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tolbar_agregar" />
 
+    <AutoCompleteTextView
+        android:id="@+id/tv_subcate"
+        android:layout_width="250dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="81dp"
+        android:elevation="10dp"
+        android:hint="Seleccione Sub Categoria"
+        android:inputType="textAutoCorrect|textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_categoria" />
 
     <ImageView
         android:id="@+id/imageView_sub"
         android:layout_width="310dp"
         android:layout_height="258dp"
         android:layout_marginStart="25dp"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="21dp"
         android:elevation="10dp"
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.454"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCategoria"
+        app:layout_constraintTop_toBottomOf="@+id/tv_subcate"
         app:srcCompat="@drawable/caramelitos" />
 
 

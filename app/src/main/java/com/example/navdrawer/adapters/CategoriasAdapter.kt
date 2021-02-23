@@ -30,5 +30,7 @@ class CategoriasAdapter(var arrayCategorias:MutableList<Categorias>, val fragmen
             fragment.supportFragmentManager.beginTransaction().replace(R.id.frame_layout, SubCateFragment.newInstance(categoriasArray.id))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).addToBackStack(SubCateFragment.VOLVER).commit()
         }
+
+
     }
 }
