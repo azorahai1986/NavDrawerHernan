@@ -150,9 +150,7 @@ class HomeFragment : Fragment() {
         // ...... asignar variable a los botones........
         var btAgregar = view.findViewById<FloatingActionButton>(R.id.flot_btAgregar)
         var btAgCartel = view.findViewById<FloatingActionButton>(R.id.floatBtAgregarCartel)
-        var btAgProducto = view.findViewById<FloatingActionButton>(R.id.floatBtAgregarProducto)
         var txtcartel = view.findViewById<TextView>(R.id.textOfertas)
-        var txtproducto = view.findViewById<TextView>(R.id.textLista)
         //........ token y datos desde accederFragment.....................................................
         if(mailRecuperado.isNullOrEmpty()){
             Toast.makeText(context, "bienvenido visitante", Toast.LENGTH_LONG).show()
@@ -162,22 +160,16 @@ class HomeFragment : Fragment() {
         }
         btAgregar.setOnClickListener {
             btAgCartel.visibility = View.VISIBLE
-            btAgProducto.visibility = View.VISIBLE
             txtcartel.visibility = View.VISIBLE
-            txtproducto.visibility = View.VISIBLE
 
             isOpen = if (isOpen){
-                btAgProducto.startAnimation(abrire)
                 btAgCartel.startAnimation(abrire)
                 txtcartel.startAnimation(abrire)
-                txtproducto.startAnimation(abrire)
                 //flot_btAgregar.startAnimation(rotate)
                 false
             }else{
-                btAgProducto.startAnimation(cerrar)
                 btAgCartel.startAnimation(cerrar)
                 txtcartel.startAnimation(cerrar)
-                txtproducto.startAnimation(cerrar)
                 true
             }
         }

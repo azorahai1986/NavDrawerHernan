@@ -14,10 +14,7 @@
             android:id="@+id/busqueda"
             android:icon="@drawable/ic_search"
             android:title="busqueda y pedidos" />
-        <item
-            android:id="@+id/timeLine"
-            android:title="timeLine"
-            android:icon="@drawable/ic_timeline"/>
+
     </group>
 
     <item android:title="controls">

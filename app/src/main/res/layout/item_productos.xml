@@ -43,18 +43,8 @@
                 android:layout_height="2dp"
                 android:layout_marginTop="5dp"
                 android:background="@color/color_negro"/>
-            <TextView
-                android:id="@+id/textview_cate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/texto_descripcion"/>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginTop="5dp"
-                android:background="@color/color_negro"/>
+
             <TextView
                 android:id="@+id/textview_precio"
                 android:layout_width="match_parent"
@@ -68,7 +58,9 @@
                 android:id="@+id/textview_marca"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="5dp"
+                android:textAlignment="center"
+                android:textColor="#E40928"
                 android:text="@string/imagen_de_constantin"
                 android:textSize="18sp" />
         </LinearLayout>

@@ -104,7 +104,6 @@ class Repo {
         val mutableData = MutableLiveData<MutableList<SubCategorias>>()
         FirebaseFirestore.getInstance().collection("Subcatergoria").whereEqualTo("cate", categoriaRecibida)
             .get().addOnSuccessListener {
-                Log.e("En el repo", categoriaRecibida)
                 val listData = mutableListOf<SubCategorias>()
                 for (obtenerFireBase in it.documents){
                     val indument = obtenerFireBase.toObject(SubCategorias::class.java)

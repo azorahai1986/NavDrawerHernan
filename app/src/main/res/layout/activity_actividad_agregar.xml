@@ -1,10 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_para_fondos"
     tools:context=".actividades.ActividadAgregar">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        app:cardCornerRadius="15dp"
+        app:cardMaxElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="5dp">
+
+            <AutoCompleteTextView
+                android:id="@+id/tvCategoria"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:elevation="10dp"
+                android:hint="Nueva Categoria"
+                android:textAlignment="center"
+                android:inputType="textAutoCorrect|textPersonName" />
+
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="180dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        app:cardCornerRadius="15dp"
+        app:cardMaxElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageView_sub"
+                android:layout_width="310dp"
+                android:layout_height="258dp"
+                android:elevation="10dp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/caramelitos" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="480dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        app:cardCornerRadius="15dp"
+        app:cardMaxElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/btCargar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:background="@color/colorPrimaryDark"
+                android:text="Crear Categoria"
+                android:textColor="@color/WhiteColor"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/tolbar_agregar"
@@ -17,65 +99,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Switch
-            android:id="@+id/switch_push"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/textview_switch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="notificar usuarios"
-            android:textColor="#FAE246"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="60dp"
-            android:elevation="10dp"
-            android:text="cargar producto"
-            android:textColor="#FAE246" />
-
-        <ImageButton
-            android:id="@+id/btCargar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginLeft="8dp"
-            android:elevation="10dp"
-            android:background="@color/colorPrimary"
-            android:src="@drawable/ic_agregar" />
     </androidx.appcompat.widget.Toolbar>
 
-    <AutoCompleteTextView
-        android:id="@+id/tvCategoria"
-        android:layout_width="250dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="28dp"
-        android:layout_marginEnd="81dp"
-        android:elevation="10dp"
-        android:hint="Seleccione Categoria"
-        android:inputType="textAutoCorrect|textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tolbar_agregar" />
 
 
-    <ImageView
-        android:id="@+id/imageView_sub"
-        android:layout_width="310dp"
-        android:layout_height="258dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="68dp"
-        android:layout_marginEnd="21dp"
-        android:elevation="10dp"
-        android:scaleType="fitXY"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.454"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvCategoria"
-        app:srcCompat="@drawable/caramelitos" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

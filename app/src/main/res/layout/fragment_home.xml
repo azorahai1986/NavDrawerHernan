@@ -47,7 +47,7 @@
             android:layout_height="match_parent"
             android:elevation="10dp"
             android:scrollbarStyle="insideOverlay"
-            android:background="@color/light_grey" />
+            android:background="@color/color_para_fondos" />
 
 
     </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -155,20 +155,6 @@
             app:fabSize="normal"
             android:elevation="10dp"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatBtAgregarProducto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:layout_marginBottom="90dp"
-            android:layout_marginRight="10dp"
-            android:clickable="true"
-            android:elevation="10dp"
-            android:src="@drawable/ic_lista"
-            android:backgroundTint="#FFFFFF"
-            app:fabSize="mini"
-            android:visibility="gone"
-            app:pressedTranslationZ="12dp"/>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatBtAgregarCartel"
@@ -194,18 +180,6 @@
             android:layout_gravity="right|bottom"
             android:layout_marginRight="55dp"
             android:layout_marginBottom="155dp"
-            android:visibility="invisible"
-            android:textColor="@color/colorAccent"/>
-
-        <TextView
-            android:id="@+id/textLista"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Productos"
-            android:textStyle="bold"
-            android:layout_gravity="right|bottom"
-            android:layout_marginRight="55dp"
-            android:layout_marginBottom="95dp"
             android:visibility="invisible"
             android:textColor="@color/colorAccent"/>
 

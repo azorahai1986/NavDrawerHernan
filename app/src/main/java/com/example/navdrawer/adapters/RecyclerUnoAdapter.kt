@@ -36,7 +36,6 @@ class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, 
 
         holder.itemView.textview_nombre.text = modelosFb.nombre + " "+modelosFb.marca
         holder.itemView.textview_precio.text = " $ " + modelosFb.precio
-        holder.itemView.textview_cate.text = modelosFb.cate
         holder.itemView.textview_marca.text = modelosFb.marca
         Glide.with(activity).load(modelosFb.imagen).into(holder.itemView.imageview)
 

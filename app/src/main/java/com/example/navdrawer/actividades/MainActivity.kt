@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var auth:FirebaseAuth // para saber si hay existe un email
     lateinit var inicioFragment: HomeFragment
     lateinit var workFragment: MainActivity
-    lateinit var settingFragment: SettingFragment
     lateinit var subCateFragment: SubCateFragment
     lateinit var timelineFragment: PdfFragment
     lateinit var accederFragment: AccederFragment
@@ -96,11 +95,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val intent = Intent(this, ActividadBusqueda::class.java)
                 startActivity(intent)
 
-            }
-            com.example.navdrawer.R.id.timeLine -> {
-                timelineFragment = PdfFragment()
-                supportFragmentManager.beginTransaction().replace(com.example.navdrawer.R.id.frame_layout, timelineFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
             }
 
             com.example.navdrawer.R.id.acceder -> {

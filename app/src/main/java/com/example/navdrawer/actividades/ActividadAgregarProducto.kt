@@ -8,7 +8,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -36,7 +36,8 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
 
     val TAG = "ActividadAgregar"
     var tvSwitch: TextView? = null
-    var btCargarProdu: ImageButton? = null
+    var btCargarProdu: Button? = null
+    var tvMarca: TextView? = null
 
     private val PICK_IMAGE_REQUEST = 1234
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
@@ -137,6 +138,11 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
 
+        val bundle = intent.extras
+        var marca = bundle?.getString("marca")
+
+        tvMarca = findViewById(R.id.tv_marca)
+        tvMarca?.text = marca
 
         btCargarProdu = findViewById(R.id.btCargar_produ)
         imageView_produ.setOnClickListener(this)
@@ -222,18 +228,7 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
 
         }
 
-    /*fun lanzarPush() {
-        val title = tvNombre.text.toString()
-        val message = tvMarca.text.toString() + "  " + tvCategoria.text.toString()
-        if (title.isNotEmpty() && message.isNotEmpty()) {
-            PushNotification(
-                NotificationData(title, message),
-                TOPIC
-            ).also {
-                sendNotification(it)
-            }
-        }
-    }*/
+
 
     override fun onClick(v: View?) {
         if (v === imageView_produ)

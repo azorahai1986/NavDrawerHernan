@@ -129,7 +129,7 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_actividad_agregar)
 
-        tvSwitch = findViewById(R.id.textview_switch)
+        //tvSwitch = findViewById(R.id.textview_switch)
 
         storage = Firebase.storage
 
@@ -143,20 +143,7 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
         // dar funcion al swith..........................................
-        switch_push.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                tvSwitch?.setTextColor(getColor(R.color.WhiteColor))
-                btCargar.setOnClickListener {
-                    uploadFile()
-                    //lanzarPush()
-                }
 
-            } else {
-                tvSwitch?.setTextColor(getColor(R.color.amarillo))
-                btCargar.setOnClickListener { uploadFile() }
-
-            }
-        }
         btCargar.setOnClickListener { uploadFile() }
 
         exTraerDatos()
@@ -164,7 +151,7 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
     }
 
     fun exTraerDatos() {
-        viewModel.fetchUserData().observe(this, androidx.lifecycle.Observer {
+        viewModel.fetchUserDataCategorias().observe(this, androidx.lifecycle.Observer {
             adapter?.arrayCategorias = it as ArrayList<Categorias>
             adapter?.notifyDataSetChanged()
             val autocompletar = mutableListOf<String>()

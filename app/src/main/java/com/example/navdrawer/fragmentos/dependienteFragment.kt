@@ -2,9 +2,11 @@ package com.example.navdrawer.fragmentos
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
@@ -16,6 +18,9 @@ import com.example.navdrawer.adapters.RecyDependienteAdapter
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
 import com.example.navdrawer.modelos_de_datos.Dependiente
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +29,12 @@ private const val RECIIBIR_ID = "recibir_id"
 
 
 class dependienteFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+    private lateinit var auth: FirebaseAuth
+    private var uidRecuperado:String? = null
+    private var mailRecuperado:String? = null
+    private var textViewP: TextView? = null
+
+
     private var recibirMarca: String? = null
     private var IdRecibido: String? = null
 
@@ -43,7 +53,6 @@ class dependienteFragment : Fragment() {
     var recyDependiente:RecyclerView? = null
     var adapterDependiente:RecyDependienteAdapter? = null
     var layoutManager:RecyclerView.LayoutManager? = null
-    var btMostrarProdu:FloatingActionButton? = null
     var btAgregarProdu:FloatingActionButton? = null
 
     override fun onCreateView(
@@ -67,13 +76,27 @@ class dependienteFragment : Fragment() {
 
         observeDataDependiente()
 
-        btMostrarProdu = view.findViewById(R.id.flot_bt_mostrar_btprodu)
-        btAgregarProdu = view.findViewById(R.id.btCargar_produ)
-        btMostrarProdu?.setOnClickListener {
-            btAgregarProdu?.visibility = View.VISIBLE
+        btAgregarProdu = view.findViewById(R.id.fl_Bt_AgregarProdu)
+        textViewP = view.findViewById(R.id.text_p)
+
+        auth = Firebase.auth
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.let {
+            // Name, email address, and profile photo Url
+            mailRecuperado = user.email
+
+            Log.e("EmailHome", mailRecuperado.toString())
+
+            uidRecuperado = user.uid
+
         }
 
-        btMostrarProdu?.setOnClickListener { irAcitividadAgregarProducto() }
+        if (!(mailRecuperado.isNullOrEmpty())){
+            btAgregarProdu?.visibility = View.VISIBLE
+            textViewP?.visibility = View.VISIBLE
+        }
+
+        btAgregarProdu?.setOnClickListener { irAcitividadAgregarProducto() }
 
         return view
     }

@@ -23,11 +23,10 @@ class CategoriasAdapter(var arrayCategorias:MutableList<Categorias>, val fragmen
     override fun onBindViewHolder(holder: CateViewHolder, position: Int) {
         val categoriasArray = arrayCategorias[position]
         holder.itemView.text_item_categorias.text = categoriasArray.cate
-        holder.itemView.text_item_categorias_arriba.text = categoriasArray.cate
         Glide.with(fragment).load(categoriasArray.imagen).into(holder.itemView.imagen_item_categorias)
 
         holder.itemView.cardview_categorias.setOnClickListener {
-            fragment.supportFragmentManager.beginTransaction().replace(R.id.frame_layout, SubCateFragment.newInstance(categoriasArray.id))
+            fragment.supportFragmentManager.beginTransaction().replace(R.id.frame_layout, SubCateFragment.newInstance(categoriasArray.id, categoriasArray.cate))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).addToBackStack(SubCateFragment.VOLVER).commit()
         }
 

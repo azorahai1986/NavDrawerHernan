@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
@@ -17,21 +18,30 @@ import com.example.navdrawer.adapters.RecyclerSubcate
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
 import com.example.navdrawer.modelos_de_datos.SubCategorias
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class SubCateFragment : Fragment() {
+    private lateinit var auth: FirebaseAuth
+    private var uidRecuperado:String? = null
+    private var mailRecuperado:String? = null
+    private var textViewC: TextView? = null
 
     var categoriaRecibida: String? = null
-    var btMostrarbt:FloatingActionButton? = null
+    var nombreCateRecibida:String? = null
     var btAgregarSub:FloatingActionButton? = null
 
 
     companion object {
         private const val CATE_RECIBIDA = "cate_recibida"
+        private const val NOMCAT_RECIBIDA = "nomcat_recibida"
         const val VOLVER = "volver"
-        fun newInstance(categoriaRecibidas: String): SubCateFragment{
+        fun newInstance(categoriaRecibidas: String, nombreCateReci:String): SubCateFragment{
             val bundle = Bundle()
             bundle.putString(CATE_RECIBIDA, categoriaRecibidas)
+            bundle.putString(NOMCAT_RECIBIDA, nombreCateReci)
 
             val fragment = SubCateFragment()
             fragment.arguments = bundle
@@ -52,9 +62,10 @@ class SubCateFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_sub_cate, container, false)
         categoriaRecibida = arguments?.getString(CATE_RECIBIDA)
+        nombreCateRecibida = arguments?.getString(NOMCAT_RECIBIDA)
 
-        btMostrarbt = view.findViewById(R.id.flot_bt_mostrar_sub)
         btAgregarSub = view.findViewById(R.id.fl_Bt_AgregarSub)
+        textViewC = view.findViewById(R.id.text_sub)
         recyclerSub = view.findViewById(R.id.recy_subcate)
 
         layoutManager = GridLayoutManager(activity, 2)
@@ -64,9 +75,23 @@ class SubCateFragment : Fragment() {
         recyclerSub?.adapter = adapterSub
         observeDataSub()
 
-        btMostrarbt?.setOnClickListener {
-            btAgregarSub?.visibility = View.VISIBLE
+        auth = Firebase.auth
+        val user = FirebaseAuth.getInstance().currentUser
+        user?.let {
+            // Name, email address, and profile photo Url
+            mailRecuperado = user.email
+
+            Log.e("EmailHome", mailRecuperado.toString())
+
+            uidRecuperado = user.uid
+
         }
+
+        if (!(mailRecuperado.isNullOrEmpty())){
+            btAgregarSub?.visibility = View.VISIBLE
+            textViewC?.visibility = View.VISIBLE
+        }
+
         btAgregarSub?.setOnClickListener { irAAgregarSub() }
         return view
     }
@@ -83,6 +108,7 @@ class SubCateFragment : Fragment() {
     fun irAAgregarSub(){
         val intent = Intent(context, ActividadAgregarSubCat::class.java)
         intent.putExtra("id", categoriaRecibida)
+        intent.putExtra("nombreCate", nombreCateRecibida)
         startActivity(intent)
     }
 
