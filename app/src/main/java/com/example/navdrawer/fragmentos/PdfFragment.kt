@@ -124,7 +124,7 @@ class PdfFragment : Fragment() {
             }
         }
 
-        mostrarrPdf?.setOnClickListener { enviarPdf(null) }
+        mostrarrPdf?.setOnClickListener { enviarPdf("") }
 
         return view
     }
@@ -318,7 +318,6 @@ class PdfFragment : Fragment() {
                 if (task.isSuccessful) {
                     val downloadUri = task.result
 
-                    enviarPdf(downloadUri)
                 } else {
                     // Handle failures
                     // ...
@@ -326,6 +325,7 @@ class PdfFragment : Fragment() {
             }
 
 
+            enviarPdf(mFilePath)
         }
         catch (e: Exception){
         }
@@ -379,23 +379,26 @@ class PdfFragment : Fragment() {
     }
 
 
-    fun enviarPdf(downloadUri: Uri?) {
-        Log.e("URL", downloadUri.toString())
+    fun enviarPdf(mFilePath: String) {
+        Log.e("URL", mFilePath.toString())
 
-        var url = downloadUri
 
+        var file = File(mFilePath)
         val nTel = "+541133545454"
-        var uri = "whatsapp://send?phone=$nTel&text=${url.toString()}"
-        //val intent = Intent(Intent.ACTION_SEND)
-        val intent = Intent(Intent.ACTION_VIEW)
 
-        intent.data = Uri.parse(uri)
-        //intent.type = "text/plain"
-       // intent.setPackage("com.whatsapp")
-        //intent.putExtra(Intent.EXTRA_TEXT, "$downloadUri")
+        val  share = Intent()
+        val url = Uri.fromFile(file)
+        Log.e("URL", url.toString())
+        var uri = "whatsapp://send?phone=$nTel&text= pedido reservado"
+
+        share.action = Intent.ACTION_VIEW
+        share.type = "application/pdf"
+        share.putExtra(Intent.EXTRA_STREAM, url)
+        share.setPackage("com.whatsapp")
+        //share.data = Uri.parse(uri)
 
         try {
-            activity?.startActivity(intent)
+            activity?.startActivity(share)
         } catch (ex: ActivityNotFoundException) {
             ex.printStackTrace()
             Snackbar.make(View(requireContext()), "El dispositivo no tiene instalado WhatsApp", Snackbar.LENGTH_LONG)
