@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +30,6 @@ import java.util.*
 class ActividadAgregarSubCat : AppCompatActivity(), View.OnClickListener {
 
     val TAG = "ActividadAgregar"
-    var tvSwitch: TextView? = null
     var btCargarSub: Button? = null
     var idRecibido:String? = null
     var nombreRecibido:String? = null
@@ -163,6 +163,14 @@ class ActividadAgregarSubCat : AppCompatActivity(), View.OnClickListener {
                 autocompletarCate.add(x.cate)
 
             }
+
+            val adapterAutoMarca =
+                ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletarMarca)
+            tv_subcate.threshold = 0
+            tv_subcate.setAdapter(adapterAutoMarca)
+            tv_subcate.setOnFocusChangeListener { view, b ->
+                if (b) tv_subcate.showDropDown()
+            }
             /*val adapterAuto = ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletar)
             tvNombre.threshold = 0
             tvNombre.setAdapter(adapterAuto)
@@ -170,13 +178,7 @@ class ActividadAgregarSubCat : AppCompatActivity(), View.OnClickListener {
                 if (b) tvNombre.showDropDown()
             }
 
-            val adapterAutoMarca =
-                ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletarMarca)
-            tvMarca.threshold = 0
-            tvMarca.setAdapter(adapterAutoMarca)
-            tvMarca.setOnFocusChangeListener { view, b ->
-                if (b) tvMarca.showDropDown()
-            }*/
+            */
 
             /*val adapterAutoCate =
                 ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletarCate)
@@ -195,5 +197,10 @@ class ActividadAgregarSubCat : AppCompatActivity(), View.OnClickListener {
             showFilerChooser()
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        exTraerDatos()
     }
 }

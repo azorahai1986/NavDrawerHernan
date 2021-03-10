@@ -1,6 +1,9 @@
 package com.example.navdrawer.fragmentos
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -20,16 +23,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.navdrawer.R
 import com.example.navdrawer.adapters.PdfAdapter
 import com.example.navdrawer.modelos_de_datos.ModeloPdf
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.itextpdf.text.*
 import com.itextpdf.text.pdf.PdfPCell
 import com.itextpdf.text.pdf.PdfPTable
 import com.itextpdf.text.pdf.PdfWriter
+import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class PdfFragment : Fragment() {
+    val TAG = "ActividadAgregar"
+
     private var precio: String? = null
     private var datosRecibidos:ArrayList<ModeloPdf>? = null
     var adaptadorPdf:PdfAdapter? = null
@@ -40,8 +51,14 @@ class PdfFragment : Fragment() {
     var etDireccionPdf:EditText? = null
     private var recyclerViewPdf: RecyclerView? = null
     var guardarPdf:Button? = null
+    var mostrarrPdf:Button? = null
+    private val PICK_IMAGE_REQUEST = 1234
 
     private val STORAGE_CODE: Int = 100
+    private var storageReference: StorageReference? = null
+    private var filePath: Uri? = null
+    lateinit var storage: FirebaseStorage
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,9 +73,16 @@ class PdfFragment : Fragment() {
         tvTotalPresup = view.findViewById(R.id.tvTotalPresupuesto)
         recyclerViewPdf = view.findViewById(R.id.recyclerPdf)
         guardarPdf = view.findViewById(R.id.guardar_Pdf)
+        mostrarrPdf = view.findViewById(R.id.mostrar_Pdf)
         etNombrePdf = view.findViewById(R.id.etNombre_Pdf)
         etDireccionPdf = view.findViewById(R.id.etDireccion_Pdf)
         tvEspacio = view.findViewById(R.id.tv_Espacio)
+
+        storage = Firebase.storage
+
+        // dare init a firebase
+        storage = FirebaseStorage.getInstance()
+        storageReference = storage!!.reference
 
 
         tvTotalPresup?.text = "Total: $precio"
@@ -73,7 +97,10 @@ class PdfFragment : Fragment() {
             //necesitamos manejar permisos de tiempo de ejecución para dispositivos con marshmallow  y superior
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M){
                 //sistema operativo> = marshMallow (6.0), verifique que el permiso esté habilitado o no
-                if (checkSelfPermission(requireContext(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED){
+                if (checkSelfPermission(
+                        requireContext(),
+                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_DENIED){
                     // no se otorgó permiso, solicítelo
                     val permissions = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     requestPermissions(permissions, STORAGE_CODE)
@@ -82,8 +109,9 @@ class PdfFragment : Fragment() {
                 else{
                     //permiso ya otorgado, llamar al método savepdf
                     savePdf()
-                        activity?.finish()
+                        //activity?.finish()
                     Toast.makeText(context, "archivado en el dispositivo", Toast.LENGTH_LONG).show()
+
 
                 }
             }
@@ -96,6 +124,7 @@ class PdfFragment : Fragment() {
             }
         }
 
+        mostrarrPdf?.setOnClickListener { enviarPdf(null) }
 
         return view
     }
@@ -106,10 +135,13 @@ class PdfFragment : Fragment() {
         val mDoc = Document()
         // pdf. nombre del archivo
         val mFileName = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(System.currentTimeMillis())
-        val mFilePath = Environment.getExternalStorageDirectory().toString() + "/" + mFileName + ".Pdf"
+        Log.e("Nombre PDF", mFileName.toString())
+        val mFilePath = Environment.getExternalStorageDirectory().absolutePath + "/" + mFileName + ".Pdf"
+
         try {
             PdfWriter.getInstance(mDoc, FileOutputStream(mFilePath))
             mDoc.open()
+
 
             val mPrecioTotal = tvTotalPresup?.text.toString()
             val nombrePresu = etNombrePdf?.text
@@ -126,44 +158,64 @@ class PdfFragment : Fragment() {
             table.headerRows = 1
             table.addCell(
                 PdfPCell(
-                    Phrase("Producto", Font(
-                        Font.FontFamily.HELVETICA, 16f,
-                        Font.BOLD)
+                    Phrase(
+                        "Producto", Font(
+                            Font.FontFamily.HELVETICA, 16f,
+                            Font.BOLD
+                        )
                     )
                 )
             )
             table.addCell(
                 PdfPCell(
-                    Phrase("Cantidad", Font(
-                        Font.FontFamily.HELVETICA, 16f,
-                        Font.BOLD)
+                    Phrase(
+                        "Cantidad", Font(
+                            Font.FontFamily.HELVETICA, 16f,
+                            Font.BOLD
+                        )
                     )
                 )
             )
             table.addCell(
                 PdfPCell(
-                    Phrase("Precio", Font(
-                        Font.FontFamily.HELVETICA, 16f,
-                        Font.BOLD)
+                    Phrase(
+                        "Precio", Font(
+                            Font.FontFamily.HELVETICA, 16f,
+                            Font.BOLD
+                        )
                     )
                 )
             )
             table.addCell(
                 PdfPCell(
-                    Phrase("Subtotal", Font(
-                        Font.FontFamily.HELVETICA, 16f,
-                        Font.BOLD)
+                    Phrase(
+                        "Subtotal", Font(
+                            Font.FontFamily.HELVETICA, 16f,
+                            Font.BOLD
+                        )
                     )
                 )
             )
 
             mDoc.add(table)
-            val nombrePdf = Paragraph("                    Domicilio: $domicilioPresu", Font(Font.FontFamily.HELVETICA, 12f, Font.BOLD))
+            val nombrePdf = Paragraph(
+                "                    Domicilio: $domicilioPresu", Font(
+                    Font.FontFamily.HELVETICA,
+                    12f,
+                    Font.BOLD
+                )
+            )
             nombrePdf.alignment = Element.ALIGN_LEFT
             mDoc.add(nombrePdf)
 
             mDoc.add(table)
-            val domicilioPdf = Paragraph("                    Nombre Completo: $nombrePresu", Font(Font.FontFamily.HELVETICA, 12f, Font.BOLD))
+            val domicilioPdf = Paragraph(
+                "                    Nombre Completo: $nombrePresu", Font(
+                    Font.FontFamily.HELVETICA,
+                    12f,
+                    Font.BOLD
+                )
+            )
             domicilioPdf.alignment = Element.ALIGN_LEFT
             mDoc.add(domicilioPdf)
 
@@ -174,9 +226,36 @@ class PdfFragment : Fragment() {
 
             for (list in datosRecibidos!!){
                 table.addCell(PdfPCell(Phrase(list.producto, Font(Font.FontFamily.HELVETICA, 12f))))
-                table.addCell(PdfPCell(Phrase(list.cantidad.toString(), Font(Font.FontFamily.HELVETICA, 12f))))
-                table.addCell(PdfPCell(Phrase(list.precio.toString(), Font(Font.FontFamily.HELVETICA, 12f))))
-                table.addCell(PdfPCell(Phrase(list.subTotal.toString(), Font(Font.FontFamily.HELVETICA, 12f))))
+                table.addCell(
+                    PdfPCell(
+                        Phrase(
+                            list.cantidad.toString(), Font(
+                                Font.FontFamily.HELVETICA,
+                                12f
+                            )
+                        )
+                    )
+                )
+                table.addCell(
+                    PdfPCell(
+                        Phrase(
+                            list.precio.toString(), Font(
+                                Font.FontFamily.HELVETICA,
+                                12f
+                            )
+                        )
+                    )
+                )
+                table.addCell(
+                    PdfPCell(
+                        Phrase(
+                            list.subTotal.toString(), Font(
+                                Font.FontFamily.HELVETICA,
+                                12f
+                            )
+                        )
+                    )
+                )
 
 
 
@@ -189,14 +268,67 @@ class PdfFragment : Fragment() {
             mDoc.add(preT)
 
 
+
             mDoc.close()
-            Toast.makeText(context, " $mFileName.pdf\nse guardó en \n$mFilePath", Toast.LENGTH_SHORT).show()
+           // Log.e("PDF ARCHIVo", mDoc.htmlStyleClass)
+
+            Toast.makeText(
+                context,
+                " $mFileName.pdf\nse guardó en \n$mFilePath",
+                Toast.LENGTH_SHORT
+            ).show()
+
+           /* var url = "herny"
+
+            var map = mutableMapOf<String, Any>()
+            // map["id"] = id
+            map["url"] = url
+
+            FirebaseFirestore.getInstance().collection("Categoria")
+                .document().set(map)*/
+
+            val f = File(mFilePath)
+
+            var file = Uri.fromFile(File(mFilePath))
+            val riversRef = storageReference?.child("pdf/${file.lastPathSegment}")
+            var uploadTask = riversRef?.putFile(file)
+
+// Register observers to listen for when the download is done or if it fails
+            uploadTask?.addOnFailureListener { task ->
+
+            }?.addOnSuccessListener { taskSnapshot ->
+                Log.e("File PDF", uploadTask.toString())
+
+                val task = taskSnapshot.metadata.toString()
+
+            }
+            val ref = storageReference?.child("pdf/$mFilePath")
+            uploadTask = ref?.putFile(file)
+
+            val urlTask = uploadTask?.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    task.exception?.let {
+                        throw it
+
+                    }
+                }
+                ref?.downloadUrl
+
+            }?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUri = task.result
+
+                    enviarPdf(downloadUri)
+                } else {
+                    // Handle failures
+                    // ...
+                }
+            }
+
 
         }
         catch (e: Exception){
-            Log.e("exeptin", e.toString())
         }
-
 
 
 
@@ -210,11 +342,10 @@ class PdfFragment : Fragment() {
     ) {
         when(requestCode){
             STORAGE_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // se otorgó el permiso de la ventana emergente, llama a savePdf()
                     savePdf()
-                }
-                else {
+                } else {
                     // se denegó el permiso de la ventana emergente, muestra mensaje de error
                     Toast.makeText(context, "permiso denegado", Toast.LENGTH_SHORT).show()
 
@@ -231,12 +362,10 @@ class PdfFragment : Fragment() {
 
 
         const val volver = "volver"
-        fun newInstancePdf(datosRecibidos: ArrayList<ModeloPdf>, preciosRecibidos:String): PdfFragment {
+        fun newInstancePdf(datosRecibidos: ArrayList<ModeloPdf>, preciosRecibidos: String): PdfFragment {
             val bundle = Bundle()
             bundle.putSerializable(PROD_SELECT, datosRecibidos)
             bundle.putString(PRECIOS_TOTALES, preciosRecibidos)
-            Log.e("cantidad", datosRecibidos.toString())
-            Log.e("cantidad", preciosRecibidos)
 
             val fragment = PdfFragment()
             fragment.arguments = bundle
@@ -249,4 +378,28 @@ class PdfFragment : Fragment() {
 
     }
 
+
+    fun enviarPdf(downloadUri: Uri?) {
+        Log.e("URL", downloadUri.toString())
+
+        var url = downloadUri
+
+        val nTel = "+541133545454"
+        var uri = "whatsapp://send?phone=$nTel&text=${url.toString()}"
+        //val intent = Intent(Intent.ACTION_SEND)
+        val intent = Intent(Intent.ACTION_VIEW)
+
+        intent.data = Uri.parse(uri)
+        //intent.type = "text/plain"
+       // intent.setPackage("com.whatsapp")
+        //intent.putExtra(Intent.EXTRA_TEXT, "$downloadUri")
+
+        try {
+            activity?.startActivity(intent)
+        } catch (ex: ActivityNotFoundException) {
+            ex.printStackTrace()
+            Snackbar.make(View(requireContext()), "El dispositivo no tiene instalado WhatsApp", Snackbar.LENGTH_LONG)
+                .show()
+        }
+    }
 }

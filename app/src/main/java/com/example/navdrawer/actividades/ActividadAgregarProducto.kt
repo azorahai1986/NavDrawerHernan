@@ -8,12 +8,14 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.navdrawer.R
 import com.example.navdrawer.adapters.RecyclerUnoAdapter
+import com.example.navdrawer.clases_push.NotificationData
 import com.example.navdrawer.clases_push.PushNotification
 import com.example.navdrawer.clases_push.Retrofitinstance
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
@@ -142,6 +144,7 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
         var marca = bundle?.getString("marca")
 
         tvMarca = findViewById(R.id.tv_marca)
+        tvSwitch = findViewById(R.id.tv_switch)
         tvMarca?.text = marca
 
         btCargarProdu = findViewById(R.id.btCargar_produ)
@@ -150,19 +153,20 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
 
         // dar funcion al swith..........................................
-        /*switch_push.setOnCheckedChangeListener { buttonView, isChecked ->
+        switch_push.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 tvSwitch?.setTextColor(getColor(R.color.WhiteColor))
-                btCargar.setOnClickListener {
+                btCargarProdu?.setOnClickListener {
                     uploadFile()
+                    lanzarPush()
                 }
 
             } else {
                 tvSwitch?.setTextColor(getColor(R.color.amarillo))
-                btCargar.setOnClickListener { uploadFile() }
+                btCargarProdu?.setOnClickListener { uploadFile() }
 
             }
-        }*/
+        }
         btCargarProdu?.setOnClickListener { uploadFile() }
 
         exTraerDatos()
@@ -183,14 +187,14 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
                 autocompletarCate.add(x.cate)
 
             }
-            /*val adapterAuto = ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletar)
-            tvNombre.threshold = 0
-            tvNombre.setAdapter(adapterAuto)
-            tvNombre.setOnFocusChangeListener { view, b ->
-                if (b) tvNombre.showDropDown()
+            val adapterAuto = ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletar)
+            tv_produ.threshold = 0
+            tv_produ.setAdapter(adapterAuto)
+            tv_produ.setOnFocusChangeListener { view, b ->
+                if (b) tv_produ.showDropDown()
             }
 
-            val adapterAutoMarca =
+            /*val adapterAutoMarca =
                 ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletarMarca)
             tvMarca.threshold = 0
             tvMarca.setAdapter(adapterAutoMarca)
@@ -228,7 +232,18 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
 
         }
 
-
+    fun lanzarPush() {
+        val title = tv_produ.text.toString()
+        val message = tvMarca?.text.toString() + " $ " + etPrecioProdu.text.toString()
+        if (title.isNotEmpty() && message.isNotEmpty()) {
+            PushNotification(
+                NotificationData(title, message),
+                TOPIC
+            ).also {
+                sendNotification(it)
+            }
+        }
+    }
 
     override fun onClick(v: View?) {
         if (v === imageView_produ)

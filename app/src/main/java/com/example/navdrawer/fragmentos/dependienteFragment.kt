@@ -117,4 +117,9 @@ class dependienteFragment : Fragment() {
         startActivity(intent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        observeDataDependiente()
+    }
+
 }

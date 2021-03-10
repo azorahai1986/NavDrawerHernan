@@ -41,6 +41,7 @@ class HomeFragment : Fragment() {
     private lateinit var auth:FirebaseAuth
     var uidRecuperado:String? = null
     var mailRecuperado:String? = null
+    var tvCartel:TextView? = null
 
     var isOpen = true // para las animcaiones de los botones
 
@@ -150,26 +151,30 @@ class HomeFragment : Fragment() {
         // ...... asignar variable a los botones........
         var btAgregar = view.findViewById<FloatingActionButton>(R.id.flot_btAgregar)
         var btAgCartel = view.findViewById<FloatingActionButton>(R.id.floatBtAgregarCartel)
-        var txtcartel = view.findViewById<TextView>(R.id.textOfertas)
         //........ token y datos desde accederFragment.....................................................
+
+        tvCartel = view.findViewById(R.id.textOfertas)
         if(mailRecuperado.isNullOrEmpty()){
             Toast.makeText(context, "bienvenido visitante", Toast.LENGTH_LONG).show()
         }else{
 
             btAgregar.visibility = View.VISIBLE
+            Toast.makeText(context, "bienvenido $mailRecuperado", Toast.LENGTH_LONG).show()
+
         }
         btAgregar.setOnClickListener {
+
             btAgCartel.visibility = View.VISIBLE
-            txtcartel.visibility = View.VISIBLE
+            tvCartel?.visibility = View.VISIBLE
 
             isOpen = if (isOpen){
                 btAgCartel.startAnimation(abrire)
-                txtcartel.startAnimation(abrire)
+                tvCartel?.startAnimation(abrire)
                 //flot_btAgregar.startAnimation(rotate)
                 false
             }else{
                 btAgCartel.startAnimation(cerrar)
-                txtcartel.startAnimation(cerrar)
+                tvCartel?.startAnimation(cerrar)
                 true
             }
         }

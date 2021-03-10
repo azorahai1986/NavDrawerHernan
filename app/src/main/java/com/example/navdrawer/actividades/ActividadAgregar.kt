@@ -74,6 +74,8 @@ class ActividadAgregar : AppCompatActivity(), View.OnClickListener {
             val imageRef = storageReference!!.child("images/" + UUID.randomUUID().toString())
 
             var uploadTask = imageRef.putFile(filePath!!)
+            Log.e("cantidad", uploadTask.toString())
+
             val urlTask = uploadTask.continueWithTask { task ->
                 if (!task.isSuccessful) {
                     task.exception?.let {

@@ -158,6 +158,11 @@
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:text="generar pedido"/>
+         <Button
+             android:id="@+id/mostrar_Pdf"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="mostrar"/>
       </LinearLayout>
 
 

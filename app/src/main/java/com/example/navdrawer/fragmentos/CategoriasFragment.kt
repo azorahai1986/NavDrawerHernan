@@ -96,6 +96,11 @@ class CategoriasFragment : Fragment() {
         startActivity(intent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        observerDataCategorias()
+    }
+
 
 
 

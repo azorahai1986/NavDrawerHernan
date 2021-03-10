@@ -68,7 +68,7 @@ class SearchFragment : Fragment() {
         btEnviarPdf = view.findViewById(R.id.ibEnviarAPdf)
 
         activity?.ibEnviarAPdf?.setOnClickListener {
-            if (tvTotPrecio.text.isNullOrEmpty()){
+            if (tvTotPrecio?.text == "0..."){
                 Toast.makeText(context, "Agrega productos a la lista", Toast.LENGTH_SHORT).show()
             }else{
                 // igualaré el array a la los datos que estan en el recycler promociones para enviar esos datos al recyclerPdf

@@ -175,7 +175,7 @@
             android:id="@+id/textOfertas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ofertas"
+            android:text="cargar cartel"
             android:textStyle="bold"
             android:layout_gravity="right|bottom"
             android:layout_marginRight="55dp"

@@ -16,14 +16,11 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_comercio_foreground"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_comercio"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".actividades.ActividadAgregarProducto"></activity>
-        <activity android:name=".actividades.ActividadAgregarSubCat" />
-        <activity android:name=".actividades.ActividadBusqueda" />
 
         <service
             android:name=".clases_push.FirebaseService"
@@ -33,10 +30,14 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
-
+        <activity android:name=".actividades.MainActivity"></activity>
+        <activity android:name=".actividades.ActividadAgregarProducto" />
+        <activity android:name=".actividades.ActividadAgregarSubCat" />
+        <activity android:name=".actividades.ActividadBusqueda" />
         <activity android:name=".actividades.CartelActivity" />
         <activity android:name=".actividades.ActividadAgregar" />
-        <activity android:name=".actividades.MainActivity">
+        <activity android:name=".actividades.SplashActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

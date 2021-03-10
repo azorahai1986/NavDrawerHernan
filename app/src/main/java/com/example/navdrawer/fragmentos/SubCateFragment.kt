@@ -112,4 +112,9 @@ class SubCateFragment : Fragment() {
         startActivity(intent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        observeDataSub()
+    }
+
 }
