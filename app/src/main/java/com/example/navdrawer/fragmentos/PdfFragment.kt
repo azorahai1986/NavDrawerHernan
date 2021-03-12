@@ -1,6 +1,5 @@
 package com.example.navdrawer.fragmentos
 
-import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -17,13 +16,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.navdrawer.R
 import com.example.navdrawer.adapters.PdfAdapter
 import com.example.navdrawer.modelos_de_datos.ModeloPdf
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -124,7 +123,6 @@ class PdfFragment : Fragment() {
             }
         }
 
-        mostrarrPdf?.setOnClickListener { enviarPdf("") }
 
         return view
     }
@@ -292,12 +290,13 @@ class PdfFragment : Fragment() {
             var file = Uri.fromFile(File(mFilePath))
             val riversRef = storageReference?.child("pdf/${file.lastPathSegment}")
             var uploadTask = riversRef?.putFile(file)
+            Log.e("File", file.toString())
+            Log.e("uploadTask", uploadTask.toString())
 
 // Register observers to listen for when the download is done or if it fails
             uploadTask?.addOnFailureListener { task ->
 
             }?.addOnSuccessListener { taskSnapshot ->
-                Log.e("File PDF", uploadTask.toString())
 
                 val task = taskSnapshot.metadata.toString()
 
@@ -317,6 +316,7 @@ class PdfFragment : Fragment() {
             }?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val downloadUri = task.result
+                    enviarPdf(mFilePath)
 
                 } else {
                     // Handle failures
@@ -325,7 +325,6 @@ class PdfFragment : Fragment() {
             }
 
 
-            enviarPdf(mFilePath)
         }
         catch (e: Exception){
         }
@@ -380,29 +379,34 @@ class PdfFragment : Fragment() {
 
 
     fun enviarPdf(mFilePath: String) {
-        Log.e("URL", mFilePath.toString())
 
 
-        var file = File(mFilePath)
+        var file = File("$mFilePath")
         val nTel = "+541133545454"
+        var pdfUri = Uri.fromFile(file)
 
-        val  share = Intent()
-        val url = Uri.fromFile(file)
-        Log.e("URL", url.toString())
-        var uri = "whatsapp://send?phone=$nTel&text= pedido reservado"
+        val intent = Intent()
+        val uri = FileProvider.getUriForFile(
+            requireContext(),
+            requireActivity().packageName.toString() + ".provider",
+            file
+        )
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            pdfUri = FileProvider.getUriForFile(
+                requireContext(),
+                requireActivity().packageName.toString() + ".provider", file)
+            Log.e("URL1", pdfUri.toString())
 
-        share.action = Intent.ACTION_VIEW
-        share.type = "application/pdf"
-        share.putExtra(Intent.EXTRA_STREAM, url)
-        share.setPackage("com.whatsapp")
-        //share.data = Uri.parse(uri)
+        } else {
+            pdfUri = Uri.fromFile(file)
+            Log.e("URL2", pdfUri.toString())
 
-        try {
-            activity?.startActivity(share)
-        } catch (ex: ActivityNotFoundException) {
-            ex.printStackTrace()
-            Snackbar.make(View(requireContext()), "El dispositivo no tiene instalado WhatsApp", Snackbar.LENGTH_LONG)
-                .show()
         }
+        val share = Intent()
+        share.action = Intent.ACTION_SEND
+        share.type = "application/pdf"
+        share.putExtra(Intent.EXTRA_STREAM, pdfUri)
+        startActivity(Intent.createChooser(share, "Share"))
     }
 }
