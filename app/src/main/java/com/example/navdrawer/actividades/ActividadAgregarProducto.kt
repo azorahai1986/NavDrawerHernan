@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.TextView
@@ -31,6 +33,7 @@ import kotlinx.android.synthetic.main.activity_actividad_agregar_producto.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.util.*
 
@@ -40,6 +43,7 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
     var tvSwitch: TextView? = null
     var btCargarProdu: Button? = null
     var tvMarca: TextView? = null
+    var open:Boolean = false
 
     private val PICK_IMAGE_REQUEST = 1234
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
@@ -103,12 +107,29 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
                     map["nombre"] = producto
                     map["imagen"] = imagen
 
+                    when {
+                        open -> {FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
+                            .add(map).addOnSuccessListener {
+                                lanzarPush(it.id)
+
+                            }
+
+                    }
+                        !open ->{
+                            FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
+                                .document().set(map)
+                            finish()
+                        }
+
+                    }
 
 
-
-                    FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
+                    /*FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
                         .document().set(map)
-                    finish()
+                    finish()*/
+
+
+
                 } else {
                     // Handle failures
                     // ...
@@ -151,22 +172,28 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
         imageView_produ.setOnClickListener(this)
 
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
-
+        val dilatar = AnimationUtils.loadAnimation(this, R.anim.dilatar)
         // dar funcion al swith..........................................
         switch_push.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 tvSwitch?.setTextColor(getColor(R.color.WhiteColor))
-                btCargarProdu?.setOnClickListener {
-                    uploadFile()
-                    lanzarPush()
-                }
+                dilatar.repeatMode = Animation.REVERSE
+                tvSwitch?.startAnimation(dilatar)
+                image_tilde.visibility = View.VISIBLE
+                open = true
+
 
             } else {
                 tvSwitch?.setTextColor(getColor(R.color.amarillo))
-                btCargarProdu?.setOnClickListener { uploadFile() }
+                image_tilde.visibility = View.INVISIBLE
+
+                open = false
+                Log.e("openFalse", open.toString())
 
             }
         }
+
+
         btCargarProdu?.setOnClickListener { uploadFile() }
 
         exTraerDatos()
@@ -194,21 +221,6 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
                 if (b) tv_produ.showDropDown()
             }
 
-            /*val adapterAutoMarca =
-                ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletarMarca)
-            tvMarca.threshold = 0
-            tvMarca.setAdapter(adapterAutoMarca)
-            tvMarca.setOnFocusChangeListener { view, b ->
-                if (b) tvMarca.showDropDown()
-            }
-*/
-            /*val adapterAutoCate =
-                ArrayAdapter(this, android.R.layout.simple_list_item_1, autocompletarCate)
-            tvCategoria.threshold = 0
-            tvCategoria.setAdapter(adapterAutoCate)
-            tvCategoria.setOnFocusChangeListener { view, b ->
-                if (b) tvCategoria.showDropDown()
-            }*/
         })
 
     }
@@ -225,24 +237,31 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
 
                 }
 
+                withContext(Dispatchers.Main){
+                    finish()
+                }
             } catch (e: Exception) {
-                Log.e(TAG, e.toString())
+                withContext(Dispatchers.Main){
+                    finish()
+                }
             }
 
 
         }
 
-    fun lanzarPush() {
+    fun lanzarPush(id:String) {
         val title = tv_produ.text.toString()
         val message = tvMarca?.text.toString() + " $ " + etPrecioProdu.text.toString()
         if (title.isNotEmpty() && message.isNotEmpty()) {
             PushNotification(
-                NotificationData(title, message),
+                NotificationData(title, message, id),
                 TOPIC
             ).also {
                 sendNotification(it)
+
             }
         }
+        
     }
 
     override fun onClick(v: View?) {

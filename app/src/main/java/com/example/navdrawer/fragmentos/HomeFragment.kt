@@ -66,12 +66,15 @@ class HomeFragment : Fragment() {
     lateinit var homeFragment: HomeFragment
     //para el bundle
     var tokenrecibido:String? = null
+    var idRecibid:String? = null
 
     companion object {
         private const val TOKEN_RECIBIDO = "TOKEN_RECIBIDO"
-        fun newInstance(token: String):HomeFragment {
+        private const val ID_RECIBIDO = "ID_RECIBIDO"
+        fun newInstance(token: String, idProd:String? = null):HomeFragment {
             val bundle = Bundle()
             bundle.putString(TOKEN_RECIBIDO, token)
+            bundle.putString(ID_RECIBIDO, idProd)
             val fragment = HomeFragment()
             fragment.arguments = bundle
             Log.e("newInstance", token)
@@ -92,6 +95,7 @@ class HomeFragment : Fragment() {
 
 
         tokenrecibido = arguments?.getString(TOKEN_RECIBIDO)
+        idRecibid = arguments?.getString(ID_RECIBIDO)
         Log.e("TokenRecibid", tokenrecibido.toString())
 
 
@@ -154,13 +158,21 @@ class HomeFragment : Fragment() {
         //........ token y datos desde accederFragment.....................................................
 
         tvCartel = view.findViewById(R.id.textOfertas)
-        if(mailRecuperado.isNullOrEmpty()){
-            Toast.makeText(context, "bienvenido visitante", Toast.LENGTH_LONG).show()
-        }else{
+        when {
+            mailRecuperado != null -> {
+                btAgregar.visibility = View.VISIBLE
 
-            btAgregar.visibility = View.VISIBLE
-            Toast.makeText(context, "bienvenido $mailRecuperado", Toast.LENGTH_LONG).show()
+                //Toast.makeText(context, "bienvenido visitante", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "bienvenido $mailRecuperado", Toast.LENGTH_LONG).show()
 
+            }
+            mailRecuperado == null -> {
+                Toast.makeText(context, "bienvenido visitante", Toast.LENGTH_LONG).show()
+            }
+            else -> {
+                Toast.makeText(context, "bienvenido visitante", Toast.LENGTH_LONG).show()
+
+            }
         }
         btAgregar.setOnClickListener {
 
@@ -200,6 +212,13 @@ class HomeFragment : Fragment() {
         viewModel.fetchUserData().observe(this.viewLifecycleOwner, androidx.lifecycle.Observer {
             adapter!!.setData(it as ArrayList<ModeloDeIndumentaria>)
             adapter!!.notifyDataSetChanged()
+
+            if (idRecibid != null){
+                val i = busqueda()
+                if (i>-1){
+                    recyclerView!!.layoutManager!!.scrollToPosition(i)
+                }
+            }
 
         })
 
@@ -243,4 +262,15 @@ class HomeFragment : Fragment() {
         cargarPagerCartelPrincipal()
 
     }
+
+    fun busqueda():Int{
+        for (i in 0 until adapter!!.mutableListModel.size){
+            if (adapter!!.mutableListModel[i].id == idRecibid){
+                return i
+            }
+        }
+        return -1
+    }
+
+
 }

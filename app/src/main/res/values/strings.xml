@@ -29,5 +29,6 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="filtrar">filtrar</string>
+    <string name="texto_info">los iconos en movimiento permiten editar sus valores</string>
 
 </resources>

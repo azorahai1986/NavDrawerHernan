@@ -10,11 +10,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -33,6 +33,7 @@ import com.itextpdf.text.pdf.PdfPTable
 import com.itextpdf.text.pdf.PdfWriter
 import java.io.File
 import java.io.FileOutputStream
+import java.net.URLEncoder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,9 +50,8 @@ class PdfFragment : Fragment() {
     var etNombrePdf:EditText? = null
     var etDireccionPdf:EditText? = null
     private var recyclerViewPdf: RecyclerView? = null
-    var guardarPdf:Button? = null
-    var mostrarrPdf:Button? = null
-    private val PICK_IMAGE_REQUEST = 1234
+    var guardarPdf:CardView? = null
+    var chatearPdf:CardView? = null
 
     private val STORAGE_CODE: Int = 100
     private var storageReference: StorageReference? = null
@@ -71,8 +71,8 @@ class PdfFragment : Fragment() {
 
         tvTotalPresup = view.findViewById(R.id.tvTotalPresupuesto)
         recyclerViewPdf = view.findViewById(R.id.recyclerPdf)
-        guardarPdf = view.findViewById(R.id.guardar_Pdf)
-        mostrarrPdf = view.findViewById(R.id.mostrar_Pdf)
+        guardarPdf = view.findViewById(R.id.card_enviar_pdf)
+        chatearPdf = view.findViewById(R.id.card_chatear)
         etNombrePdf = view.findViewById(R.id.etNombre_Pdf)
         etDireccionPdf = view.findViewById(R.id.etDireccion_Pdf)
         tvEspacio = view.findViewById(R.id.tv_Espacio)
@@ -84,13 +84,23 @@ class PdfFragment : Fragment() {
         storageReference = storage!!.reference
 
 
-        tvTotalPresup?.text = "Total: $precio"
+        tvTotalPresup?.text = "Total: $ $precio"
         // inflaré el recyclerPdf
         recyclerViewPdf?.setHasFixedSize(true)
         layoutManager = LinearLayoutManager(context)
         recyclerViewPdf?.layoutManager =layoutManager
         adaptadorPdf = PdfAdapter(datosRecibidos!!)
         recyclerViewPdf?.adapter = adaptadorPdf
+
+        // animar los cardView
+        /*val dilatar = AnimationUtils.loadAnimation(context, R.anim.dilatar)
+        dilatar.interpolator
+        dilatar.repeatMode = Animation.REVERSE
+        guardarPdf?.startAnimation(dilatar)
+        chatearPdf?.startAnimation(dilatar)*/
+
+
+        chatearPdf?.setOnClickListener { chatear() }
 
         guardarPdf?.setOnClickListener {
             //necesitamos manejar permisos de tiempo de ejecución para dispositivos con marshmallow  y superior
@@ -276,22 +286,10 @@ class PdfFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
 
-           /* var url = "herny"
-
-            var map = mutableMapOf<String, Any>()
-            // map["id"] = id
-            map["url"] = url
-
-            FirebaseFirestore.getInstance().collection("Categoria")
-                .document().set(map)*/
-
-            val f = File(mFilePath)
 
             var file = Uri.fromFile(File(mFilePath))
             val riversRef = storageReference?.child("pdf/${file.lastPathSegment}")
             var uploadTask = riversRef?.putFile(file)
-            Log.e("File", file.toString())
-            Log.e("uploadTask", uploadTask.toString())
 
 // Register observers to listen for when the download is done or if it fails
             uploadTask?.addOnFailureListener { task ->
@@ -330,7 +328,6 @@ class PdfFragment : Fragment() {
         }
 
 
-
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -344,6 +341,7 @@ class PdfFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // se otorgó el permiso de la ventana emergente, llama a savePdf()
                     savePdf()
+                    enviarPdf("")
                 } else {
                     // se denegó el permiso de la ventana emergente, muestra mensaje de error
                     Toast.makeText(context, "permiso denegado", Toast.LENGTH_SHORT).show()
@@ -360,7 +358,6 @@ class PdfFragment : Fragment() {
         const val PRECIOS_TOTALES = "PreciosTotales"
 
 
-        const val volver = "volver"
         fun newInstancePdf(datosRecibidos: ArrayList<ModeloPdf>, preciosRecibidos: String): PdfFragment {
             val bundle = Bundle()
             bundle.putSerializable(PROD_SELECT, datosRecibidos)
@@ -381,32 +378,48 @@ class PdfFragment : Fragment() {
     fun enviarPdf(mFilePath: String) {
 
 
-        var file = File("$mFilePath")
-        val nTel = "+541133545454"
-        var pdfUri = Uri.fromFile(file)
+        val file = File("$mFilePath")
 
         val intent = Intent()
-        val uri = FileProvider.getUriForFile(
-            requireContext(),
-            requireActivity().packageName.toString() + ".provider",
-            file
-        )
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            pdfUri = FileProvider.getUriForFile(
+        var uri: Uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            FileProvider.getUriForFile(
                 requireContext(),
-                requireActivity().packageName.toString() + ".provider", file)
-            Log.e("URL1", pdfUri.toString())
+                requireActivity().packageName.toString() + ".provider", file
+            )
 
         } else {
-            pdfUri = Uri.fromFile(file)
-            Log.e("URL2", pdfUri.toString())
+            Uri.fromFile(file)
 
         }
         val share = Intent()
         share.action = Intent.ACTION_SEND
         share.type = "application/pdf"
-        share.putExtra(Intent.EXTRA_STREAM, pdfUri)
+        share.putExtra(Intent.EXTRA_STREAM, uri)
         startActivity(Intent.createChooser(share, "Share"))
+
+        activity?.finish()
+    }
+    private fun chatear(){
+        val msj = "Cordiales saludos. solicito una conferencia informativa"
+        val numeroTel = "+5491133545454"
+
+        val packageManager = requireContext().packageManager
+        val i = Intent(Intent.ACTION_VIEW)
+
+        try {
+            val url =
+                "https://api.whatsapp.com/send?phone=$numeroTel&text=" + URLEncoder.encode(
+                    msj,
+                    "UTF-8"
+                )
+            i.setPackage("com.whatsapp")
+            i.data = Uri.parse(url)
+            if (i.resolveActivity(packageManager) != null) {
+                requireContext().startActivity(i)
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
     }
 }

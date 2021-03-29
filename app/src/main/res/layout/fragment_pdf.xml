@@ -153,16 +153,76 @@
              android:layout_gravity="center"
              android:textAppearance="@style/TextAppearance.AppCompat.Body2"
              android:textColorHint="#EA0909" />
-         <Button
-             android:id="@+id/guardar_Pdf"
-             android:layout_width="wrap_content"
+
+         <androidx.cardview.widget.CardView
+             android:id="@+id/card_enviar_pdf"
+             android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:text="generar pedido"/>
-         <Button
-             android:id="@+id/mostrar_Pdf"
-             android:layout_width="wrap_content"
+             android:layout_margin="12dp"
+             app:cardElevation="@dimen/cardview_compat_inset_shadow"
+             app:cardCornerRadius="15dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal"
+                android:elevation="10dp">
+               <ImageView
+                   android:id="@+id/imageV_Enviar"
+                   android:layout_width="50dp"
+                   android:layout_height="50dp"
+                   android:src="@drawable/what_ic"
+                   android:layout_margin="10dp"
+                   android:clickable="false"
+                   android:scaleType="fitXY" />
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Guardar y enviar pedido"
+                   android:textStyle="bold"
+                   android:textColor="@color/colorPrimaryDark"
+                   android:layout_margin="20dp"
+                   android:textSize="18dp"/>
+
+            </LinearLayout>
+         </androidx.cardview.widget.CardView>
+         <androidx.cardview.widget.CardView
+             android:id="@+id/card_chatear"
+             android:layout_width="match_parent"
              android:layout_height="wrap_content"
-             android:text="mostrar"/>
+             android:layout_margin="12dp"
+             app:cardElevation="@dimen/cardview_compat_inset_shadow"
+             app:cardCornerRadius="15dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:orientation="horizontal"
+                android:elevation="10dp">
+               <ImageView
+                   android:id="@+id/imageV_Chatear"
+                   android:layout_width="50dp"
+                   android:layout_height="50dp"
+                   android:src="@drawable/whatschat"
+                   android:layout_margin="10dp"
+                   android:clickable="false"
+                   android:scaleType="fitXY" />
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="charlar con el administrador"
+                   android:textStyle="bold"
+                   android:textColor="#B3001B"
+                   android:layout_margin="20dp"
+                   android:textSize="18dp"/>
+
+            </LinearLayout>
+         </androidx.cardview.widget.CardView>
+
       </LinearLayout>
 
 

@@ -43,6 +43,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         actionBar?.title = ""
 
 
+
+
         val drawerToggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(this, drawerLayout, toolbar, (
                 com.example.navdrawer.R.string.open), (com.example.navdrawer.R.string.close)){
 
@@ -54,10 +56,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        inicioFragment = HomeFragment()
-        supportFragmentManager.beginTransaction().replace(com.example.navdrawer.R.id.frame_layout, HomeFragment.newInstance(mailRecuperado.toString()))
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
 
+        mailRecuperado = "visitante"
         // recuperar los datos del login o acceso de usuario...............
         //para saber si existe un email................................
         auth = Firebase.auth
@@ -73,6 +73,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             uidRecuperado = user.uid
             mailRecuperado = email.toString()
         }
+
+
+
+        val idP = intent.getStringExtra("idProd")
+
+        inicioFragment = HomeFragment.newInstance(mailRecuperado!!, idP)
+        supportFragmentManager.beginTransaction().replace(com.example.navdrawer.R.id.frame_layout, inicioFragment)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
 
     }
 
@@ -98,7 +106,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
 
             com.example.navdrawer.R.id.acceder -> {
-                if (mailRecuperado != null){
+                if (mailRecuperado != "visitante"){
                     Toast.makeText(this, "Ya estás registrado", Toast.LENGTH_LONG).show()
                 }else{
                     accederFragment = AccederFragment()
@@ -109,7 +117,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             }
             com.example.navdrawer.R.id.cerrar ->{
-                if (mailRecuperado.isNullOrEmpty()){
+                if (mailRecuperado == "visitante"){
                     Toast.makeText(this, "No estás registrado", Toast.LENGTH_LONG).show()
 
                 }else{
@@ -130,6 +138,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val homeIntent = Intent(this, MainActivity::class.java)
         startActivity(homeIntent)
 
+        finish()
 
     }
 
@@ -138,6 +147,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             drawerLayout.closeDrawer(GravityCompat.START)
         }else{
             super.onBackPressed()
+
         }
 
     }

@@ -39,6 +39,7 @@ class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, 
         holder.itemView.textview_marca.text = modelosFb.marca
         Glide.with(activity).load(modelosFb.imagen).into(holder.itemView.imageview)
 
+
         holder.itemView.imageview.setOnClickListener{
             activity.supportFragmentManager.beginTransaction()
                 .replace(R.id.frame_layout, VerImagenFragment.newInstance(modelosFb.imagen, modelosFb.nombre, modelosFb.marca, "$"+modelosFb.precio, modelosFb.id))
@@ -46,6 +47,7 @@ class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, 
         }
 
     }
+
 
 
 }

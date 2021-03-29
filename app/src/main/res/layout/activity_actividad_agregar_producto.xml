@@ -78,7 +78,8 @@
             android:ems="10"
             android:hint="@string/precio"
             android:inputType="numberDecimal"
-            android:textSize="14sp"/>
+            android:textSize="14sp"
+            android:autofillHints="Edita precio" />
     </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -161,6 +162,14 @@
                 android:layout_marginLeft="10dp"
                 android:textAlignment="center"
                 android:textColor="@color/WhiteColor"/>
+
+            <ImageView
+                android:id="@+id/image_tilde"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_tilde"
+                android:visibility="gone"
+                android:layout_marginLeft="15dp"/>
 
         </LinearLayout>
     </androidx.appcompat.widget.Toolbar>
