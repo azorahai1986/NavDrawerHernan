@@ -105,7 +105,7 @@ class HomeFragment : Fragment() {
 
 
         recyclerView = view.findViewById(R.id.recycler_productos)
-        layoutManager = GridLayoutManager(activity, 2)
+        layoutManager = GridLayoutManager(activity, 1)
         recyclerView?.layoutManager = layoutManager
         recyclerView?.setHasFixedSize(true)
         adapter = RecyclerUnoAdapter(arrayListOf(), context as FragmentActivity)
@@ -116,6 +116,7 @@ class HomeFragment : Fragment() {
         indicator = view.findViewById(R.id.indicator)
         animationCartel = view.findViewById(R.id.animacion2)
         animationRecycler = view.findViewById(R.id.animacionRecycler)
+
 
         adapterCartelPrincipal = PagerPrincipalAdapter(arrayListOf(), context as FragmentActivity)
         viewPagerCartelPrincipal!!.adapter = adapterCartelPrincipal
@@ -153,16 +154,25 @@ class HomeFragment : Fragment() {
         quienesSomos.setOnClickListener { dialQuienSomos() }
 
         // ...... asignar variable a los botones........
-        var btAgregar = view.findViewById<FloatingActionButton>(R.id.flot_btAgregar)
-        var btAgCartel = view.findViewById<FloatingActionButton>(R.id.floatBtAgregarCartel)
+        var btAgCartel = view.findViewById<FloatingActionButton>(R.id.flot_btAgregar)
         //........ token y datos desde accederFragment.....................................................
 
         tvCartel = view.findViewById(R.id.textOfertas)
         when {
             mailRecuperado != null -> {
-                btAgregar.visibility = View.VISIBLE
+                btAgCartel.visibility = View.VISIBLE
+                tvCartel?.visibility = View.VISIBLE
+                isOpen = if (isOpen){
+                    btAgCartel.startAnimation(abrire)
+                    tvCartel?.startAnimation(abrire)
+                    //flot_btAgregar.startAnimation(rotate)
+                    false
+                }else{
+                    btAgCartel.startAnimation(cerrar)
+                    tvCartel?.startAnimation(cerrar)
+                    true
+                }
 
-                //Toast.makeText(context, "bienvenido visitante", Toast.LENGTH_LONG).show()
                 Toast.makeText(context, "bienvenido $mailRecuperado", Toast.LENGTH_LONG).show()
 
             }
@@ -174,22 +184,10 @@ class HomeFragment : Fragment() {
 
             }
         }
-        btAgregar.setOnClickListener {
 
-            btAgCartel.visibility = View.VISIBLE
-            tvCartel?.visibility = View.VISIBLE
 
-            isOpen = if (isOpen){
-                btAgCartel.startAnimation(abrire)
-                tvCartel?.startAnimation(abrire)
-                //flot_btAgregar.startAnimation(rotate)
-                false
-            }else{
-                btAgCartel.startAnimation(cerrar)
-                tvCartel?.startAnimation(cerrar)
-                true
-            }
-        }
+
+
 
         // dar funcines a los botones............................
         btAgCartel.setOnClickListener { irCartelActivity() }
@@ -229,10 +227,12 @@ class HomeFragment : Fragment() {
         adapterCartelPrincipal!!.itemCartel = it as ArrayList<CartelPrincipal>
         adapterCartelPrincipal!!.notifyDataSetChanged()
             // para inflar y desaparecer las animaciones de carga
+            val abrire = AnimationUtils.loadAnimation(context, R.anim.abrir2)
 
             if (adapterCartelPrincipal !=null){
                 animationCartel?.visibility = View.GONE
                 animationRecycler?.visibility = View.GONE
+                viewPagerCartelPrincipal?.startAnimation(abrire)
             }
         })
     }

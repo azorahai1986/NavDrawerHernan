@@ -66,7 +66,7 @@
             android:id="@+id/swiperefreshlayout"
             android:layout_width="wrap_content"
             android:layout_height="800dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
             app:layout_anchor="@+id/swiperefreshlayout"
             app:layout_anchorGravity="center"
@@ -151,25 +151,11 @@
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="20dp"
             android:visibility="gone"
+            android:backgroundTint="@color/colorPrimaryDark"
             android:src="@drawable/ic_agregar"
             app:fabSize="normal"
             android:elevation="10dp"/>
 
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatBtAgregarCartel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|bottom"
-            android:layout_marginRight="10dp"
-            android:layout_marginBottom="145dp"
-            android:backgroundTint="#FFFFFF"
-            android:clickable="true"
-            android:elevation="8dp"
-            android:src="@drawable/ic_cartel"
-            android:visibility="gone"
-            app:fabSize="mini"
-            app:pressedTranslationZ="12dp" />
 
         <TextView
             android:id="@+id/textOfertas"
@@ -178,10 +164,10 @@
             android:text="cargar cartel"
             android:textStyle="bold"
             android:layout_gravity="right|bottom"
-            android:layout_marginRight="55dp"
-            android:layout_marginBottom="155dp"
-            android:visibility="invisible"
-            android:textColor="@color/colorAccent"/>
+            android:layout_marginRight="65dp"
+            android:layout_marginBottom="35dp"
+            android:visibility="gone"
+            android:textColor="@color/colorPrimary"/>
 
 
 

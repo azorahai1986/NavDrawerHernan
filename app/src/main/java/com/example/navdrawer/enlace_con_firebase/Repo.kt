@@ -148,4 +148,24 @@ class Repo {
             }
         return mutableData
     }
+    fun getUserDataPorcentaje(): LiveData<MutableList<SubCategorias>>{
+        val mutablePorcen = MutableLiveData<MutableList<SubCategorias>>()
+        FirebaseFirestore.getInstance().collection("Subcatergoria").get().addOnSuccessListener {
+            // variable para el for
+            val listDataCate = mutableListOf<SubCategorias>()
+
+            for (datosPorcen in it.documents){
+                val cat = datosPorcen.toObject(SubCategorias::class.java)
+                cat?.id = datosPorcen.id
+                if (cat != null)
+                    listDataCate.add(cat)
+            }
+            mutablePorcen.value = listDataCate
+            //Log.e("Datos del repo2", listDataCate.toString())
+        }.addOnFailureListener {
+            Log.e("errorCategorias", it.toString())
+        }
+        return mutablePorcen
+
+    }
 }

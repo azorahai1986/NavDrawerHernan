@@ -10,8 +10,7 @@
         android:pivotX="50%"
         android:pivotY="50%"
         android:interpolator="@android:anim/linear_interpolator"
-        android:repeatCount="infinite"
-        android:duration="3000"/>
+        android:duration="1000"/>
 
     <alpha
         android:fromAlpha="0.0"

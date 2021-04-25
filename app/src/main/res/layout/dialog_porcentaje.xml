@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        app:cardCornerRadius="12dp"
+        app:cardMaxElevation="5dp"
+        android:background="@color/color_para_fondos">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Modifica Porcentajes"
+                android:textSize="24dp"
+                android:textColor="#EF1D0E"
+                android:layout_gravity="center"/>
+
+            <EditText
+                android:id="@+id/edit_porcen"
+                android:layout_width="237dp"
+                android:layout_height="38dp"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:hint="...... 0.0 %"
+                android:inputType="numberDecimal"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="120dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        app:cardCornerRadius="12dp"
+        app:cardMaxElevation="5dp"
+        android:background="@color/color_para_fondos">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/bt_cancelar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_agregar"
+                android:layout_marginLeft="10dp"
+                app:fabSize="mini"
+                android:backgroundTint="@color/colorPrimaryDark"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancelar"
+                android:textColor="#EF1D0E"
+                android:layout_margin="10dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aplicar"
+                android:textColor="#EF1D0E"
+                android:layout_marginLeft="55dp"
+                android:layout_marginTop="10dp"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/bt_aceptar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_agregar"
+                app:fabSize="mini"
+                android:layout_marginLeft="10dp"
+                android:backgroundTint="@color/colorPrimaryDark"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

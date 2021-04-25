@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/guardar"
+        android:icon="@drawable/ic_agregar"
+        android:title="ejecutar"/>
+
+    <item
+    android:id="@+id/cancelar"
+    android:icon="@drawable/ic_agregar"
+    android:title="cancelar" />
+</menu>

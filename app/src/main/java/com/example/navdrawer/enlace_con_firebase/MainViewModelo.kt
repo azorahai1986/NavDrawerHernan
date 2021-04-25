@@ -64,4 +64,11 @@ class MainViewModelo: ViewModel() {
         return mutableData
 
     }
+    fun fetchUserDataPorcentaje():LiveData<MutableList<SubCategorias>>{
+        val mutabledataPorcen = MutableLiveData<MutableList<SubCategorias>>()
+        repo.getUserDataPorcentaje().observeForever {
+            mutabledataPorcen.value = it
+        }
+        return mutabledataPorcen
+    }
 }

@@ -17,7 +17,7 @@
 
     </group>
 
-    <item android:title="controls">
+    <item android:title="Administrador">
         <menu>
             <item
                 android:id="@+id/acceder"
@@ -29,8 +29,12 @@
                 android:title="Cerrar sesion"
                 android:icon="@drawable/ic_settings"/>
 
-
+            <item
+                android:id="@+id/porcentajes"
+                android:title="porcentajes"
+                android:icon="@drawable/ic_tilde"/>
         </menu>
     </item>
+
 
 </menu>

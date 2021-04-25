@@ -147,6 +147,7 @@ class ActividadAgregarSubCat : AppCompatActivity(), View.OnClickListener {
 
         exTraerDatos()
 
+
     }
 
     fun exTraerDatos() {
