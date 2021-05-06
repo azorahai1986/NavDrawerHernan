@@ -7,7 +7,7 @@ class ModeloDeIndumentaria(
     val imagen: String,
     val nombre: String,
     val precio: String,
-    val arrayImagen: String
+    val arrayImagen: ArrayList<String> = arrayListOf()
 ){
-    constructor():this("", "","","","","", "")
+    constructor():this("", "","","","","")
 }
