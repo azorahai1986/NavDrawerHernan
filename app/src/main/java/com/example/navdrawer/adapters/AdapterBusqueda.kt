@@ -13,6 +13,7 @@ import com.example.navdrawer.R
 import com.example.navdrawer.fragmentos.SearchFragment
 import com.example.navdrawer.fragmentos.VerImagenFragment
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
+import com.example.navdrawer.modelos_de_datos.SubCategorias
 import kotlinx.android.synthetic.main.dialog_ir_pdf.view.*
 import kotlinx.android.synthetic.main.item_recycler_busqueda.view.*
 import java.math.BigDecimal
@@ -20,6 +21,7 @@ import java.math.RoundingMode
 
 class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, val activity:FragmentActivity, val busqueda: SearchFragment):RecyclerView.Adapter<AdapterBusqueda.ViewHolder>() {
 
+    var datosSubcate:SubCategorias? = null
     var arrayFiltro: ArrayList<ModeloDeIndumentaria> = ArrayList()
     var arrayCantidades: ArrayList<Int> = ArrayList()
     var arrayPecios: ArrayList<Double> = ArrayList()
@@ -41,6 +43,7 @@ class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, va
         }
 
     }
+
     inner class ViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterBusqueda.ViewHolder =
@@ -53,6 +56,7 @@ class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, va
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val modelosFb = arrayFiltro[position]
         val index = indexModelo(modelosFb)
+
 
         holder.itemView.textview_nombre_busqueda.text = modelosFb.nombre + " "+modelosFb.marca
         holder.itemView.textview_precio_busqueda.text = " $ " + modelosFb.precio

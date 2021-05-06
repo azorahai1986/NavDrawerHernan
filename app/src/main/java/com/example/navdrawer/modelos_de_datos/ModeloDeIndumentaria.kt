@@ -6,6 +6,8 @@ class ModeloDeIndumentaria(
     val marca: String,
     val imagen: String,
     val nombre: String,
-    val precio: String){
-    constructor():this("", "","","","","")
+    val precio: String,
+    val arrayImagen: String
+){
+    constructor():this("", "","","","","", "")
 }

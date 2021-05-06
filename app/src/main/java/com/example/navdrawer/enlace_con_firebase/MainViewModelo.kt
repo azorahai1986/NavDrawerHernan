@@ -11,6 +11,7 @@ class MainViewModelo: ViewModel() {
 
     fun fetchUserData(): LiveData<MutableList<ModeloDeIndumentaria>> {
         val mutableData = MutableLiveData<MutableList<ModeloDeIndumentaria>>()
+
         repo.getUserData().observeForever {
             mutableData.value = it
 
@@ -21,10 +22,8 @@ class MainViewModelo: ViewModel() {
 
     fun fetchUserDataSimilares(recibirMarca: String?): LiveData<MutableList<PagerSimilares>> {
         val mutableData = MutableLiveData<MutableList<PagerSimilares>>()
-        Log.e("ReciMarcaViewM", mutableData.toString())
         repo.getUserDataSimilares(recibirMarca).observeForever {
             mutableData.value = it
-            Log.e("ReciMarcaViewPa", mutableData.toString())
 
         }
         return mutableData
@@ -70,5 +69,17 @@ class MainViewModelo: ViewModel() {
             mutabledataPorcen.value = it
         }
         return mutabledataPorcen
+    }
+
+    fun fetchUserDataZoom(idRecibido: String?): LiveData<MutableList<ImagenesViewPager>> {
+        val mutableData = MutableLiveData<MutableList<ImagenesViewPager>>()
+        Log.e("ReciIDViewM", mutableData.toString())
+
+        repo.getUserDataZoom(idRecibido).observeForever {
+            mutableData.value = it
+
+        }
+        return mutableData
+
     }
 }

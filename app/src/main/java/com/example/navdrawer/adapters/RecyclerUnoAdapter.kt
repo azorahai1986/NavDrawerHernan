@@ -15,7 +15,6 @@ import kotlinx.android.synthetic.main.item_productos.view.*
 class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, val activity:FragmentActivity): RecyclerView.Adapter<RecyclerUnoAdapter.ViewHolderModel>() {
 
     var arrayFiltro: ArrayList<ModeloDeIndumentaria> = ArrayList()
-
     fun setData(datos: ArrayList<ModeloDeIndumentaria>){
         mutableListModel = datos
         arrayFiltro = ArrayList(mutableListModel)
@@ -32,7 +31,6 @@ class RecyclerUnoAdapter(var mutableListModel: ArrayList<ModeloDeIndumentaria>, 
     // Enlazar ViewHolder
     override fun onBindViewHolder(holder: RecyclerUnoAdapter.ViewHolderModel, position: Int) {
         val modelosFb = arrayFiltro[position]
-
 
         holder.itemView.textview_nombre.text = modelosFb.nombre + " "+modelosFb.marca
         holder.itemView.textview_precio.text = " $ " + modelosFb.precio

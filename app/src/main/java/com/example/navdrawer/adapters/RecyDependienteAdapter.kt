@@ -11,6 +11,7 @@ import com.example.navdrawer.modelos_de_datos.Dependiente
 import kotlinx.android.synthetic.main.item_dependiente.view.*
 
 class RecyDependienteAdapter(var arrayDependiente:ArrayList<Dependiente>, val fragment:FragmentActivity):RecyclerView.Adapter<RecyDependienteAdapter.DepenViewHolder>() {
+
     inner class DepenViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DepenViewHolder=
@@ -24,7 +25,11 @@ class RecyDependienteAdapter(var arrayDependiente:ArrayList<Dependiente>, val fr
         holder.itemView.text_dependiente_precio.text = arrayDep.precio
         holder.itemView.text_dependiente_marca.text = arrayDep.marca
         Glide.with(fragment).load(arrayDep.imagen).into(holder.itemView.imageview_dependiente)
+
+
+
     }
+
 
 
 }

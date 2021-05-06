@@ -2,7 +2,6 @@ package com.example.navdrawer.fragmentos
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +25,7 @@ import com.google.firebase.ktx.Firebase
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val RECIBIRMARCA = "recibir_marca"
 private const val RECIIBIR_ID = "recibir_id"
+private const val RECIIBIR_PORCENTAJE = "recibir_porcentaje"
 
 
 class dependienteFragment : Fragment() {
@@ -37,15 +37,17 @@ class dependienteFragment : Fragment() {
 
     private var recibirMarca: String? = null
     private var IdRecibido: String? = null
+    private var porcentajeRecibido: String? = null
 
     companion object {
 
         const val VOLVER = "volver"
-        fun newInstance(marcaRecibida: String, id:String) =
+        fun newInstance(marcaRecibida: String, id: String, porcentaje: String) =
             dependienteFragment().apply {
                 arguments = Bundle().apply {
                     putString(RECIBIRMARCA, marcaRecibida)
                     putString(RECIIBIR_ID, id)
+                    putString(RECIIBIR_PORCENTAJE, porcentaje)
                 }
             }
     }
@@ -63,6 +65,7 @@ class dependienteFragment : Fragment() {
 
         recibirMarca = arguments?.getString(RECIBIRMARCA)
         IdRecibido = arguments?.getString(RECIIBIR_ID)
+        porcentajeRecibido = arguments?.getString(RECIIBIR_PORCENTAJE)
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_dependiente, container, false)
@@ -85,8 +88,6 @@ class dependienteFragment : Fragment() {
             // Name, email address, and profile photo Url
             mailRecuperado = user.email
 
-            Log.e("EmailHome", mailRecuperado.toString())
-
             uidRecuperado = user.uid
 
         }
@@ -106,6 +107,7 @@ class dependienteFragment : Fragment() {
             adapterDependiente!!.arrayDependiente = it as ArrayList<Dependiente>
             adapterDependiente!!.notifyDataSetChanged()
 
+
         })
 
 
@@ -114,6 +116,8 @@ class dependienteFragment : Fragment() {
         val intent = Intent(context, ActividadAgregarProducto::class.java)
         intent.putExtra("id", IdRecibido)
         intent.putExtra("marca", recibirMarca)
+        intent.putExtra("porcentaje", porcentajeRecibido)
+
         startActivity(intent)
     }
 
@@ -121,5 +125,6 @@ class dependienteFragment : Fragment() {
         super.onResume()
         observeDataDependiente()
     }
+
 
 }

@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager2.widget.ViewPager2
 import com.airbnb.lottie.LottieAnimationView
@@ -26,6 +27,7 @@ import com.example.navdrawer.R
 import com.example.navdrawer.actividades.MainActivity
 import com.example.navdrawer.adapters.PagerSimilaresAdapter
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
+import com.example.navdrawer.fragmentos.ZoomFragment.Companion.VOLVERZOOM
 import com.example.navdrawer.modelos_de_datos.PagerSimilares
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -38,12 +40,11 @@ import com.google.firebase.storage.ktx.storage
 import kotlinx.android.synthetic.main.dialog_editar.view.*
 import kotlinx.android.synthetic.main.dialog_editar_imagen.view.*
 import kotlinx.android.synthetic.main.dialog_editar_precio.view.*
-import kotlinx.android.synthetic.main.fragment_ver_imagen.*
 import java.io.IOException
 import java.util.*
 
 
-class VerImagenFragment : Fragment(), View.OnClickListener {
+class VerImagenFragment : Fragment() {
 
     // variables para los datos recibidos desde el adapterRecyclerPrincipal............................
     var recibirImagen: String? = null
@@ -51,11 +52,11 @@ class VerImagenFragment : Fragment(), View.OnClickListener {
     var recibirMarca: String? = null
     var recibirPrecio: String? = null
     var recibirId: String? = null
-    var imageVer:ImageView?= null
     private val PICK_IMAGE_REQUEST = 1234
     private var filePath: Uri? = null
     private var storageReference: StorageReference? = null
     lateinit var storage: FirebaseStorage
+
 
 // variable para recuperar el usuario
     private lateinit var auth: FirebaseAuth
@@ -108,6 +109,7 @@ class VerImagenFragment : Fragment(), View.OnClickListener {
     var cardImagen:CardView? = null
     var cardProducto:CardView? = null
     var cardPrecio:CardView? = null
+    var cardZoom:CardView? = null
     var anim1:LottieAnimationView? = null
     var anim2:LottieAnimationView? = null
 
@@ -131,21 +133,25 @@ class VerImagenFragment : Fragment(), View.OnClickListener {
         recibirPrecio = arguments?.getString(PRECIO_RECIBIDO)
         recibirId = arguments?.getString(ID_RECIBIDO)
 
-        imagenDelAdapter = view.findViewById<ImageView>(R.id.imageView_ver_imagen)
+        imagenDelAdapter = view.findViewById<ImageView>(R.id.imageView_ver_imagen)// as PhotoView
         nombre = view.findViewById<TextView>(R.id.textViewNombre)
         marca = view.findViewById<TextView>(R.id.textview_marca)
         precio = view.findViewById<TextView>(R.id.textViewPrecio)
         btEliminar = view.findViewById(R.id.floatEliminarProducto)
+        cardZoom = view.findViewById(R.id.card_zoom)
         cardImagen = view.findViewById(R.id.card_imagen)
         cardProducto = view.findViewById(R.id.card_producto)
         cardPrecio = view.findViewById(R.id.card_precio)
         var tvElimProducto = view.findViewById<TextView>(R.id.tv_elim_producto)
-        imageVer = view.findViewById(R.id.imageView_ver_imagen)
+        //imageVer = view.findViewById(R.id.imageView_ver_imagen) as PhotoView
         anim1 = view.findViewById(R.id.animacion2)
         anim2 = view.findViewById(R.id.animacion3)
         // botones del dialog
 
-        imageVer?.setOnClickListener(this)
+
+//      ONCLICK...................................................
+        imagenDelAdapter?.setOnClickListener { showFilerChooser() }
+        cardZoom?.setOnClickListener { hacerZoom() }
 
         Glide.with(requireContext().applicationContext).load(recibirImagen!!).into(imagenDelAdapter!!)
         nombre?.text = recibirNombre
@@ -178,6 +184,7 @@ class VerImagenFragment : Fragment(), View.OnClickListener {
             tvTolocaEdit?.visibility = View.GONE
             anim1?.visibility = View.GONE
             anim2?.visibility = View.GONE
+
         }else{
 
             /*val dilatar = AnimationUtils.loadAnimation(context, R.anim.dilatar)
@@ -205,9 +212,7 @@ class VerImagenFragment : Fragment(), View.OnClickListener {
                 dialogEditarPrecio()
             }
         }
-        if (mailRecuperado == null){
-            imageVer?.isClickable = false
-        }
+
 
 
 
@@ -216,10 +221,12 @@ class VerImagenFragment : Fragment(), View.OnClickListener {
 
     //  funcion para inflar el viewPager
     private fun observerDataSimil() {
-        viewModel.fetchUserDataSimilares(recibirMarca).observe(this.viewLifecycleOwner, androidx.lifecycle.Observer {
+        viewModel.fetchUserDataSimilares(recibirMarca).observe(
+            this.viewLifecycleOwner,
+            androidx.lifecycle.Observer {
                 adapterSimilar!!.similaresArray = it as ArrayList<PagerSimilares>
                 adapterSimilar!!.notifyDataSetChanged()
-            Log.e("RecibMarca", recibirMarca.toString())
+                Log.e("RecibMarca", recibirMarca.toString())
             })
 
     }
@@ -263,7 +270,7 @@ class VerImagenFragment : Fragment(), View.OnClickListener {
 
 
     }
-    fun editarPrecio(edPrecio:EditText){
+    fun editarPrecio(edPrecio: EditText){
         var precio = edPrecio.text.toString()
 
         if (precio.isNullOrEmpty()){
@@ -316,7 +323,10 @@ class VerImagenFragment : Fragment(), View.OnClickListener {
     fun dialogEditarPrecio() {
 
 
-        val dialogEditPrecio = LayoutInflater.from(context).inflate(R.layout.dialog_editar_precio, null)
+        val dialogEditPrecio = LayoutInflater.from(context).inflate(
+            R.layout.dialog_editar_precio,
+            null
+        )
         val dialogConstructor = AlertDialog.Builder(context).setView(dialogEditPrecio)
 
         val edPrecio = dialogEditPrecio.et_precio
@@ -365,7 +375,7 @@ class VerImagenFragment : Fragment(), View.OnClickListener {
             filePath = data.data
             try {
                 val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, filePath)
-                imageVer?.setImageBitmap(bitmap)
+                imagenDelAdapter?.setImageBitmap(bitmap)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -407,7 +417,11 @@ class VerImagenFragment : Fragment(), View.OnClickListener {
                         .document(recibirId.toString())
                     edit.update(map)
                         .addOnSuccessListener {
-                            Toast.makeText(context, "Producto Modificado con exito", Toast.LENGTH_SHORT) .show()
+                            Toast.makeText(
+                                context,
+                                "Producto Modificado con exito",
+                                Toast.LENGTH_SHORT
+                            ) .show()
                             progressDialog.dismiss()
                         }.addOnFailureListener {
                             Toast.makeText(context, "Falló Modificación", Toast.LENGTH_SHORT).show()
@@ -440,12 +454,10 @@ class VerImagenFragment : Fragment(), View.OnClickListener {
 
 
     }
-    override fun onClick(v: View?) {
-        val imagen = ""
-        if (v === imageView_ver_imagen)
-            showFilerChooser()
-
-
-
+    fun hacerZoom(){
+        activity?.supportFragmentManager?.beginTransaction()?.
+        replace(R.id.frame_layout, ZoomFragment.newInstance(recibirImagen!!, recibirId))?.
+        setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)?.addToBackStack(VOLVERZOOM)?.commit()
     }
+
 }

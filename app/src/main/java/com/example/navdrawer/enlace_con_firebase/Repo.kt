@@ -168,4 +168,30 @@ class Repo {
         return mutablePorcen
 
     }
+    fun getUserDataZoom(idRecibido: String?): LiveData<MutableList<ImagenesViewPager>> {
+
+        val mutableData = MutableLiveData<MutableList<ImagenesViewPager>>()
+        FirebaseFirestore.getInstance().collection("ImagenesViewPager").whereEqualTo("id", idRecibido )
+            .get().addOnSuccessListener {
+                Log.e("ZoomRepo", idRecibido.toString())
+
+                val listData = mutableListOf<ImagenesViewPager>()
+
+                for (obtenerFireBase in it.documents){
+                    val indument = obtenerFireBase.toObject(ImagenesViewPager::class.java)
+                    indument?.id = obtenerFireBase.id
+                    if (indument != null)
+
+                        listData.add(indument)
+
+                }
+                mutableData.value = listData
+
+            }.addOnFailureListener {
+                Log.e("ErrorMODELO", it.toString())
+                //Esto lo hice para probar si llega internet a la app.
+            }
+        return mutableData
+    }
+
 }

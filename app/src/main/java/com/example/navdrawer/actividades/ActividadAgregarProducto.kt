@@ -12,6 +12,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
@@ -52,6 +53,7 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
     // Método para subir imagenes al firebase storage
     private var filePath: Uri? = null
     private var storageReference: StorageReference? = null
+    lateinit var imagenCargada:ImageView
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -59,8 +61,11 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             filePath = data.data
             try {
+
                 val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
                 imageView_produ!!.setImageBitmap(bitmap)
+
+
             } catch (e: IOException) {
                 e.printStackTrace()
             }
