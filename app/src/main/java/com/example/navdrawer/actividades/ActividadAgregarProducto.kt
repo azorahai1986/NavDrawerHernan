@@ -10,10 +10,7 @@ import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.navdrawer.R
@@ -31,6 +28,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_actividad_agregar_producto.*
+import kotlinx.android.synthetic.main.item_productos.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,7 +36,7 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 import java.util.*
 
-class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
+class ActividadAgregarProducto : AppCompatActivity() {
 
     val TAG = "ActividadAgregar"
     var tvSwitch: TextView? = null
@@ -55,35 +53,53 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
     private var storageReference: StorageReference? = null
     lateinit var imagenCargada:ImageView
 
+    private var arrayImagePath = arrayListOf<Uri>()
+    private var arrayURLs = arrayListOf<String>()
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-            filePath = data.data
-            try {
+    /**
+     * 3
+     */
+    private fun uploadImage(pos: Int){
 
-                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
-                imageView_produ!!.setImageBitmap(bitmap)
+        if(pos == arrayImagePath.size){
+            val bundle = intent.extras
+            val idRecuperado = bundle?.getString("id")
+            var marca = bundle?.getString("marca")
+            //var cate = tvCategoria.text.toString()
+            var producto = tv_produ.text.toString()
+            var imagen = if(arrayURLs.isEmpty()) "" else arrayURLs[0]
+            var arrayIm = arrayURLs
+            var precio = etPrecioProdu.text.toString()
+
+            var map = mutableMapOf<String, Any>()
+            map["cate"] = idRecuperado.toString()
+            map["marca"] = marca.toString()
+            map["precio"] = precio
+            map["nombre"] = producto
+            map["imagen"] = imagen
+            map["arrayImagen"] = arrayIm
 
 
-            } catch (e: IOException) {
-                e.printStackTrace()
+            when {
+                open -> {FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
+                    .add(map).addOnSuccessListener {
+                        lanzarPush(it.id)
+
+                        progressDialog.hide()
+                    }
+
+                }
+                !open ->{
+                    FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
+                        .document().set(map)
+                    finish()
+                }
+
             }
-        }
+        }else {
+            val imageRef = storageReference!!.child("images/" + UUID.randomUUID().toString()+".jpg")
 
-    }
-
-    private fun uploadFile() {
-        if (filePath != null) {
-            val progressDialog = ProgressDialog(this)
-            progressDialog.setTitle("Cargando...")
-            progressDialog.show()
-
-            // para modificar los datos de una lista usando firestore..........................
-
-            val imageRef = storageReference!!.child("images/" + UUID.randomUUID().toString())
-
-            var uploadTask = imageRef.putFile(filePath!!)
+            var uploadTask = imageRef.putFile(arrayImagePath[pos])
             val urlTask = uploadTask.continueWithTask { task ->
                 if (!task.isSuccessful) {
                     task.exception?.let {
@@ -94,53 +110,39 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
             }.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val downloadUri = task.result
+                    arrayURLs.add(downloadUri.toString())
+                    uploadImage(pos+1)
 
                     // para editar los datos de la lista...........................................
 
-                    val bundle = intent.extras
-                    val idRecuperado = bundle?.getString("id")
-                    var marca = bundle?.getString("marca")
-                    //var cate = tvCategoria.text.toString()
-                    var producto = tv_produ.text.toString()
-                    var imagen = downloadUri.toString()
-                    var precio = etPrecioProdu.text.toString()
-
-                    var map = mutableMapOf<String, Any>()
-                     map["cate"] = idRecuperado.toString()
-                     map["marca"] = marca.toString()
-                    map["precio"] = precio
-                    map["nombre"] = producto
-                    map["imagen"] = imagen
-
-                    when {
-                        open -> {FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
-                            .add(map).addOnSuccessListener {
-                                lanzarPush(it.id)
-
-                            }
-
-                    }
-                        !open ->{
-                            FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
-                                .document().set(map)
-                            finish()
-                        }
-
-                    }
-
 
                     /*FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
-                        .document().set(map)
-                    finish()*/
-
+                    .document().set(map)
+                finish()*/
 
 
                 } else {
+                    Toast.makeText(this, "Error al subir",Toast.LENGTH_SHORT).show()
                     // Handle failures
                     // ...
                 }
             }
+        }
+    }
+    val progressDialog = ProgressDialog(this)
+    private fun uploadFile() {
+        if (arrayImagePath.isNotEmpty()) {
 
+            progressDialog.setTitle("Cargando...")
+            progressDialog.show()
+
+            uploadImage(0)
+            // para modificar los datos de una lista usando firestore..........................
+
+
+
+        }else {
+            Toast.makeText(this, "Agreque imagenes", Toast.LENGTH_SHORT).show()
         }
 
 
@@ -148,12 +150,65 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
     }
 
 
+    /**
+     * abre una nueva activity(externa de otra app nativa)
+     * para abrir y seleccionar imagenes
+     */
     private fun showFilerChooser() {
         val intent = Intent()
         intent.type = "image/*"
+        /**
+         * Intent.EXTRA_ALLOW_MULTIPLE
+         * Sirve para seleccionar mas de una imagen
+         * de una vez
+         */
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(Intent.createChooser(intent, "SELECT PICTURE"), PICK_IMAGE_REQUEST)
+        startActivityForResult(Intent.createChooser(intent, "Seleccione las imagenes"), PICK_IMAGE_REQUEST)
     }
+
+    /**
+     * Uri es una direccion de donde se encuentra la imagen
+     */
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
+            if(data.clipData!=null){
+                for(i in 0 until data.clipData!!.itemCount){
+                    val uriAux = data.clipData!!.getItemAt(i).uri
+                    arrayImagePath.add(uriAux)
+                }
+            }else {
+                if(data.data!=null){
+                    val uriA = data.data!!
+                    arrayImagePath.add(uriA)
+                }
+            }
+            /**
+             * llenar datos en el viewpager para mostrarlos
+             * antes de subirlos
+             * ejemplo
+             * adapterViewPager.arrayPath = arrayImagePath
+             * adaoterViewPager.notifySetDataChanged()
+             */
+            /*filePath = data.data
+            try {
+
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
+                /**
+                 * mostrar las imagenes
+                 */
+                // imageView_produ!!.setImageBitmap(bitmap)
+
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }*/
+        }
+
+    }
+
+
     lateinit var storage: FirebaseStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -174,7 +229,9 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
         tvMarca?.text = marca
 
         btCargarProdu = findViewById(R.id.btCargar_produ)
-        imageView_produ.setOnClickListener(this)
+        imageView_produ.setOnClickListener {
+            showFilerChooser()
+        }
 
         FirebaseMessaging.getInstance().subscribeToTopic(TOPIC)
         val dilatar = AnimationUtils.loadAnimation(this, R.anim.dilatar)
@@ -267,13 +324,5 @@ class ActividadAgregarProducto : AppCompatActivity(), View.OnClickListener {
             }
         }
         
-    }
-
-    override fun onClick(v: View?) {
-        if (v === imageView_produ)
-            showFilerChooser()
-
-
-
     }
 }
