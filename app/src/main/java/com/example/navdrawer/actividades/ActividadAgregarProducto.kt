@@ -186,7 +186,8 @@ class ActividadAgregarProducto : AppCompatActivity() {
 
                 }
             }
-
+            adapterImagenes?.arrayImagenes = arrayImagePath
+            adapterImagenes?.notifyDataSetChanged()
             //adapterImagenes = AdapterImagenCrear(, this)
 
 
@@ -238,15 +239,13 @@ class ActividadAgregarProducto : AppCompatActivity() {
 
         btCargarProdu = findViewById(R.id.btCargar_produ)
 
-        //adapterImagenes = AdapterImagenCrear(arrayListOf(), this)
+        adapterImagenes = AdapterImagenCrear(arrayListOf())
 
 
 
 
         //adapterImagenes?.arrayImagenes = arrayImagePath
-        viewpagerCrearProdu.adapter = adapterImagenes
-        adapterImagenes?.arrayImagenes = arrayImagePath
-        adapterImagenes?.notifyDataSetChanged()
+
 
 
         btCargar_foto.setOnClickListener {

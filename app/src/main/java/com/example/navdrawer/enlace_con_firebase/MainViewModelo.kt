@@ -1,6 +1,5 @@
 package com.example.navdrawer.enlace_con_firebase
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -73,7 +72,6 @@ class MainViewModelo: ViewModel() {
 
     fun fetchUserDataZoom(idRecibido: String?): LiveData<MutableList<ImagenesViewPager>> {
         val mutableData = MutableLiveData<MutableList<ImagenesViewPager>>()
-        Log.e("ReciIDViewM", mutableData.toString())
 
         repo.getUserDataZoom(idRecibido).observeForever {
             mutableData.value = it

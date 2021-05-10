@@ -111,11 +111,9 @@ class Repo {
                     if (indument != null)
 
                         listData.add(indument)
-                    Log.e("listData", it.documents.toString())
 
                 }
                 mutableData.value = listData
-                Log.e("Datos del repo3", listData.toString())
             }.addOnFailureListener {
                 Log.e("ErrorMODELO", it.toString())
                 //Esto lo hice para probar si llega internet a la app.
@@ -131,7 +129,6 @@ class Repo {
 
                 val listData = mutableListOf<Dependiente>()
 
-                Log.e("DependienteRepo", idRecibido.toString())
                 for (obtenerFireBase in it.documents){
                     val indument = obtenerFireBase.toObject(Dependiente::class.java)
                     indument?.id = obtenerFireBase.id

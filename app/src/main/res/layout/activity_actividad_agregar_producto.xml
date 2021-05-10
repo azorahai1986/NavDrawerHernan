@@ -85,8 +85,9 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpagerCrearProdu"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:background="@drawable/camara"
         android:layout_marginTop="225dp"
         android:elevation="10dp"
         android:scrollbarStyle="insideOverlay"
