@@ -1,11 +1,9 @@
 package com.example.navdrawer.actividades
 
 import android.app.Activity
-import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
@@ -14,10 +12,12 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.navdrawer.R
+import com.example.navdrawer.adapters.AdapterImagenCrear
 import com.example.navdrawer.adapters.RecyclerUnoAdapter
 import com.example.navdrawer.clases_push.NotificationData
 import com.example.navdrawer.clases_push.PushNotification
 import com.example.navdrawer.clases_push.Retrofitinstance
+import com.example.navdrawer.databinding.ActivityActividadAgregarProductoBinding
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
 import com.google.firebase.firestore.FirebaseFirestore
@@ -28,12 +28,10 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_actividad_agregar_producto.*
-import kotlinx.android.synthetic.main.item_productos.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.IOException
 import java.util.*
 
 class ActividadAgregarProducto : AppCompatActivity() {
@@ -47,6 +45,7 @@ class ActividadAgregarProducto : AppCompatActivity() {
     private val PICK_IMAGE_REQUEST = 1234
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
     private var adapter: RecyclerUnoAdapter? = null
+    private var adapterImagenes: AdapterImagenCrear? = null
 
     // Método para subir imagenes al firebase storage
     private var filePath: Uri? = null
@@ -85,7 +84,7 @@ class ActividadAgregarProducto : AppCompatActivity() {
                     .add(map).addOnSuccessListener {
                         lanzarPush(it.id)
 
-                        progressDialog.hide()
+                        //progressDialog.hide()
                     }
 
                 }
@@ -97,7 +96,7 @@ class ActividadAgregarProducto : AppCompatActivity() {
 
             }
         }else {
-            val imageRef = storageReference!!.child("images/" + UUID.randomUUID().toString()+".jpg")
+            val imageRef = storageReference!!.child("images/" + UUID.randomUUID().toString())
 
             var uploadTask = imageRef.putFile(arrayImagePath[pos])
             val urlTask = uploadTask.continueWithTask { task ->
@@ -129,12 +128,12 @@ class ActividadAgregarProducto : AppCompatActivity() {
             }
         }
     }
-    val progressDialog = ProgressDialog(this)
+//    val progressDialog = ProgressDialog(this)
     private fun uploadFile() {
         if (arrayImagePath.isNotEmpty()) {
 
-            progressDialog.setTitle("Cargando...")
-            progressDialog.show()
+            //progressDialog.setTitle("Cargando...")
+            //progressDialog.show()
 
             uploadImage(0)
             // para modificar los datos de una lista usando firestore..........................
@@ -177,13 +176,20 @@ class ActividadAgregarProducto : AppCompatActivity() {
                 for(i in 0 until data.clipData!!.itemCount){
                     val uriAux = data.clipData!!.getItemAt(i).uri
                     arrayImagePath.add(uriAux)
+
+                    Log.e("arrayImagen1", arrayImagePath.toString())
                 }
             }else {
                 if(data.data!=null){
                     val uriA = data.data!!
                     arrayImagePath.add(uriA)
+
                 }
             }
+
+            //adapterImagenes = AdapterImagenCrear(, this)
+
+
             /**
              * llenar datos en el viewpager para mostrarlos
              * antes de subirlos
@@ -210,10 +216,12 @@ class ActividadAgregarProducto : AppCompatActivity() {
 
 
     lateinit var storage: FirebaseStorage
+    private lateinit var binding:ActivityActividadAgregarProductoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_actividad_agregar_producto)
+        binding = ActivityActividadAgregarProductoBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         storage = Firebase.storage
 
@@ -229,7 +237,19 @@ class ActividadAgregarProducto : AppCompatActivity() {
         tvMarca?.text = marca
 
         btCargarProdu = findViewById(R.id.btCargar_produ)
-        imageView_produ.setOnClickListener {
+
+        //adapterImagenes = AdapterImagenCrear(arrayListOf(), this)
+
+
+
+
+        //adapterImagenes?.arrayImagenes = arrayImagePath
+        viewpagerCrearProdu.adapter = adapterImagenes
+        adapterImagenes?.arrayImagenes = arrayImagePath
+        adapterImagenes?.notifyDataSetChanged()
+
+
+        btCargar_foto.setOnClickListener {
             showFilerChooser()
         }
 
