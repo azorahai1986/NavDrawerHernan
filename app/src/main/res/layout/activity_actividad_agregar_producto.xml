@@ -85,10 +85,11 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpagerCrearProdu"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
         android:background="@drawable/camara"
         android:layout_marginTop="225dp"
+        android:layout_gravity="center_horizontal"
         android:elevation="10dp"
         android:scrollbarStyle="insideOverlay"
        />
@@ -98,10 +99,12 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="490dp"
+        android:layout_marginTop="425dp"
+        android:layout_gravity="center_horizontal"
         app:cardElevation="@dimen/cardview_compat_inset_shadow"
         app:cardCornerRadius="15dp"
-        app:cardMaxElevation="5dp">
+        app:cardMaxElevation="5dp"
+        android:backgroundTint="@color/color_negro">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -109,11 +112,12 @@
 
             <Button
                 android:id="@+id/btCargar_foto"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textAlignment="center"
-                android:background="@color/colorPrimaryDark"
-                android:text="Cargar Producto"
+                android:layout_margin="5dp"
+                android:background="@color/color_negro"
+                android:text="Agregar fotos"
                 android:textColor="@color/WhiteColor"/>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -121,9 +125,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="490dp"
-        app:cardElevation="@dimen/cardview_compat_inset_shadow"
+        android:backgroundTint="@color/color_negro"
+        app:cardElevation="10dp"
         app:cardCornerRadius="15dp"
         app:cardMaxElevation="5dp">
 

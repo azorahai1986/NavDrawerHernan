@@ -47,6 +47,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
 
+
         val drawerToggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
             this, drawerLayout, toolbar, (
                     com.example.navdrawer.R.string.open), (com.example.navdrawer.R.string.close)
@@ -85,45 +86,47 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         }
 
-        val idP = intent.getStringExtra("idProd")
 
-        inicioFragment = HomeFragment.newInstance(mailRecuperado!!, idP)
+        /*inicioFragment = HomeFragment.newInstance(mailRecuperado!!, idP)
         supportFragmentManager.beginTransaction().replace(
             com.example.navdrawer.R.id.frame_layout,
             inicioFragment
         )
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
-
+*/
+        val idP = intent.getStringExtra("idProd")
+        pantallaIncio(idP)
 
 
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
+
         when (item.itemId) {
             R.id.inicio -> {
-                inicioFragment = HomeFragment()
-                supportFragmentManager.beginTransaction().replace(
-                    com.example.navdrawer.R.id.frame_layout,
-                    inicioFragment
-                )
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
             }
             R.id.categorias -> {
                 categoriasFragment = CategoriasFragment()
-                supportFragmentManager.beginTransaction().replace(
+                supportFragmentManager.beginTransaction().
+                setCustomAnimations(R.anim.abrir2, R.anim.cerrar).replace(
                     com.example.navdrawer.R.id.frame_layout,
                     categoriasFragment
-                )
+                ).setReorderingAllowed(true)
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(
                         CategoriasFragment.volver
                     ).commit()
+
+
                 //en este caso para volver desde un fragmenr al inicio debo colocar aquí el addtoBackStack
             }
 
             R.id.busqueda -> {
                 val intent = Intent(this, ActividadBusqueda::class.java)
                 startActivity(intent)
+
 
             }
 
@@ -135,7 +138,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     supportFragmentManager.beginTransaction().replace(
                         com.example.navdrawer.R.id.frame_layout,
                         accederFragment
-                    )
+                    ).setReorderingAllowed(true)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(
                             AccederFragment.VOLVER
                         ).commit()
@@ -153,8 +156,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
             R.id.porcentajes -> {
                 sumarPorcentajeFragment = PorcentajeFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout, sumarPorcentajeFragment)
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(PorcentajeFragment.VOLVER).commit()
+                supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.expandir_lateral, R.anim.contraer_lateral)
+                    .replace(R.id.frame_layout, sumarPorcentajeFragment)
+                    .setReorderingAllowed(true)
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(PorcentajeFragment.VOLVERPORCEN).commit()
             }
 
 
@@ -187,6 +193,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun pushGeneral(){
         FirebaseMessaging.getInstance().subscribeToTopic("general")
+    }
+
+    fun pantallaIncio(idP: String?) {
+
+        inicioFragment = HomeFragment.newInstance(mailRecuperado!!, idP)
+        supportFragmentManager.beginTransaction().replace(
+            com.example.navdrawer.R.id.frame_layout, inicioFragment)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
+
     }
 
 

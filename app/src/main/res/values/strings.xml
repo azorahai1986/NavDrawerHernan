@@ -30,5 +30,10 @@
     <string name="hello_world">Hello Square World!</string>
     <string name="filtrar">filtrar</string>
     <string name="texto_info">los iconos en movimiento permiten editar sus valores</string>
+    <string name="zoom">Zoom</string>
+    <string name="prodcto_nombre">Prodcto nombre</string>
+    <string name="s150">S150</string>
+    <string name="eliminar_producto">Eliminar producto</string>
+    <string name="productos_similares">PRODUCTOS SIMILARES</string>
 
 </resources>

@@ -78,7 +78,7 @@
             android:layout_height="258dp"
             android:elevation="10dp"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/caramelitos" />
+            app:srcCompat="@drawable/camara" />
 
     </LinearLayout>
     </androidx.cardview.widget.CardView>

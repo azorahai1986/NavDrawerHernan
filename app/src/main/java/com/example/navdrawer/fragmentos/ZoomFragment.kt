@@ -8,21 +8,19 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProviders
-import androidx.viewpager2.widget.ViewPager2
 import com.example.navdrawer.adapters.PagerZoomAdapter
 import com.example.navdrawer.databinding.FragmentZoomBinding
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
-import com.example.navdrawer.modelos_de_datos.ImagenesViewPager
 
 
 class ZoomFragment : Fragment() {
 
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
 
-    private var imagenRecibida: String? = null
+    private var imagenesRecibidas: ArrayList<String>? = null
     private var idRecibido: String? = null
     private lateinit var binding:FragmentZoomBinding
-    var adapter:PagerZoomAdapter? = null
+    var adapterZoomm:PagerZoomAdapter? = null
 
 
     override fun onCreateView(
@@ -32,28 +30,38 @@ class ZoomFragment : Fragment() {
         // Inflate the layout for this fragment
 
         binding = FragmentZoomBinding.inflate(inflater, container, false)
-        imagenRecibida = arguments?.getString(IMAGEN_RECIBIDA)
+        imagenesRecibidas = arguments?.getSerializable(IMAGENES_RECIBIDAS) as ArrayList<String>?
         idRecibido = arguments?.getString(ID_RECIBIDO)
-        Log.e("IMAGENZOOM", idRecibido.toString())
+        Log.e("IDZOOM", idRecibido.toString())
+        Log.e("IMAGENZOOM", imagenesRecibidas.toString())
 
-        binding.viewpagerZoom as ViewPager2
-        adapter = PagerZoomAdapter(arrayListOf(), context as FragmentActivity)
-        binding.viewpagerZoom.adapter = adapter
+        adapterZoomm = PagerZoomAdapter(arrayListOf(), context as FragmentActivity)
+        binding.viewpagerZoom.adapter = adapterZoomm
+        adapterZoomm?.arrayZoom = imagenesRecibidas!!
+        adapterZoomm?.notifyDataSetChanged()
 
-        observeDataZoom()
+        if (adapterZoomm == null){
+            binding.animacionZoom.visibility = View.VISIBLE
+            binding.viewpagerZoom.visibility = View.GONE
+        }else{
+            binding.animacionZoom.visibility = View.GONE
+            binding.viewpagerZoom.visibility = View.VISIBLE
+        }
+
+        //observeDataZoom()
         return binding.root
     }
 
     companion object {
-        private val IMAGEN_RECIBIDA = "IMAGENRECIBIDA"
+        private val IMAGENES_RECIBIDAS = "IMAGENES_RECIBIDAS"
         private val ID_RECIBIDO = "IDRECIBIDO"
 
         const val VOLVERZOOM = "VOLVER"
 
-        fun newInstance(imagen: String, idRecibido: String?):ZoomFragment {
+        fun newInstance(imagenes: ArrayList<String>?, idRecibido: String?):ZoomFragment {
 
         val bundle = Bundle()
-            bundle.putString(IMAGEN_RECIBIDA, imagen)
+            bundle.putSerializable(IMAGENES_RECIBIDAS, imagenes)
             bundle.putString(ID_RECIBIDO, idRecibido)
 
             val fragment = ZoomFragment()
@@ -68,10 +76,4 @@ class ZoomFragment : Fragment() {
         }
     }
 
-    fun observeDataZoom(){
-        viewModel.fetchUserDataZoom(idRecibido).observe(this.viewLifecycleOwner, androidx.lifecycle.Observer {
-            adapter?.arrayZoom = it as ArrayList<ImagenesViewPager>
-            adapter?.notifyDataSetChanged()
-        })
-    }
 }

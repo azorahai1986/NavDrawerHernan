@@ -35,7 +35,11 @@
                 android:layout_gravity="center"
                 android:textStyle="normal"
                 android:textColor="#B80A0A"
-                android:textSize="24dp"/>
+                android:textSize="24dp"
+                android:shadowColor="@color/cardview_dark_background"
+                android:shadowDx="2"
+                android:shadowDy="8"
+                android:shadowRadius="3"/>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

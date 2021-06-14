@@ -7,10 +7,9 @@ import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.navdrawer.R
-import com.example.navdrawer.modelos_de_datos.ImagenesViewPager
 import kotlinx.android.synthetic.main.item_pager_zoom.view.*
 
-class PagerZoomAdapter(var arrayZoom:ArrayList<ImagenesViewPager>, val fragment:FragmentActivity):RecyclerView.Adapter<PagerZoomAdapter.ZoomViewHolder>() {
+class PagerZoomAdapter(var arrayZoom:ArrayList<String>, val fragment:FragmentActivity):RecyclerView.Adapter<PagerZoomAdapter.ZoomViewHolder>() {
 
     inner class ZoomViewHolder(itemView:View):RecyclerView.ViewHolder(itemView)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ZoomViewHolder =
@@ -21,7 +20,10 @@ class PagerZoomAdapter(var arrayZoom:ArrayList<ImagenesViewPager>, val fragment:
     override fun onBindViewHolder(holder: ZoomViewHolder, position: Int) {
         val zoom = arrayZoom[position]
 
-        Glide.with(fragment).load(zoom.imagen).into(holder.itemView.imagenZoom)
+
+        //holder.itemView.imagenZoom.setImageResource(zoom.toInt())
+        Glide.with(fragment.applicationContext).load(zoom).into(holder.itemView.imagenZoom)
+
     }
 
 }

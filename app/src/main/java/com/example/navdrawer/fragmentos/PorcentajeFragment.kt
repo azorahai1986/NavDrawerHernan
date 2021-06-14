@@ -1,7 +1,6 @@
 package com.example.navdrawer.fragmentos
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,6 @@ import com.example.navdrawer.modelos_de_datos.SubCategorias
 
 class PorcentajeFragment : Fragment() {
 
-    var verif:Boolean = false
     var porcenAdapter:AdapterPorcenSubCate? = null
     var layoutManager:RecyclerView.LayoutManager? = null
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
@@ -66,12 +64,11 @@ class PorcentajeFragment : Fragment() {
         viewModel.fetchUserDataPorcentaje().observe(this.viewLifecycleOwner, androidx.lifecycle.Observer {
             porcenAdapter!!.mutableListSub = it as ArrayList<SubCategorias>
             porcenAdapter!!.notifyDataSetChanged()
-            Log.e("datos IT", it.toString())
         })
 
     }
     companion object {
-        const val VOLVER = "volver"
+        const val VOLVERPORCEN = "volverPorcen"
 
 
     }
@@ -80,5 +77,6 @@ class PorcentajeFragment : Fragment() {
         super.onResume()
         observeDataSub()
     }
+
 
 }

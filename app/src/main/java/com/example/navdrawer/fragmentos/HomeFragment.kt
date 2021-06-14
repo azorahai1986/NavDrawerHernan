@@ -21,8 +21,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.airbnb.lottie.LottieAnimationView
 import com.example.navdrawer.R
 import com.example.navdrawer.actividades.CartelActivity
+import com.example.navdrawer.adapters.AdapterRecyclerPrincipal
 import com.example.navdrawer.adapters.PagerPrincipalAdapter
-import com.example.navdrawer.adapters.RecyclerUnoAdapter
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
 import com.example.navdrawer.modelos_de_datos.CartelPrincipal
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
@@ -43,9 +43,10 @@ class HomeFragment : Fragment() {
     var mailRecuperado:String? = null
     var tvCartel:TextView? = null
 
+
     var isOpen = true // para las animcaiones de los botones
 
-    private var adapter:RecyclerUnoAdapter? = null
+    private var adapterRecyclerPrincipal:AdapterRecyclerPrincipal? = null
     private var adapterCartelPrincipal:PagerPrincipalAdapter? = null
     private var layoutManager:RecyclerView.LayoutManager? = null
     private var recyclerView:RecyclerView? = null
@@ -108,8 +109,8 @@ class HomeFragment : Fragment() {
         layoutManager = GridLayoutManager(activity, 1)
         recyclerView?.layoutManager = layoutManager
         recyclerView?.setHasFixedSize(true)
-        adapter = RecyclerUnoAdapter(arrayListOf(), context as FragmentActivity)
-        recyclerView?.adapter = adapter
+        adapterRecyclerPrincipal = AdapterRecyclerPrincipal(arrayListOf(), context as FragmentActivity)
+        recyclerView?.adapter = adapterRecyclerPrincipal
 
         // inflar ViewPager Principal
         viewPagerCartelPrincipal = view.findViewById(R.id.viewpager_cartel)
@@ -158,6 +159,8 @@ class HomeFragment : Fragment() {
         //........ token y datos desde accederFragment.....................................................
 
         tvCartel = view.findViewById(R.id.textOfertas)
+
+
         when {
             mailRecuperado != null -> {
                 btAgCartel.visibility = View.VISIBLE
@@ -186,11 +189,8 @@ class HomeFragment : Fragment() {
         }
 
 
-
-
-
         // dar funcines a los botones............................
-        btAgCartel.setOnClickListener { irCartelActivity() }
+        btAgCartel.setOnClickListener { irCartelActivity()}
 
         var swipe = view.findViewById<SwipeRefreshLayout>(R.id.swiperefreshlayout)
         swipe?.setOnRefreshListener {
@@ -208,8 +208,8 @@ class HomeFragment : Fragment() {
 
     fun observeData(){
         viewModel.fetchUserData().observe(this.viewLifecycleOwner, androidx.lifecycle.Observer {
-            adapter!!.setData(it as ArrayList<ModeloDeIndumentaria>)
-            adapter!!.notifyDataSetChanged()
+            adapterRecyclerPrincipal!!.setData(it as ArrayList<ModeloDeIndumentaria>)
+            adapterRecyclerPrincipal!!.notifyDataSetChanged()
 
             if (idRecibid != null){
                 val i = busqueda()
@@ -254,6 +254,8 @@ class HomeFragment : Fragment() {
     fun irCartelActivity(){
         val intent = Intent(context, CartelActivity::class.java)
         startActivity(intent)
+        activity?.overridePendingTransition(R.anim.expandir_lateral_derecho, R.anim.contraer_lateral_derecho)
+
     }
 
     override fun onResume() {
@@ -264,8 +266,8 @@ class HomeFragment : Fragment() {
     }
 
     fun busqueda():Int{
-        for (i in 0 until adapter!!.mutableListModel.size){
-            if (adapter!!.mutableListModel[i].id == idRecibid){
+        for (i in 0 until adapterRecyclerPrincipal!!.mutableListModel.size){
+            if (adapterRecyclerPrincipal!!.mutableListModel[i].id == idRecibid){
                 return i
             }
         }

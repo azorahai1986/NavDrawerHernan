@@ -23,12 +23,14 @@ import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val RECIBIRMARCA = "recibir_marca"
-private const val RECIIBIR_ID = "recibir_id"
-private const val RECIIBIR_PORCENTAJE = "recibir_porcentaje"
+
 
 
 class dependienteFragment : Fragment() {
+
+    private val RECIBIRMARCA = "recibir_marca"
+    private val RECIIBIR_ID = "recibir_id"
+
     private lateinit var auth: FirebaseAuth
     private var uidRecuperado:String? = null
     private var mailRecuperado:String? = null
@@ -37,17 +39,16 @@ class dependienteFragment : Fragment() {
 
     private var recibirMarca: String? = null
     private var IdRecibido: String? = null
-    private var porcentajeRecibido: String? = null
 
     companion object {
 
-        const val VOLVER = "volver"
-        fun newInstance(marcaRecibida: String, id: String, porcentaje: String) =
+        const val VOLVERPORCENTAJE = "volverPorcentaje"
+        const val VOLVERASUBCATE = "volver"
+        fun newInstance(marcaRecibida: String, id: String) =
             dependienteFragment().apply {
                 arguments = Bundle().apply {
                     putString(RECIBIRMARCA, marcaRecibida)
                     putString(RECIIBIR_ID, id)
-                    putString(RECIIBIR_PORCENTAJE, porcentaje)
                 }
             }
     }
@@ -65,7 +66,6 @@ class dependienteFragment : Fragment() {
 
         recibirMarca = arguments?.getString(RECIBIRMARCA)
         IdRecibido = arguments?.getString(RECIIBIR_ID)
-        porcentajeRecibido = arguments?.getString(RECIIBIR_PORCENTAJE)
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_dependiente, container, false)
@@ -116,7 +116,6 @@ class dependienteFragment : Fragment() {
         val intent = Intent(context, ActividadAgregarProducto::class.java)
         intent.putExtra("id", IdRecibido)
         intent.putExtra("marca", recibirMarca)
-        intent.putExtra("porcentaje", porcentajeRecibido)
 
         startActivity(intent)
     }

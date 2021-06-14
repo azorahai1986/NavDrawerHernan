@@ -1,7 +1,7 @@
 package com.example.navdrawer.adapters
 
 import android.app.AlertDialog
-import android.text.Editable
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +11,15 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.navdrawer.R
-import com.example.navdrawer.fragmentos.PorcentajeFragment
+import com.example.navdrawer.clases.AplicarPorcentajesPrecios
+import com.example.navdrawer.clases.ModificarFirebase
+import com.example.navdrawer.fragmentos.dependienteFragment
 import com.example.navdrawer.modelos_de_datos.SubCategorias
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_porcentaje.view.*
 import kotlinx.android.synthetic.main.item_porcen_sub.view.*
 import kotlinx.android.synthetic.main.item_subcate.view.imageView_sub
 import kotlinx.android.synthetic.main.item_subcate.view.text_descripcion_sub
+
 
 class AdapterPorcenSubCate(var mutableListSub: ArrayList<SubCategorias>, val activity:FragmentActivity): RecyclerView.Adapter<AdapterPorcenSubCate.ViewHolderModel>() {
 
@@ -118,13 +120,30 @@ class AdapterPorcenSubCate(var mutableListSub: ArrayList<SubCategorias>, val act
 
         var editValor = dialog.edittext_dialog_porcen.text
         dialog.tv_dialog_marca.text = marca
-        dialog.bt_dialog_aceptar.setOnClickListener {
-            
-            porcentajes(editValor, id)
 
-            reiniciarFragment()
-            alertDialog.dismiss()
-        }
+
+
+
+            dialog.bt_dialog_aceptar.setOnClickListener {
+                if (editValor.isNullOrEmpty()){
+                    val toast = Toast.makeText(activity, "Ingresa un valor", Toast.LENGTH_SHORT)
+                    toast.setGravity(Gravity.HORIZONTAL_GRAVITY_MASK or Gravity.CENTER_HORIZONTAL, 0, 0)
+                    toast.show()
+                }else{
+                    porcentajes(editValor.toString(), id)
+
+                    irSubCateFragment(id, marca)
+                    alertDialog.dismiss()
+
+                    val aplicarPorcen = AplicarPorcentajesPrecios()
+                    aplicarPorcen.userData(editValor.toString(), marca)
+                }
+
+
+
+            }
+
+
 
         dialog.bt_dialog_cancelar.setOnClickListener {
             alertDialog.dismiss()
@@ -133,27 +152,21 @@ class AdapterPorcenSubCate(var mutableListSub: ArrayList<SubCategorias>, val act
 
         //
     }
-    fun porcentajes(porcen: Editable, id: String){
+    fun porcentajes(porcen: String, id: String){
+        val por = porcen + porcen.toDouble()/100
 
-
-
-        var map = mutableMapOf<String, Any>()
-        map["porcentaje"] = porcen.toString()
-        val editar = FirebaseFirestore.getInstance().collection("Subcatergoria")
-            .document(id)
-        editar.update(map)
-            .addOnSuccessListener {
-                Toast.makeText(activity, "Producto Modificado con exito", Toast.LENGTH_SHORT) .show()
-            }.addOnFailureListener {
-                Toast.makeText(activity, "Falló Modificación", Toast.LENGTH_SHORT).show()
-
-            }
+        val modificar = ModificarFirebase()
+        modificar.modificarPorcentajes(porcen, id)
 
     }
 
-    fun reiniciarFragment(){
-        activity.supportFragmentManager.beginTransaction().replace(R.id.frame_layout, PorcentajeFragment())
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit()
+    private fun irSubCateFragment(id: String, marca: String) {
+        activity.supportFragmentManager.beginTransaction()
+            .replace(R.id.frame_layout, dependienteFragment.newInstance(marca, id))
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            .addToBackStack(dependienteFragment.VOLVERPORCENTAJE)
+            .commit()
+
     }
 
 }

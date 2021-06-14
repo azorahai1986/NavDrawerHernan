@@ -38,7 +38,11 @@
                 android:textSize="28dp"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:textColor="#F30723"/>
+                android:textColor="#F30723"
+                android:shadowColor="@color/cardview_dark_background"
+                android:shadowDx="2"
+                android:shadowDy="8"
+                android:shadowRadius="4"/>
 
         </LinearLayout>
 

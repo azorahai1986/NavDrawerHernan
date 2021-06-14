@@ -1,20 +1,16 @@
 package com.example.navdrawer.adapters
 
-import android.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.navdrawer.R
 import com.example.navdrawer.fragmentos.SearchFragment
-import com.example.navdrawer.fragmentos.VerImagenFragment
 import com.example.navdrawer.modelos_de_datos.ModeloDeIndumentaria
 import com.example.navdrawer.modelos_de_datos.SubCategorias
-import kotlinx.android.synthetic.main.dialog_ir_pdf.view.*
 import kotlinx.android.synthetic.main.item_recycler_busqueda.view.*
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -103,17 +99,7 @@ class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, va
             }
         }
 
-        holder.itemView.imageview_busqueda.setOnClickListener{
-            Log.e("en el adapter1", cantidad.toString())
-            if (cantidad == null){
-                activity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.cordinat, VerImagenFragment.newInstance(modelosFb.imagen, modelosFb.nombre, modelosFb.marca,"$"+modelosFb.precio, modelosFb.id))
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(
-                        VerImagenFragment.VOLVERBUSQUEDA).commit()
-            }else{
-                dialIrAVerImagen(modelosFb.imagen, modelosFb.nombre, modelosFb.marca, modelosFb.precio, modelosFb.id)
-            }
-        }
+
     }
 
 
@@ -148,21 +134,6 @@ class AdapterBusqueda(var arrayModelBudqueda:ArrayList<ModeloDeIndumentaria>, va
     }
     fun traerdatosParaDialog(totalCant:Int){
         cantidad = totalCant
-
-    }
-
-    fun dialIrAVerImagen(imagen:String, nombre:String, marca:String, precio:String, id:String){
-        val dialIrVerImagen =LayoutInflater.from(activity).inflate(R.layout.dialog_ir_pdf, null)
-        val constructorDialog = AlertDialog.Builder(activity).setView(dialIrVerImagen)
-        // mostrar dialog.
-        val alertDialog= constructorDialog.show()
-        dialIrVerImagen.flbt_permanecer.setOnClickListener { alertDialog.dismiss() }
-        dialIrVerImagen.flbt_avanzar.setOnClickListener {
-            activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.cordinat, VerImagenFragment.newInstance(imagen, nombre, marca, precio, id))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(VerImagenFragment.VOLVERBUSQUEDA).commit()
-            alertDialog.dismiss()
-        }
 
     }
 

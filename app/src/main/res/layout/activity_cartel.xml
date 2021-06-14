@@ -34,7 +34,7 @@
         android:id="@+id/image_crar_ofertas"
         android:layout_width="match_parent"
         android:layout_height="190dp"
-        android:src="@drawable/caramelitos"
+        android:src="@drawable/camara"
         android:layout_marginTop="270dp"
         android:elevation="15dp"
         android:scaleType="fitXY"/>

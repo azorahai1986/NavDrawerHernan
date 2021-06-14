@@ -32,7 +32,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="40dp"
-                android:src="@drawable/ic_carrito_24"/>
+                android:src="@drawable/ic_carrito_24"
+                />
 
             <TextView
                 android:id="@+id/tvCantidad"
@@ -42,7 +43,11 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp"
                 android:textColor="#FFFFFF"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:shadowColor="@color/cardview_dark_background"
+                android:shadowDx="2"
+                android:shadowDy="8"
+                android:shadowRadius="3"/>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -58,7 +63,11 @@
                 android:layout_marginTop="5dp"
                 android:textStyle="bold"
                 android:text="0..."
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF"
+                android:shadowColor="@color/cardview_dark_background"
+                android:shadowDx="2"
+                android:shadowDy="8"
+                android:shadowRadius="3"/>
 
 
         </LinearLayout>

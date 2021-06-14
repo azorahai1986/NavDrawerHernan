@@ -37,7 +37,7 @@ class SubCateFragment : Fragment() {
     companion object {
         private const val CATE_RECIBIDA = "cate_recibida"
         private const val NOMCAT_RECIBIDA = "nomcat_recibida"
-        const val VOLVER = "volver"
+        const val VOLVERACATEGORIAS = "volver"
         fun newInstance(categoriaRecibidas: String, nombreCateReci:String): SubCateFragment{
             val bundle = Bundle()
             bundle.putString(CATE_RECIBIDA, categoriaRecibidas)

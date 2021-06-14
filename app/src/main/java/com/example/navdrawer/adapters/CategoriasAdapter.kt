@@ -27,7 +27,7 @@ class CategoriasAdapter(var arrayCategorias:MutableList<Categorias>, val fragmen
 
         holder.itemView.cardview_categorias.setOnClickListener {
             fragment.supportFragmentManager.beginTransaction().replace(R.id.frame_layout, SubCateFragment.newInstance(categoriasArray.id, categoriasArray.cate))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).addToBackStack(SubCateFragment.VOLVER).commit()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).addToBackStack(SubCateFragment.VOLVERACATEGORIAS).commit()
         }
 
 

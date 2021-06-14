@@ -7,7 +7,11 @@ import com.example.navdrawer.modelos_de_datos.*
 import com.google.firebase.firestore.FirebaseFirestore
 
 class Repo {
+
     fun getUserData(): LiveData<MutableList<ModeloDeIndumentaria>> {
+        /*
+        crearé una variable para enviar el precio a la clase AplicarPorcentajesPrecios
+         */
 
         val mutableData = MutableLiveData<MutableList<ModeloDeIndumentaria>>()
         FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
@@ -21,9 +25,9 @@ class Repo {
                     if (indument != null)
 
                         listData.add(indument)
-
                 }
                 mutableData.value = listData
+
 
             }.addOnFailureListener {
                 Log.e("ErrorMODELO", it.toString())
@@ -168,7 +172,7 @@ class Repo {
     fun getUserDataZoom(idRecibido: String?): LiveData<MutableList<ImagenesViewPager>> {
 
         val mutableData = MutableLiveData<MutableList<ImagenesViewPager>>()
-        FirebaseFirestore.getInstance().collection("ImagenesViewPager").whereEqualTo("id", idRecibido )
+        FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria").whereEqualTo("id", idRecibido )
             .get().addOnSuccessListener {
                 Log.e("ZoomRepo", idRecibido.toString())
 

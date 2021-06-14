@@ -27,7 +27,6 @@ import com.example.navdrawer.R
 import com.example.navdrawer.actividades.MainActivity
 import com.example.navdrawer.adapters.PagerSimilaresAdapter
 import com.example.navdrawer.enlace_con_firebase.MainViewModelo
-import com.example.navdrawer.fragmentos.ZoomFragment.Companion.VOLVERZOOM
 import com.example.navdrawer.modelos_de_datos.PagerSimilares
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
@@ -48,6 +47,7 @@ class VerImagenFragment : Fragment() {
 
     // variables para los datos recibidos desde el adapterRecyclerPrincipal............................
     var recibirImagen: String? = null
+    var recibirImagenes: ArrayList<String>? = null
     var recibirNombre: String? = null
     var recibirMarca: String? = null
     var recibirPrecio: String? = null
@@ -64,8 +64,9 @@ class VerImagenFragment : Fragment() {
 
     companion object {
         const val IMAGENRECIBIDA = "imagenRecibida" //para cuando vuelvo atras recordar donde estaba ubicado
-        const val VOLVERBUSQUEDA = "imagenRecibida" //para cuando vuelvo atras recordar donde estaba ubicado
+        const val VOLVERBUSQUEDA = "VOLVER" //para cuando vuelvo atras recordar donde estaba ubicado
         private const val IM_RECIBIDA = "IM_RECIBIDA" //para recibir la imagen del adapter
+        private const val IMAGENES_RECIBIDAS = "IMAGENES_RECIBIDAS" //para recibir la imagen del adapter
         private const val NOMBRE_RECIBIDO = "NOMBRE_RECIBIDO" //para recibir el nombre del adapter
         private const val MARCA_RECIBIDA = "MARCA_RECIBIDA" //para recibir la descripcion del adapter
         private const val PRECIO_RECIBIDO = "PRECIO_RECIBIDO" //para recibir el precio del adapter
@@ -73,6 +74,7 @@ class VerImagenFragment : Fragment() {
 
         fun newInstance(
             recibirImagen: String,
+            recibirImagenes: ArrayList<String>,
             recibirNombre: String,
             recibirMarca: String,
             precioRecibido: String,
@@ -81,6 +83,7 @@ class VerImagenFragment : Fragment() {
 
             val bundle = Bundle()
             bundle.putString(IM_RECIBIDA, recibirImagen)
+            bundle.putSerializable(IMAGENES_RECIBIDAS, recibirImagenes)
             bundle.putString(NOMBRE_RECIBIDO, recibirNombre)
             bundle.putString(MARCA_RECIBIDA, recibirMarca)
             bundle.putString(PRECIO_RECIBIDO, precioRecibido)
@@ -114,7 +117,6 @@ class VerImagenFragment : Fragment() {
     var anim2:LottieAnimationView? = null
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -128,10 +130,15 @@ class VerImagenFragment : Fragment() {
         storage = FirebaseStorage.getInstance()
         storageReference = storage!!.reference
         recibirImagen = arguments?.getString(IM_RECIBIDA)
+        recibirImagenes = arguments?.getSerializable(IMAGENES_RECIBIDAS) as ArrayList<String>?
         recibirNombre = arguments?.getString(NOMBRE_RECIBIDO)
         recibirMarca = arguments?.getString(MARCA_RECIBIDA)
         recibirPrecio = arguments?.getString(PRECIO_RECIBIDO)
         recibirId = arguments?.getString(ID_RECIBIDO)
+
+
+        Log.e("IDVERIMAGENES", recibirId.toString())
+        Log.e("IMAGENESVERIMAGEN", recibirImagenes.toString())
 
         imagenDelAdapter = view.findViewById<ImageView>(R.id.imageView_ver_imagen)// as PhotoView
         nombre = view.findViewById<TextView>(R.id.textViewNombre)
@@ -159,15 +166,13 @@ class VerImagenFragment : Fragment() {
         precio?.text = recibirPrecio
 
 
-
-
-
         // inflar viewPager......................................
 
         viewPagerSimilar = view.findViewById(R.id.viewPager_similares) as ViewPager2
         adapterSimilar = PagerSimilaresAdapter(arrayListOf(), context as FragmentActivity)
         viewPagerSimilar?.adapter = adapterSimilar
         observerDataSimil()
+
 
         //recuperar usuario..............................................
         auth = Firebase.auth
@@ -176,7 +181,6 @@ class VerImagenFragment : Fragment() {
             // Name, email address, and profile photo Url
             mailRecuperado = user.email
 
-            Log.e("EmailVerIamagen", mailRecuperado.toString())
         }
         if (mailRecuperado.isNullOrEmpty()){
             btEliminar?.visibility = View.GONE
@@ -184,6 +188,7 @@ class VerImagenFragment : Fragment() {
             tvTolocaEdit?.visibility = View.GONE
             anim1?.visibility = View.GONE
             anim2?.visibility = View.GONE
+            imagenDelAdapter?.isClickable = false
 
         }else{
 
@@ -248,14 +253,14 @@ class VerImagenFragment : Fragment() {
 
     fun editarNombre(etnom: EditText) {
 
-        var nombre = etnom.text.toString()
+        var nombrerecib = etnom.text.toString()
 
-        if (nombre.isNullOrEmpty()){
+        if (nombrerecib.isNullOrEmpty()){
             Toast.makeText(context, "Cambia el nombre de tu producto", Toast.LENGTH_SHORT) .show()
 
         }else{
             var map = mutableMapOf<String, Any>()
-            map["nombre"] = nombre
+            map["nombre"] = nombrerecib
             val editar = FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
                 .document(recibirId.toString())
             editar.update(map)
@@ -265,20 +270,21 @@ class VerImagenFragment : Fragment() {
                     Toast.makeText(context, "Falló Modificación", Toast.LENGTH_SHORT).show()
 
                 }
+            nombre?.text = nombrerecib
         }
 
 
 
     }
     fun editarPrecio(edPrecio: EditText){
-        var precio = edPrecio.text.toString()
+        var preciorecib = edPrecio.text.toString()
 
-        if (precio.isNullOrEmpty()){
+        if (preciorecib.isNullOrEmpty()){
             Toast.makeText(context, "Cambia el nombre de tu producto", Toast.LENGTH_SHORT) .show()
 
         }else{
             var map = mutableMapOf<String, Any>()
-            map["precio"] = precio
+            map["precio"] = preciorecib
             val editar = FirebaseFirestore.getInstance().collection("ModeloDeIndumentaria")
                 .document(recibirId.toString())
             editar.update(map)
@@ -288,6 +294,7 @@ class VerImagenFragment : Fragment() {
                     Toast.makeText(context, "Falló Modificación", Toast.LENGTH_SHORT).show()
 
                 }
+            precio?.text = preciorecib
         }
     }
 
@@ -454,10 +461,12 @@ class VerImagenFragment : Fragment() {
 
 
     }
-    fun hacerZoom(){
+    fun hacerZoom() {
+
         activity?.supportFragmentManager?.beginTransaction()?.
-        replace(R.id.frame_layout, ZoomFragment.newInstance(recibirImagen!!, recibirId))?.
-        setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)?.addToBackStack(VOLVERZOOM)?.commit()
+        setCustomAnimations(R.anim.expandir_lateral_derecho, R.anim.contraer_lateral_derecho, R.anim.expandir_lateral, R.anim.contraer_lateral)?.
+        replace(R.id.drawerLayout, ZoomFragment.newInstance(recibirImagenes, recibirId))?.
+        setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)?.addToBackStack(ZoomFragment.VOLVERZOOM)?.commit()
     }
 
 }

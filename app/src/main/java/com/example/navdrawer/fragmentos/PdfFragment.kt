@@ -341,7 +341,7 @@ class PdfFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // se otorgó el permiso de la ventana emergente, llama a savePdf()
                     savePdf()
-                    enviarPdf("")
+                    enviarPdf(TAG)
                 } else {
                     // se denegó el permiso de la ventana emergente, muestra mensaje de error
                     Toast.makeText(context, "permiso denegado", Toast.LENGTH_SHORT).show()

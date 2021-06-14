@@ -10,6 +10,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:outlineAmbientShadowColor="@color/cardview_dark_background"
         android:layout_marginTop="200dp">
 
         <EditText
@@ -18,6 +19,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Nuevo Email"
+            app:hintAnimationEnabled= "false"
             android:inputType="textEmailAddress"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
@@ -36,13 +38,22 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
-        android:id="@+id/btAcceder"
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#039BE5"
-        android:text="Acceder"
-        android:textColor="#FFFFFF" />
+        android:layout_gravity="center"
+        app:cardCornerRadius="15dp">
+        <Button
+            android:id="@+id/btAcceder"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="#039BE5"
+            android:layout_gravity="center"
+            android:text="Acceder"
+            android:textColor="#FFFFFF" />
+
+    </androidx.cardview.widget.CardView>
+
 
 
 

@@ -42,7 +42,11 @@
                     android:text="@string/texto_descripcion"
                     android:textSize="12sp"
                     android:elevation="10dp"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textColor="@color/colorPrimary"
+                    android:shadowColor="@color/cardview_dark_background"
+                    android:shadowDx="2"
+                    android:shadowDy="8"
+                    android:shadowRadius="3"/>
 
                 <View
                     android:layout_width="200dp"
@@ -62,7 +66,11 @@
                         android:text="@string/_140"
                         android:textSize="18sp"
                         android:textColor="@color/amarillo"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:shadowColor="@color/cardview_dark_background"
+                        android:shadowDx="2"
+                        android:shadowDy="8"
+                        android:shadowRadius="3"/>
                     <TextView
                         android:id="@+id/tv_template_cantidad"
                         android:layout_width="wrap_content"
@@ -70,7 +78,11 @@
                         android:layout_marginLeft="20dp"
                         android:text="cantidad"
                         android:textStyle="italic"
-                        android:textColor="@color/colorPrimaryDark"/>
+                        android:textColor="@color/colorPrimaryDark"
+                        android:shadowColor="@color/cardview_dark_background"
+                        android:shadowDx="2"
+                        android:shadowDy="8"
+                        android:shadowRadius="7"/>
 
 
                 </LinearLayout>
@@ -86,7 +98,11 @@
                         android:layout_marginLeft="20dp"
                         android:textStyle="italic"
                         android:text="SubTotal"
-                        android:textColor="@color/colorPrimaryDark"/>
+                        android:textColor="@color/colorPrimaryDark"
+                        android:shadowColor="@color/cardview_dark_background"
+                        android:shadowDx="2"
+                        android:shadowDy="8"
+                        android:shadowRadius="3"/>
 
                 </LinearLayout>
 
@@ -127,7 +143,11 @@
                 android:layout_height="wrap_content"
                 android:text="0..."
                 android:textSize="18dp"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:textColor="@color/colorPrimaryDark"
+                android:shadowColor="@color/cardview_dark_background"
+                android:shadowDx="2"
+                android:shadowDy="8"
+                android:shadowRadius="3"/>
 
             <ImageButton
                 android:id="@+id/btRestar"

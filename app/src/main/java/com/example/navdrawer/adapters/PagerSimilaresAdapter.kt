@@ -9,6 +9,8 @@ import com.bumptech.glide.Glide
 import com.example.navdrawer.R
 import com.example.navdrawer.modelos_de_datos.PagerSimilares
 import kotlinx.android.synthetic.main.item_pager_similares.view.*
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 class PagerSimilaresAdapter(var similaresArray:ArrayList<PagerSimilares>, val activity:FragmentActivity):
     RecyclerView.Adapter<PagerSimilaresAdapter.SimilaresViewHolder>() {
@@ -24,9 +26,12 @@ class PagerSimilaresAdapter(var similaresArray:ArrayList<PagerSimilares>, val ac
     override fun onBindViewHolder(holder: PagerSimilaresAdapter.SimilaresViewHolder, position: Int) {
         val arraySimilar= similaresArray[position]
 
+        val precio = arraySimilar.precio.toDouble()
+        val redondeo = BigDecimal(precio).setScale(2, RoundingMode.HALF_EVEN)
+
         holder.itemView.text_nombre_similar.text = arraySimilar.nombre
-        holder.itemView.text_precio_similar.text = " $ " + arraySimilar.precio + " x unidad"
-        holder.itemView.text_sub_similar.text = arraySimilar.sub
+        holder.itemView.text_precio_similar.text = " $ $redondeo x unidad"
+        holder.itemView.text_sub_similar.text = arraySimilar.marca
         Glide.with(activity).load(arraySimilar.imagen).into(holder.itemView.imageView_similar)
     }
 }

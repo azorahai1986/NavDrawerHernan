@@ -1,6 +1,7 @@
 package com.example.navdrawer.actividades
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.example.navdrawer.R
 import com.example.navdrawer.adapters.AdapterImagenCrear
-import com.example.navdrawer.adapters.RecyclerUnoAdapter
+import com.example.navdrawer.adapters.AdapterRecyclerPrincipal
 import com.example.navdrawer.clases_push.NotificationData
 import com.example.navdrawer.clases_push.PushNotification
 import com.example.navdrawer.clases_push.Retrofitinstance
@@ -44,7 +45,7 @@ class ActividadAgregarProducto : AppCompatActivity() {
 
     private val PICK_IMAGE_REQUEST = 1234
     private val viewModel by lazy { ViewModelProviders.of(this).get(MainViewModelo::class.java) }
-    private var adapter: RecyclerUnoAdapter? = null
+    private var adapterRecyclerPrincipal: AdapterRecyclerPrincipal? = null
     private var adapterImagenes: AdapterImagenCrear? = null
 
     // Método para subir imagenes al firebase storage
@@ -70,6 +71,7 @@ class ActividadAgregarProducto : AppCompatActivity() {
             var arrayIm = arrayURLs
             var precio = etPrecioProdu.text.toString()
 
+
             var map = mutableMapOf<String, Any>()
             map["cate"] = idRecuperado.toString()
             map["marca"] = marca.toString()
@@ -84,7 +86,6 @@ class ActividadAgregarProducto : AppCompatActivity() {
                     .add(map).addOnSuccessListener {
                         lanzarPush(it.id)
 
-                        //progressDialog.hide()
                     }
 
                 }
@@ -128,16 +129,17 @@ class ActividadAgregarProducto : AppCompatActivity() {
             }
         }
     }
-//    val progressDialog = ProgressDialog(this)
     private fun uploadFile() {
         if (arrayImagePath.isNotEmpty()) {
+            val progressDialog = ProgressDialog(this)
 
-            //progressDialog.setTitle("Cargando...")
-            //progressDialog.show()
+            progressDialog.setTitle("Cargando...")
+            progressDialog.show()
 
             uploadImage(0)
             // para modificar los datos de una lista usando firestore..........................
 
+            //progressDialog.hide()
 
 
         }else {
@@ -186,6 +188,7 @@ class ActividadAgregarProducto : AppCompatActivity() {
 
                 }
             }
+            viewpagerCrearProdu.adapter = adapterImagenes
             adapterImagenes?.arrayImagenes = arrayImagePath
             adapterImagenes?.notifyDataSetChanged()
             //adapterImagenes = AdapterImagenCrear(, this)
@@ -237,7 +240,7 @@ class ActividadAgregarProducto : AppCompatActivity() {
         tvSwitch = findViewById(R.id.tv_switch)
         tvMarca?.text = marca
 
-        btCargarProdu = findViewById(R.id.btCargar_produ)
+        //btCargarProdu = findViewById(R.id.btCargar_produ)
 
         adapterImagenes = AdapterImagenCrear(arrayListOf())
 
@@ -275,7 +278,7 @@ class ActividadAgregarProducto : AppCompatActivity() {
         }
 
 
-        btCargarProdu?.setOnClickListener { uploadFile() }
+        btCargar_produ.setOnClickListener { uploadFile() }
 
         exTraerDatos()
 
@@ -283,8 +286,8 @@ class ActividadAgregarProducto : AppCompatActivity() {
 
     fun exTraerDatos() {
         viewModel.fetchUserData().observe(this, androidx.lifecycle.Observer {
-            adapter?.mutableListModel = it as ArrayList<ModeloDeIndumentaria>
-            adapter?.notifyDataSetChanged()
+            adapterRecyclerPrincipal?.mutableListModel = it as ArrayList<ModeloDeIndumentaria>
+            adapterRecyclerPrincipal?.notifyDataSetChanged()
             val autocompletar = mutableListOf<String>()
             val autocompletarMarca = mutableListOf<String>()
             val autocompletarCate = mutableListOf<String>()
